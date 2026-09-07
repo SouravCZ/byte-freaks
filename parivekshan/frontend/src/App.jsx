@@ -2,6 +2,8 @@ import React from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import DistrictLanding from './pages/DistrictLanding'
 import NationalLanding from './pages/NationalLanding'
+import Projects from './pages/Projects'
+import ProjectDetail from './pages/ProjectDetail'
 
 function Home() {
   return (
@@ -20,6 +22,10 @@ function Home() {
             National Platform
             <span className="block text-xs text-emerald-200 font-normal mt-1">Pan-India Infrastructure</span>
           </Link>
+          <Link to="/projects" className="px-8 py-4 bg-white text-navy-500 font-semibold rounded-xl border-2 border-navy-500 hover:bg-navy-50 transition">
+            Projects Dashboard
+            <span className="block text-xs text-slate-400 font-normal mt-1">Live API data</span>
+          </Link>
         </div>
       </div>
     </div>
@@ -32,6 +38,8 @@ export default function App() {
       <Route path="/" element={<Home />} />
       <Route path="/district" element={<DistrictLanding />} />
       <Route path="/national" element={<NationalLanding />} />
+      <Route path="/projects" element={<Projects />} />
+      <Route path="/projects/:id" element={<ProjectDetail />} />
     </Routes>
   )
 }

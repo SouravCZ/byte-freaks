@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import Logo from '../components/Logo'
+
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 const delayData = [
   { month: 'Jan', probability: 32 },
@@ -249,6 +251,26 @@ function Features() {
 
 function DashboardPreview() {
   const [activeProject, setActiveProject] = useState(0)
+  const [stats, setStats] = useState(null)
+  const [blocks, setBlocks] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const ctrl = new AbortController()
+    Promise.all([
+      fetch(`${API_BASE}/api/stats`, { signal: ctrl.signal }).then((r) => r.json()),
+      fetch(`${API_BASE}/api/blocks`, { signal: ctrl.signal }).then((r) => r.json()),
+    ])
+      .then(([statsData, blocksData]) => {
+        setStats(statsData)
+        setBlocks(Array.isArray(blocksData) ? blocksData : [])
+      })
+      .catch((err) => {
+        if (err.name !== 'AbortError') console.error('Failed to load dashboard telemetry:', err)
+      })
+      .finally(() => setLoading(false))
+    return () => ctrl.abort()
+  }, [])
 
   return (
     <section id="dashboard" className="py-20 bg-slate-900 text-white">
@@ -277,44 +299,57 @@ function DashboardPreview() {
             <div className="lg:col-span-1 border-r border-slate-700 p-4">
               <h4 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">Project Queue</h4>
               <div className="space-y-2">
-                {projects.map((p, i) => (
-                  <button key={p.id} onClick={() => setActiveProject(i)}
-                    className={`w-full text-left p-3 rounded-lg transition text-sm ${activeProject === i ? 'bg-navy-500/30 border border-navy-400/30' : 'hover:bg-slate-700/50 border border-transparent'}`}>
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-medium text-white truncate">{p.name}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-slate-400">{p.block}</span>
-                      <RiskBadge risk={p.risk} />
-                    </div>
-                  </button>
-                ))}
+                {blocks.length > 0 ? (
+                  blocks.map((p, i) => (
+                    <button key={p.id} onClick={() => setActiveProject(i)}
+                      className={`w-full text-left p-3 rounded-lg transition text-sm ${activeProject === i ? 'bg-navy-500/30 border border-navy-400/30' : 'hover:bg-slate-700/50 border border-transparent'}`}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-medium text-white truncate">{p.name}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-slate-400">{p.district}</span>
+                        <RiskBadge risk={Number(p.risk_score)} />
+                      </div>
+                    </button>
+                  ))
+                ) : (
+                  <p className="text-xs text-slate-400 py-4 text-center">{loading ? 'Loading telemetry...' : 'No block data available'}</p>
+                )}
               </div>
             </div>
 
             <div className="lg:col-span-2 p-6">
+              {blocks.length > 0 && (
+                <>
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-lg font-bold">{projects[activeProject].name}</h3>
-                  <p className="text-sm text-slate-400">Active Block: {projects[activeProject].block} | Risk Level: {projects[activeProject].status}</p>
+                  <h3 className="text-lg font-bold">{blocks[activeProject].name}</h3>
+                  <p className="text-sm text-slate-400">Active Block: {blocks[activeProject].district} | Risk Level: {blocks[activeProject] && Number(blocks[activeProject].risk_score) >= 75 ? 'Critical' : Number(blocks[activeProject].risk_score) >= 50 ? 'Moderate' : 'Low'}</p>
                 </div>
-                <RiskBadge risk={projects[activeProject].risk} />
+                <RiskBadge risk={Number(blocks[activeProject].risk_score)} />
               </div>
 
               <div className="grid sm:grid-cols-3 gap-4 mb-6">
                 <div className="bg-slate-700/50 rounded-lg p-4">
                   <p className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Delay Probability</p>
-                  <p className="text-2xl font-bold text-emerald-400">{projects[activeProject].risk}%</p>
+                  <p className="text-2xl font-bold text-emerald-400">{Number(blocks[activeProject].risk_score).toFixed(0)}%</p>
                 </div>
                 <div className="bg-slate-700/50 rounded-lg p-4">
                   <p className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Mouzas Affected</p>
-                  <p className="text-2xl font-bold text-white">24</p>
+                  <p className="text-2xl font-bold text-white">{blocks[activeProject].mouza_count}</p>
                 </div>
                 <div className="bg-slate-700/50 rounded-lg p-4">
                   <p className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Lead Time</p>
-                  <p className="text-2xl font-bold text-amber-400">180d</p>
+                  <p className="text-2xl font-bold text-amber-400">{Number(blocks[activeProject].risk_score) >= 75 ? '180d' : Number(blocks[activeProject].risk_score) >= 50 ? '120d' : '60d'}</p>
                 </div>
               </div>
+              </>
+              )}
+              {blocks.length === 0 && (
+                <div className="flex items-center justify-center h-64">
+                  <p className="text-slate-400">{loading ? 'Loading live telemetry...' : 'No telemetry available'}</p>
+                </div>
+              )}
 
               <div className="bg-slate-700/30 rounded-lg p-4 mb-6">
                 <h4 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">Delay Probability Curve</h4>

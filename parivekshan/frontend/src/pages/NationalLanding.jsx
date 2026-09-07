@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import Logo from '../components/Logo'
+
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 const delayCurve = [
   { month: 'M-6', val: 25 }, { month: 'M-5', val: 32 }, { month: 'M-4', val: 41 },
@@ -260,6 +262,31 @@ function Features() {
 }
 
 function DashboardPreview() {
+  const [stats, setStats] = useState(null)
+  const [blocks, setBlocks] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const ctrl = new AbortController()
+    Promise.all([
+      fetch(`${API_BASE}/api/stats`, { signal: ctrl.signal }).then((r) => r.json()),
+      fetch(`${API_BASE}/api/blocks`, { signal: ctrl.signal }).then((r) => r.json()),
+    ])
+      .then(([statsData, blocksData]) => {
+        setStats(statsData)
+        setBlocks(Array.isArray(blocksData) ? blocksData : [])
+      })
+      .catch((err) => {
+        if (err.name !== 'AbortError') console.error('Failed to load command center telemetry:', err)
+      })
+      .finally(() => setLoading(false))
+    return () => ctrl.abort()
+  }, [])
+
+  const delayPct = blocks.length > 0
+    ? Math.round((blocks.filter((b) => Number(b.risk_score) >= 75).length / blocks.length) * 100)
+    : 34
+
   return (
     <section id="dashboard" className="py-20 bg-slate-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -281,28 +308,28 @@ function DashboardPreview() {
             <div className="lg:col-span-2 space-y-6">
               <div className="grid grid-cols-4 gap-3">
                 {[
-                  { label: 'Active Corridors', value: '540+', color: 'text-emerald-400' },
-                  { label: 'States Covered', value: '28', color: 'text-white' },
-                  { label: 'Collectorates', value: '384', color: 'text-white' },
-                  { label: 'Parcels in Delay', value: '34%', color: 'text-amber-400' },
+                  { label: 'Active Corridors', value: stats ? String(stats.totalProjects) : '—', color: 'text-emerald-400' },
+                  { label: 'States Covered', value: stats ? String(stats.totalBlocks) : '—', color: 'text-white' },
+                  { label: 'Collectorates', value: stats ? String(stats.totalProjects) : '—', color: 'text-white' },
+                  { label: 'Parcels in Delay', value: stats ? `${delayPct}%` : '—', color: 'text-amber-400' },
                 ].map((s) => (
                   <div key={s.label} className="bg-slate-700/50 rounded-lg p-3">
                     <p className="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">{s.label}</p>
-                    <p className={`text-xl font-bold ${s.color}`}>{s.value}</p>
+                    <p className={`text-xl font-bold ${s.color}`}>{loading ? '...' : s.value}</p>
                   </div>
                 ))}
               </div>
               <div className="bg-slate-700/30 rounded-lg p-4">
                 <h4 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">Corridor Risk Comparison</h4>
                 <ResponsiveContainer width="100%" height={200}>
-                  <BarChart data={corridorRisk} layout="vertical">
+                  <BarChart data={blocks.length > 0 ? blocks.map((b) => ({ name: b.name, risk: Number(b.risk_score) })) : corridorRisk} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                     <XAxis type="number" stroke="#64748b" fontSize={11} domain={[0, 100]} />
                     <YAxis type="category" dataKey="name" stroke="#64748b" fontSize={11} width={120} />
                     <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#fff' }} />
                     <Bar dataKey="risk" radius={[0, 4, 4, 0]}>
-                      {corridorRisk.map((entry, i) => (
-                        <Cell key={i} fill={entry.risk >= 70 ? '#dc2626' : entry.risk >= 50 ? '#d97706' : '#059669'} />
+                      {(blocks.length > 0 ? blocks : corridorRisk).map((entry, i) => (
+                        <Cell key={i} fill={Number(entry.risk_score || entry.risk) >= 70 ? '#dc2626' : Number(entry.risk_score || entry.risk) >= 50 ? '#d97706' : '#059669'} />
                       ))}
                     </Bar>
                   </BarChart>
