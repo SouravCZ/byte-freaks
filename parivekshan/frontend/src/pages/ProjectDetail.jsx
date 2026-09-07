@@ -1,0 +1,181 @@
+import React, { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+
+function riskLevel(score) {
+  if (score >= 75) return { label: 'HIGH', cls: 'bg-red-100 text-red-800 border-red-300' }
+  if (score >= 50) return { label: 'MOD', cls: 'bg-amber-100 text-amber-800 border-amber-300' }
+  return { label: 'LOW', cls: 'bg-emerald-100 text-emerald-800 border-emerald-300' }
+}
+
+function severityCls(sev) {
+  switch (sev) {
+    case 'critical': return 'bg-red-100 text-red-800 border-red-300'
+    case 'high': return 'bg-orange-100 text-orange-800 border-orange-300'
+    case 'moderate': return 'bg-amber-100 text-amber-800 border-amber-300'
+    case 'low': return 'bg-emerald-100 text-emerald-800 border-emerald-300'
+    default: return 'bg-slate-100 text-slate-700 border-slate-300'
+  }
+}
+
+function fmtDate(d) {
+  if (!d) return '—'
+  return new Date(d).toLocaleDateString()
+}
+
+export default function ProjectDetail() {
+  const { id } = useParams()
+  const [project, setProject] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const ctrl = new AbortController()
+    setLoading(true)
+    setError(null)
+    fetch(`${API_BASE}/api/projects/${id}`, { signal: ctrl.signal })
+      .then(async (r) => {
+        if (!r.ok) {
+          const body = await r.json().catch(() => ({}))
+          throw new Error(body.error || `HTTP ${r.status}`)
+        }
+        return r.json()
+      })
+      .then((data) => setProject(data))
+      .catch((err) => {
+        if (err.name !== 'AbortError') setError(err.message)
+      })
+      .finally(() => setLoading(false))
+    return () => ctrl.abort()
+  }, [id])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-10 h-10 border-4 border-navy-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-500 text-sm">Loading project...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !project) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+        <div className="bg-white border border-red-200 rounded-xl p-6 max-w-md text-center">
+          <p className="text-red-600 font-semibold mb-2">Could not load project</p>
+          <p className="text-sm text-slate-500">{error || 'Project not found'}</p>
+          <Link to="/projects" className="inline-block mt-4 text-navy-500 text-sm font-semibold hover:underline">← Back to projects</Link>
+        </div>
+      </div>
+    )
+  }
+
+  const risk = riskLevel(Number(project.risk_score))
+  const maxDriver = project.drivers && project.drivers.length
+    ? Math.max(...project.drivers.map((d) => Number(d.impact_pct)))
+    : 100
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <header className="bg-white border-b border-slate-200">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+          <Link to="/projects" className="text-navy-500 text-sm font-semibold hover:underline">← All projects</Link>
+          <span className="font-mono text-slate-400 text-sm">{project.code}</span>
+        </div>
+      </header>
+
+      <main className="max-w-6xl mx-auto px-4 py-8 space-y-6">
+        <div className="bg-white rounded-xl border border-slate-200 p-6">
+          <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+            <div>
+              <h1 className="text-2xl font-bold text-slate-900">{project.name}</h1>
+              <p className="text-sm text-slate-500 mt-1">
+                {project.block || '—'} · {project.district || ''} · {project.project_type}
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className={`px-3 py-1 text-sm font-mono font-semibold rounded border ${risk.cls}`}>
+                {Number(project.risk_score).toFixed(0)}% {risk.label}
+              </span>
+              <span className={`px-3 py-1 text-sm font-semibold capitalize rounded ${project.status === 'active' ? 'bg-navy-500/10 text-navy-700' : 'bg-slate-100 text-slate-700'}`}>
+                {project.status}
+              </span>
+            </div>
+          </div>
+
+          {project.description && (
+            <p className="text-sm text-slate-600 leading-relaxed mb-6">{project.description}</p>
+          )}
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="bg-slate-50 rounded-lg p-4">
+              <p className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Delay Days</p>
+              <p className="text-xl font-bold text-red-600">{project.delay_days}d</p>
+            </div>
+            <div className="bg-slate-50 rounded-lg p-4">
+              <p className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Lead Time</p>
+              <p className="text-xl font-bold text-slate-900">{project.lead_time_days}d</p>
+            </div>
+            <div className="bg-slate-50 rounded-lg p-4">
+              <p className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Mouzas Affected</p>
+              <p className="text-xl font-bold text-slate-900">{project.mouzas_affected}</p>
+            </div>
+            <div className="bg-slate-50 rounded-lg p-4">
+              <p className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Start / Target</p>
+              <p className="text-sm font-semibold text-slate-900">{fmtDate(project.start_date)} → {fmtDate(project.target_date)}</p>
+            </div>
+          </div>
+        </div>
+
+        {project.drivers && project.drivers.length > 0 && (
+          <div className="bg-white rounded-xl border border-slate-200 p-6">
+            <h2 className="text-lg font-bold text-slate-900 mb-1">Risk Drivers</h2>
+            <p className="text-xs text-slate-400 mb-4">SHAP-style factor attribution</p>
+            <div className="space-y-3">
+              {project.drivers.map((d, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <span className="text-xs font-mono text-slate-400 w-6">{i + 1}.</span>
+                  <span className="text-sm text-slate-700 w-64 shrink-0">{d.factor}</span>
+                  <div className="flex-1 h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-emerald-500 rounded-full"
+                      style={{ width: `${(Number(d.impact_pct) / maxDriver) * 100}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-sm font-mono text-slate-600 w-12 text-right">{Number(d.impact_pct).toFixed(0)}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {project.alerts && project.alerts.length > 0 && (
+          <div className="bg-white rounded-xl border border-slate-200 p-6">
+            <h2 className="text-lg font-bold text-slate-900 mb-4">Alerts</h2>
+            <div className="space-y-3">
+              {project.alerts.map((a) => (
+                <div key={a.id} className="border border-slate-200 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className={`px-2 py-0.5 text-xs font-mono font-semibold uppercase rounded border ${severityCls(a.severity)}`}>
+                      {a.severity}
+                    </span>
+                    <span className="font-semibold text-slate-900 text-sm">{a.title}</span>
+                  </div>
+                  {a.message && <p className="text-sm text-slate-600">{a.message}</p>}
+                  <p className="text-xs text-slate-400 mt-2">{new Date(a.created_at).toLocaleString()}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!project.drivers || project.drivers.length === 0 && (!project.alerts || project.alerts.length === 0) && (
+          <p className="text-center text-slate-400 py-8">No drivers or alerts recorded for this project yet.</p>
+        )}
+      </main>
+    </div>
+  )
+}
