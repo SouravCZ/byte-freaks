@@ -1,7 +1,7 @@
 export const DISTRICT_OFFICER_DISTRICT = 'North 24 Parganas'
 
 export function isDistrictOfficer(role) {
-  return role === 'District Officer'
+  return role === 'District Magistrate'
 }
 
 export function scopeProjects(projects, role) {

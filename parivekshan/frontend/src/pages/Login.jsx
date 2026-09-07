@@ -3,13 +3,13 @@ import { useNavigate, Link } from 'react-router-dom'
 import Logo from '../components/Logo'
 import { useRole } from '../lib/roleContext'
 
-const ROLES = ['District Officer', 'Admin', 'Viewer']
+const ROLES = ['District Magistrate', 'Admin', 'Viewer']
 
 export default function Login() {
   const navigate = useNavigate()
   const { setRole } = useRole()
   const [email, setEmail] = useState('dm@parivekshan.gov.in')
-  const [role, setRoleName] = useState('District Officer')
+  const [role, setRoleName] = useState('District Magistrate')
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -50,7 +50,7 @@ export default function Login() {
                   <option key={r} value={r}>{r}</option>
                 ))}
               </select>
-              {role === 'District Officer' && (
+              {role === 'District Magistrate' && (
                 <p className="text-xs text-slate-400 mt-1.5">Scoped view: North 24 Parganas projects only.</p>
               )}
               {role === 'Admin' && (

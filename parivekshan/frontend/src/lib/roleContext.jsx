@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from 'react'
 const RoleContext = createContext(null)
 const STORAGE_KEY = 'parivekshan.session'
 
-const ROLES = ['District Officer', 'Admin', 'Viewer']
+const ROLES = ['District Magistrate', 'Admin', 'Viewer']
 
 function loadSession() {
   try {

@@ -88,7 +88,7 @@ export default function Overview() {
           <div className="mb-6 flex items-center gap-2 bg-navy-500/5 border border-navy-500/20 rounded-xl px-4 py-3">
             <span className="text-xs font-mono">Scope:</span>
             <span className="text-xs font-mono font-semibold text-navy-700">{DISTRICT_OFFICER_DISTRICT}</span>
-            <span className="text-xs text-slate-500">District Officer — projects filtered client-side</span>
+            <span className="text-xs text-slate-500">District Magistrate — projects filtered client-side</span>
           </div>
         )}
 
