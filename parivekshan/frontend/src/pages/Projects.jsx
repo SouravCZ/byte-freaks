@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useRole } from '../lib/roleContext'
+import { scopeProjects, isDistrictOfficer, DISTRICT_OFFICER_DISTRICT } from '../lib/scoping'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -21,6 +23,7 @@ function statusCls(status) {
 }
 
 export default function Projects() {
+  const { role } = useRole()
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -39,6 +42,8 @@ export default function Projects() {
       .finally(() => setLoading(false))
     return () => ctrl.abort()
   }, [])
+
+  const visibleProjects = scopeProjects(projects, role)
 
   if (loading) {
     return (
@@ -69,11 +74,18 @@ export default function Projects() {
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="text-navy-500 text-sm font-semibold hover:underline">← Back home</Link>
           <h1 className="text-lg font-bold text-slate-900">Land Acquisition Projects</h1>
-          <span className="text-sm font-mono text-slate-400">{projects.length} records</span>
+          <span className="text-sm font-mono text-slate-400">{visibleProjects.length} records</span>
         </div>
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-8">
+        {isDistrictOfficer(role) && (
+          <div className="mb-6 flex items-center gap-2 bg-navy-500/5 border border-navy-500/20 rounded-xl px-4 py-3">
+            <span className="text-xs font-mono">Scope:</span>
+            <span className="text-xs font-mono font-semibold text-navy-700">{DISTRICT_OFFICER_DISTRICT}</span>
+            <span className="text-xs text-slate-500">District Officer — filtered client-side</span>
+          </div>
+        )}
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
           <table className="w-full text-sm">
             <thead>
@@ -88,7 +100,7 @@ export default function Projects() {
               </tr>
             </thead>
             <tbody>
-              {projects.map((p) => {
+              {visibleProjects.map((p) => {
                 const risk = riskLevel(Number(p.risk_score))
                 return (
                   <tr key={p.id} className="border-t border-slate-100 hover:bg-slate-50 transition">
@@ -116,7 +128,7 @@ export default function Projects() {
               })}
             </tbody>
           </table>
-          {projects.length === 0 && (
+          {visibleProjects.length === 0 && (
             <p className="p-8 text-center text-slate-400">No projects found.</p>
           )}
         </div>

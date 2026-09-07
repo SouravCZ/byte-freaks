@@ -10,8 +10,13 @@ INSERT INTO blocks (name, mouza_count, risk_score) VALUES
 ('Barasat I', 110, 22.0),
 ('Barasat II', 95, 30.0),
 ('Barrackpore', 140, 45.0),
-('Hasnabad', 60, 51.0)
+('Hasnabad', 60, 51.0),
+('Kakdwip', 85, 52.0),
+('Pathar Pratima', 70, 41.0)
 ON CONFLICT (name) DO NOTHING;
+
+-- South 24 Parganas blocks (for District Officer scoping demo)
+UPDATE blocks SET district = 'South 24 Parganas' WHERE name IN ('Kakdwip', 'Pathar Pratima');
 
 -- Projects
 WITH b AS (SELECT id, name FROM blocks)
@@ -27,7 +32,11 @@ INSERT INTO projects (code, name, block_id, project_type, description, status, r
 ('IC-BRK-COR', 'Barrackpore Industrial Corridor', (SELECT id FROM b WHERE name='Barrackpore'), 'Industrial',
  'Industrial utility shifting and multi-agency environmental clearances.', 'active', 45, 60, 120, 22),
 ('BF-HNG-001', 'Hingalganj Border Fencing Pkg 1', (SELECT id FROM b WHERE name='Hingalganj'), 'Border Infrastructure',
- 'Erosion-related border works with legal dispute risk.', 'on_hold', 68, 140, 160, 28)
+ 'Erosion-related border works with legal dispute risk.', 'on_hold', 68, 140, 160, 28),
+('KW-KAK-EMB', 'Kakdwip Embankment R&R', (SELECT id FROM b WHERE name='Kakdwip'), 'Resettlement',
+ 'Cyclone-hardened embankment relocation with fisher community compensation.', 'active', 52, 40, 140, 16),
+('RR-PAT-001', 'Pathar Pratima Coastal Road', (SELECT id FROM b WHERE name='Pathar Pratima'), 'Highway',
+ 'Coastal access road with wetland clearance dependency.', 'planned', 41, 0, 90, 11)
 ON CONFLICT (code) DO NOTHING;
 
 -- Risk drivers (SHAP-style attribution)
@@ -44,7 +53,10 @@ INSERT INTO risk_drivers (project_id, factor, impact_pct, rank) VALUES
 ((SELECT id FROM p WHERE code='IC-BRK-COR'), 'Multi-Agency Clearances', 41, 1),
 ((SELECT id FROM p WHERE code='IC-BRK-COR'), 'Utility Shifting', 36, 2),
 ((SELECT id FROM p WHERE code='BF-HNG-001'), 'Erosion Displacement', 61, 1),
-((SELECT id FROM p WHERE code='BF-HNG-001'), 'Legal Disputes', 57, 2)
+((SELECT id FROM p WHERE code='BF-HNG-001'), 'Legal Disputes', 57, 2),
+((SELECT id FROM p WHERE code='KW-KAK-EMB'), 'Relocation Package Negotiation', 48, 1),
+((SELECT id FROM p WHERE code='KW-KAK-EMB'), 'Fisher Livelihood Claims', 39, 2),
+((SELECT id FROM p WHERE code='RR-PAT-001'), 'Wetland Clearance', 35, 1)
 ON CONFLICT DO NOTHING;
 
 -- Risk history snapshots (12 months for trend charts)
@@ -70,7 +82,10 @@ INSERT INTO alerts (project_id, severity, title, message) VALUES
  'Automated notice dispatched to State Pollution Control Board.'),
 ((SELECT id FROM p WHERE code='RR-HNG-EMB'), 'moderate',
  'Hingalganj R&R Titling Pending',
- 'Sub-Divisional Officer grievance hearing scheduled for saline zone parcels.')
+ 'Sub-Divisional Officer grievance hearing scheduled for saline zone parcels.'),
+((SELECT id FROM p WHERE code='KW-KAK-EMB'), 'moderate',
+ 'Kakdwip Relocation Negotiations Open',
+ 'Fisher community compensation talks ongoing across 16 mouzas.')
 ON CONFLICT DO NOTHING;
 
 -- Users (RBAC)
