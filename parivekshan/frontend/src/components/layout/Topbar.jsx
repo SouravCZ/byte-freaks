@@ -14,7 +14,7 @@ export default function Topbar({ title, subtitle }) {
           {subtitle && <p className="text-[11px] font-mono text-slate-400 truncate">{subtitle}</p>}
         </div>
         <div className="flex items-center gap-3 shrink-0">
-          {scoped && (
+          {scoped && DISTRICT_OFFICER_DISTRICT && (
             <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 bg-navy-500/5 border border-navy-500/20 rounded text-[10px] font-mono font-semibold text-navy-700 uppercase tracking-wider">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
               {DISTRICT_OFFICER_DISTRICT}

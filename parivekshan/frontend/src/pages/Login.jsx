@@ -70,10 +70,10 @@ export default function Login() {
                   ))}
                 </select>
                 {role === 'District Magistrate' && (
-                  <p className="text-xs text-slate-400 mt-1.5">Scoped view: North 24 Parganas projects only.</p>
+                  <p className="text-xs text-slate-400 mt-1.5">National command view: all 20 states.</p>
                 )}
                 {role === 'Admin' && (
-                  <p className="text-xs text-slate-400 mt-1.5">Unrestricted view: all districts.</p>
+                  <p className="text-xs text-slate-400 mt-1.5">Unrestricted view: all states & districts.</p>
                 )}
               </div>
 

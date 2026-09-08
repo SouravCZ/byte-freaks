@@ -1,0 +1,4 @@
+node_modules/
+
+# Vite dev cache (rebuilt on every dev run — noise in git history)
+node_modules/.vite/
