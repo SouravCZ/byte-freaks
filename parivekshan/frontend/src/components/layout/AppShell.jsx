@@ -7,17 +7,17 @@ export default function AppShell({ icon, title, subtitle, children }) {
   const { role } = useRole()
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-background">
       <Sidebar />
-      <div className="flex-1 min-w-0 flex flex-col">
+      <div className="lg:pl-sidebar-width flex flex-col min-h-screen">
         <Topbar title={title} subtitle={subtitle} />
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <main className="flex-1 w-full max-w-[1680px] mx-auto px-space-lg lg:px-space-xl py-space-lg lg:py-space-xl">
           {children}
         </main>
-        <footer className="border-t border-slate-200 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-            <p className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Parivekshan AI · NSDSS</p>
-            <p className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Session: {role || 'anonymous'}</p>
+        <footer className="border-t border-border-crisp bg-surface-card">
+          <div className="max-w-[1680px] mx-auto px-space-lg lg:px-space-xl py-space-md flex items-center justify-between gap-2">
+            <p className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider">LandGuard AI · MoRD GeoRisk Suite · NSDSS</p>
+            <p className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider">GovNet Session: {role || 'anonymous'}</p>
           </div>
         </footer>
       </div>
