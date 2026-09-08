@@ -8,6 +8,7 @@ import Overview from './pages/Overview'
 import Login from './pages/Login'
 import Analytics from './pages/Analytics'
 import Alerts from './pages/Alerts'
+import Users from './pages/Users'
 import { useRole } from './lib/roleContext'
 
 function Protected({ children }) {
@@ -72,6 +73,7 @@ export default function App() {
       <Route path="/projects/:id" element={<Protected><ProjectDetail /></Protected>} />
       <Route path="/analytics" element={<Protected><Analytics /></Protected>} />
       <Route path="/alerts" element={<Protected><Alerts /></Protected>} />
+      <Route path="/users" element={<Protected><Users /></Protected>} />
     </Routes>
   )
 }
