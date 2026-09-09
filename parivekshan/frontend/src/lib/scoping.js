@@ -1,4 +1,4 @@
-export const DISTRICT_OFFICER_DISTRICT = 'North 24 Parganas'
+export const DISTRICT_OFFICER_DISTRICT = null
 
 export function isDistrictOfficer(role) {
   return role === 'District Magistrate'
@@ -6,7 +6,7 @@ export function isDistrictOfficer(role) {
 
 export function scopeProjects(projects, role) {
   const list = Array.isArray(projects) ? projects : []
-  if (!isDistrictOfficer(role)) return list
+  if (!isDistrictOfficer(role) || !DISTRICT_OFFICER_DISTRICT) return list
   return list.filter((p) => (p.district || '') === DISTRICT_OFFICER_DISTRICT)
 }
 

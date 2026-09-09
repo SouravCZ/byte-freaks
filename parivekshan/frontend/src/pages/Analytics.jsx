@@ -1,649 +1,413 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts'
+import { useRole } from '../lib/roleContext'
+import { scopeProjects, isDistrictOfficer, DISTRICT_OFFICER_DISTRICT } from '../lib/scoping'
+import AppShell from '../components/layout/AppShell'
 
-const ML_BASE = import.meta.env.VITE_ML_URL || 'http://localhost:8001'
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
-const RISK_COLORS = {
-  Low: '#10b981',
-  Medium: '#f59e0b',
-  High: '#ef4444',
-  Critical: '#7c3aed',
+function riskBand(score) {
+  const n = Number(score)
+  if (n >= 75) return { key: 'high', label: 'High', hex: '#ef4444', tile: 'bg-[#fca5a5]', bar: 'bg-gradient-to-r from-amber-500 to-red-600', text: 'text-error' }
+  if (n >= 50) return { key: 'mod', label: 'Medium', hex: '#f59e0b', tile: 'bg-[#fdba74]', bar: 'bg-gradient-to-r from-amber-400 to-orange-500', text: 'text-risk-warning' }
+  return { key: 'low', label: 'Low', hex: '#10b981', tile: 'bg-[#86efac]', bar: 'bg-gradient-to-r from-emerald-400 to-emerald-500', text: 'text-risk-success' }
 }
 
-const CATEGORY_ORDER = ['Low', 'Medium', 'High', 'Critical']
-
-const PROJECT_TYPES = [
-  {
-    name: 'Highway',
-    icon: '🛣',
-    desc: 'NH widening, bypass, expressway',
-    defaults: {
-      project_type: 'Highway', state: 'West Bengal', status: 'Under Scrutiny',
-      dispute_type: 'none', area_acquired_hectares: 45, dispute_duration_days: 120,
-      pending_approvals_count: 3, avg_approval_turnaround_days: 30,
-      stakeholder_responsiveness_score: 4.5, compensation_assessed_inr: 850000,
-      compensation_disbursed_inr: 340000, compensation_disbursed_pct: 0.4,
-      affected_families: 150, displaced_families: 60, rr_progress_percent: 35,
-      cohort_benchmark_days: 450, legal_dispute_flag: 1, documentation_complete: 0,
-      rr_required: 1,
-      duration_proposed_to_scrutiny: 28, duration_scrutiny_to_notification: 65,
-      duration_notification_to_declaration: 85, duration_declaration_to_award: 70,
-      duration_award_to_compensation: 80, duration_compensation_to_possession: 60,
-      duration_possession_to_closed: 55,
-    },
-  },
-  {
-    name: 'Railway',
-    icon: '🚂',
-    desc: 'Rail line, doubling, station redevelopment',
-    defaults: {
-      project_type: 'Railway', state: 'West Bengal', status: 'Preliminary Notification Issued',
-      dispute_type: 'none', area_acquired_hectares: 30, dispute_duration_days: 60,
-      pending_approvals_count: 2, avg_approval_turnaround_days: 25,
-      stakeholder_responsiveness_score: 5.5, compensation_assessed_inr: 600000,
-      compensation_disbursed_inr: 420000, compensation_disbursed_pct: 0.7,
-      affected_families: 100, displaced_families: 25, rr_progress_percent: 60,
-      cohort_benchmark_days: 480, legal_dispute_flag: 0, documentation_complete: 1,
-      rr_required: 0,
-      duration_proposed_to_scrutiny: 22, duration_scrutiny_to_notification: 50,
-      duration_notification_to_declaration: 70, duration_declaration_to_award: 55,
-      duration_award_to_compensation: 65, duration_compensation_to_possession: 50,
-      duration_possession_to_closed: 45,
-    },
-  },
-  {
-    name: 'Industrial Corridor',
-    icon: '🏭',
-    desc: 'DMIC nodes, growth corridors',
-    defaults: {
-      project_type: 'Industrial Corridor', state: 'West Bengal', status: 'Award Passed',
-      dispute_type: 'none', area_acquired_hectares: 80, dispute_duration_days: 90,
-      pending_approvals_count: 4, avg_approval_turnaround_days: 35,
-      stakeholder_responsiveness_score: 3.8, compensation_assessed_inr: 1200000,
-      compensation_disbursed_inr: 360000, compensation_disbursed_pct: 0.3,
-      affected_families: 200, displaced_families: 80, rr_progress_percent: 25,
-      cohort_benchmark_days: 540, legal_dispute_flag: 1, documentation_complete: 0,
-      rr_required: 1,
-      duration_proposed_to_scrutiny: 35, duration_scrutiny_to_notification: 80,
-      duration_notification_to_declaration: 100, duration_declaration_to_award: 85,
-      duration_award_to_compensation: 95, duration_compensation_to_possession: 80,
-      duration_possession_to_closed: 70,
-    },
-  },
-  {
-    name: 'Urban Development',
-    icon: '🏙',
-    desc: 'Metro, ring road, smart city',
-    defaults: {
-      project_type: 'Urban Development', state: 'West Bengal', status: 'Declaration Issued',
-      dispute_type: 'none', area_acquired_hectares: 15, dispute_duration_days: 30,
-      pending_approvals_count: 1, avg_approval_turnaround_days: 20,
-      stakeholder_responsiveness_score: 6.0, compensation_assessed_inr: 400000,
-      compensation_disbursed_inr: 320000, compensation_disbursed_pct: 0.8,
-      affected_families: 60, displaced_families: 15, rr_progress_percent: 70,
-      cohort_benchmark_days: 450, legal_dispute_flag: 0, documentation_complete: 1,
-      rr_required: 0,
-      duration_proposed_to_scrutiny: 20, duration_scrutiny_to_notification: 45,
-      duration_notification_to_declaration: 65, duration_declaration_to_award: 50,
-      duration_award_to_compensation: 55, duration_compensation_to_possession: 45,
-      duration_possession_to_closed: 40,
-    },
-  },
-  {
-    name: 'Renewable Energy',
-    icon: '☀',
-    desc: 'Solar park, wind-solar hybrid',
-    defaults: {
-      project_type: 'Renewable Energy', state: 'West Bengal', status: 'Compensation Disbursed',
-      dispute_type: 'none', area_acquired_hectares: 5, dispute_duration_days: 0,
-      pending_approvals_count: 1, avg_approval_turnaround_days: 15,
-      stakeholder_responsiveness_score: 7.0, compensation_assessed_inr: 200000,
-      compensation_disbursed_inr: 180000, compensation_disbursed_pct: 0.9,
-      affected_families: 30, displaced_families: 5, rr_progress_percent: 85,
-      cohort_benchmark_days: 330, legal_dispute_flag: 0, documentation_complete: 1,
-      rr_required: 0,
-      duration_proposed_to_scrutiny: 18, duration_scrutiny_to_notification: 40,
-      duration_notification_to_declaration: 55, duration_declaration_to_award: 45,
-      duration_award_to_compensation: 50, duration_compensation_to_possession: 42,
-      duration_possession_to_closed: 38,
-    },
-  },
-  {
-    name: 'Irrigation',
-    icon: '💧',
-    desc: 'Canal modernization, command area',
-    defaults: {
-      project_type: 'Irrigation', state: 'West Bengal', status: 'Under Scrutiny',
-      dispute_type: 'none', area_acquired_hectares: 25, dispute_duration_days: 45,
-      pending_approvals_count: 2, avg_approval_turnaround_days: 22,
-      stakeholder_responsiveness_score: 5.0, compensation_assessed_inr: 300000,
-      compensation_disbursed_inr: 210000, compensation_disbursed_pct: 0.7,
-      affected_families: 90, displaced_families: 20, rr_progress_percent: 55,
-      cohort_benchmark_days: 390, legal_dispute_flag: 0, documentation_complete: 1,
-      rr_required: 0,
-      duration_proposed_to_scrutiny: 20, duration_scrutiny_to_notification: 48,
-      duration_notification_to_declaration: 62, duration_declaration_to_award: 52,
-      duration_award_to_compensation: 58, duration_compensation_to_possession: 50,
-      duration_possession_to_closed: 45,
-    },
-  },
-]
-
-function StatCard({ label, value, sub, color }) {
-  return (
-    <div className="bg-white rounded-xl border border-slate-200 p-5">
-      <p className="text-xs font-mono text-black uppercase tracking-wider mb-1">{label}</p>
-      <p className={`text-2xl font-bold ${color || 'text-black'}`}>{value}</p>
-      {sub && <p className="text-xs text-black mt-1">{sub}</p>}
-    </div>
-  )
-}
-
-function riskBadge(cat, size) {
-  const s = size === 'sm' ? 'px-2 py-0.5 text-xs' : 'px-3 py-1 text-sm'
-  const base = `${s} font-mono font-semibold rounded border`
-  switch (cat) {
-    case 'Critical': return `${base} bg-purple-100 text-black border-purple-300`
-    case 'High': return `${base} bg-red-100 text-black border-red-300`
-    case 'Medium': return `${base} bg-amber-100 text-black border-amber-300`
-    case 'Low': return `${base} bg-emerald-100 text-black border-emerald-300`
-    default: return `${base} bg-slate-100 text-black border-slate-300`
-  }
-}
-
-function PredictionCard({ title, icon, desc, prediction, loading: isLoading }) {
-  if (isLoading) {
-    return (
-      <div className="bg-white rounded-xl border border-slate-200 p-5">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-xl">{icon}</span>
-          <h3 className="font-bold text-black">{title}</h3>
-        </div>
-        <div className="flex items-center justify-center py-6">
-          <div className="w-6 h-6 border-2 border-navy-500 border-t-transparent rounded-full animate-spin"></div>
-          <span className="ml-2 text-xs text-black">Predicting...</span>
-        </div>
-      </div>
-    )
-  }
-
-  if (!prediction || prediction.error) {
-    return (
-      <div className="bg-white rounded-xl border border-slate-200 p-5">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-xl">{icon}</span>
-          <h3 className="font-bold text-black">{title}</h3>
-        </div>
-        <p className="text-xs text-black py-4 text-center">{prediction?.error || 'No data'}</p>
-      </div>
-    )
-  }
-
-  const p = prediction
-  return (
-    <div className="bg-white rounded-xl border border-slate-200 p-5">
-      <div className="flex items-center justify-between mb-1">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">{icon}</span>
-          <h3 className="font-bold text-black">{title}</h3>
-        </div>
-        <span className={riskBadge(p.risk_category, 'sm')}>{p.risk_category}</span>
-      </div>
-      {desc && <p className="text-[10px] text-black mb-3">{desc}</p>}
-
-      <div className="flex items-end gap-3 mb-3">
-        <p className="text-3xl font-bold text-black">
-          {(p.risk_score * 100).toFixed(0)}%
-        </p>
-        <p className="text-[10px] text-black mb-1">confidence</p>
-      </div>
-
-      {/* Mini probability bars */}
-      <div className="space-y-1 mb-3">
-        {CATEGORY_ORDER.map(cat => (
-          <div key={cat} className="flex items-center gap-2">
-            <span className="w-14 text-[10px] font-mono text-black font-semibold">{cat}</span>
-            <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-              <div className="h-full rounded-full" style={{ width: `${(p.probabilities[cat] || 0) * 100}%`, backgroundColor: RISK_COLORS[cat] }}></div>
-            </div>
-            <span className="w-10 text-right text-[10px] font-mono text-black">{((p.probabilities[cat] || 0) * 100).toFixed(0)}%</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Top 3 factors */}
-      {p.top_factors && p.top_factors.length > 0 && (
-        <div className="pt-2 border-t border-slate-100">
-          <p className="text-[10px] font-mono text-black mb-1">Top Factors</p>
-          {p.top_factors.slice(0, 3).map((f, i) => {
-            const isNeg = f.impact < 0
-            return (
-              <div key={i} className="flex items-center gap-2 text-[11px]">
-                <span className="text-black w-3">{i + 1}.</span>
-                <span className="w-32 text-black truncate" title={f.feature}>{f.feature.replace(/_/g, ' ')}</span>
-                <div className="flex-1 h-1 bg-slate-100 rounded-full overflow-hidden">
-                  <div className={`h-full rounded-full ${isNeg ? 'bg-emerald-400' : 'bg-red-400'}`} style={{ width: `${Math.min(100, Math.abs(f.impact) * 200)}%` }}></div>
-                </div>
-                <span className="w-14 text-right font-mono text-black">
-                  {isNeg ? '-' : '+'}{(Math.abs(f.impact) * 100).toFixed(0)}%
-                </span>
-              </div>
-            )
-          })}
-        </div>
-      )}
-
-      {/* Explanation */}
-      {p.explanation && (
-        <div className="mt-2 pt-2 border-t border-slate-100">
-          <p className="text-[10px] text-black leading-relaxed">{p.explanation.summary}</p>
-          {p.explanation.recommendations?.length > 0 && (
-            <p className="text-[10px] text-black mt-1">{p.explanation.recommendations[0]}</p>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
-
-function OverallCard({ predictions, loading }) {
-  const loaded = Object.values(predictions).filter(p => p && !p.error)
-
-  if (loading) {
-    return (
-      <div className="bg-white border border-slate-200 rounded-xl p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <span className="text-2xl">📊</span>
-          <h3 className="text-lg font-bold text-black">Overall Risk Assessment</h3>
-        </div>
-        <div className="flex items-center justify-center py-8">
-          <div className="w-8 h-8 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
-          <span className="ml-3 text-sm text-black">Computing aggregate...</span>
-        </div>
-      </div>
-    )
-  }
-
-  if (loaded.length === 0) return null
-
-  // Average probabilities across all types
-  const avgProbs = {}
-  CATEGORY_ORDER.forEach(c => { avgProbs[c] = 0 })
-  loaded.forEach(p => {
-    CATEGORY_ORDER.forEach(c => { avgProbs[c] += (p.probabilities[c] || 0) })
-  })
-  CATEGORY_ORDER.forEach(c => { avgProbs[c] /= loaded.length })
-
-  const predIdx = CATEGORY_ORDER.indexOf(
-    CATEGORY_ORDER.reduce((best, c) => avgProbs[c] > avgProbs[best] ? c : best, 'Low')
-  )
-  const overallCategory = CATEGORY_ORDER[predIdx]
-  const overallScore = avgProbs[overallCategory]
-
-  // Aggregate top factors (union, take top 5 by absolute impact)
-  const factorMap = {}
-  loaded.forEach(p => {
-    p.top_factors?.forEach(f => {
-      if (!factorMap[f.feature]) factorMap[f.feature] = { ...f, count: 0, totalImpact: 0 }
-      factorMap[f.feature].count++
-      factorMap[f.feature].totalImpact += f.impact
-    })
-  })
-  const topFactors = Object.values(factorMap)
-    .sort((a, b) => Math.abs(b.totalImpact) - Math.abs(a.totalImpact))
-    .slice(0, 5)
-
-  return (
-    <div className="bg-white border-2 border-slate-300 rounded-xl p-6">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl">📊</span>
-          <div>
-            <h3 className="text-lg font-bold text-black">Overall Risk Assessment</h3>
-            <p className="text-xs text-black">Average across all {loaded.length} project types</p>
-          </div>
-        </div>
-        <span className="px-3 py-1 text-sm font-mono font-bold rounded border border-slate-300 bg-slate-100 text-black">
-          {overallCategory}
-        </span>
-      </div>
-
-      <div className="flex items-end gap-4 mb-5">
-        <p className="text-5xl font-extrabold text-black">{(overallScore * 100).toFixed(0)}%</p>
-        <div className="mb-1">
-          <p className="text-xs text-black">Average confidence</p>
-        </div>
-      </div>
-
-      {/* Probability bars */}
-      <div className="space-y-2 mb-5">
-        {CATEGORY_ORDER.map(cat => (
-          <div key={cat} className="flex items-center gap-2">
-            <span className="w-16 text-xs font-mono text-black font-semibold">{cat}</span>
-            <div className="flex-1 h-2.5 bg-slate-200 rounded-full overflow-hidden">
-              <div className="h-full rounded-full transition-all" style={{ width: `${avgProbs[cat] * 100}%`, backgroundColor: RISK_COLORS[cat] }}></div>
-            </div>
-            <span className="w-12 text-right text-xs font-mono text-black">{(avgProbs[cat] * 100).toFixed(0)}%</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Top aggregate factors */}
-      {topFactors.length > 0 && (
-        <div className="pt-4 border-t border-slate-200">
-          <p className="text-[10px] font-mono text-black uppercase mb-2">Most Influential Factors (across all types)</p>
-          {topFactors.map((f, i) => {
-            const avgImpact = f.totalImpact / f.count
-            const isNeg = avgImpact < 0
-            return (
-              <div key={i} className="flex items-center gap-2 text-xs mb-1">
-                <span className="text-black w-3">{i + 1}.</span>
-                <span className="w-36 text-black truncate" title={f.feature}>{f.feature.replace(/_/g, ' ')}</span>
-                <div className="flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                  <div className={`h-full rounded-full ${isNeg ? 'bg-emerald-400' : 'bg-red-400'}`} style={{ width: `${Math.min(100, Math.abs(avgImpact) * 200)}%` }}></div>
-                </div>
-                <span className="w-16 text-right font-mono text-black">
-                  {isNeg ? '-' : '+'}{(Math.abs(avgImpact) * 100).toFixed(0)}%
-                </span>
-              </div>
-            )
-          })}
-        </div>
-      )}
-    </div>
-  )
+function abbrState(name) {
+  const parts = String(name || '').trim().split(/\s+/)
+  if (parts.length === 1) return (parts[0].slice(0, 2)).toUpperCase()
+  return (parts[0][0] + parts[1][0]).toUpperCase()
 }
 
 export default function Analytics() {
-  const [mlHealth, setMlHealth] = useState(null)
-  const [modelInfo, setModelInfo] = useState(null)
-  const [typePredictions, setTypePredictions] = useState({})
+  const { role } = useRole()
+  const [stats, setStats] = useState(null)
+  const [blocks, setBlocks] = useState([])
+  const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
-  const [predictingTypes, setPredictingTypes] = useState(true)
+  const [error, setError] = useState(null)
+  const [fState, setFState] = useState('ALL')
+  const [fRisk, setFRisk] = useState('ALL')
 
   useEffect(() => {
     const ctrl = new AbortController()
-
-    async function loadAll() {
-      setLoading(true)
-
-      // 1. Health + model info
-      const [health, info] = await Promise.all([
-        fetch(`${ML_BASE}/health`, { signal: ctrl.signal }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${ML_BASE}/model/info`, { signal: ctrl.signal }).then(r => r.ok ? r.json() : null).catch(() => null),
-      ])
-      setMlHealth(health)
-      setModelInfo(info)
-      setLoading(false)
-
-      if (health?.status !== 'ok') {
-        setPredictingTypes(false)
-        return
-      }
-
-      // 2. Predict for each project type in parallel
-      setPredictingTypes(true)
-      const results = await Promise.all(
-        PROJECT_TYPES.map(async (pt) => {
-          try {
-            const res = await fetch(`${ML_BASE}/predict`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(pt.defaults),
-              signal: ctrl.signal,
-            })
-            if (!res.ok) return { error: `HTTP ${res.status}` }
-            return res.json()
-          } catch (e) {
-            if (e.name === 'AbortError') return null
-            return { error: e.message }
-          }
-        })
-      )
-
-      const map = {}
-      PROJECT_TYPES.forEach((pt, i) => { if (results[i]) map[pt.name] = results[i] })
-      setTypePredictions(map)
-      setPredictingTypes(false)
-    }
-
-    loadAll()
+    Promise.all([
+      fetch(`${API_BASE}/api/stats`, { signal: ctrl.signal }).then((r) => r.json()),
+      fetch(`${API_BASE}/api/blocks`, { signal: ctrl.signal }).then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      }),
+      fetch(`${API_BASE}/api/projects`, { signal: ctrl.signal }).then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      }),
+    ])
+      .then(([statsData, blocksData, projectsData]) => {
+        setStats(statsData)
+        setBlocks(Array.isArray(blocksData) ? blocksData : [])
+        setProjects(Array.isArray(projectsData) ? projectsData : [])
+      })
+      .catch((err) => {
+        if (err.name !== 'AbortError') setError(err.message)
+      })
+      .finally(() => setLoading(false))
     return () => ctrl.abort()
   }, [])
 
-  const metrics = modelInfo?.metrics
-  const featureMeta = modelInfo?.feature_meta
+  const scoped = isDistrictOfficer(role)
+  const visibleProjects = scopeProjects(projects, role)
+  const scopedBlocks = scoped
+    ? blocks.filter((b) => (b.district || '') === DISTRICT_OFFICER_DISTRICT)
+    : blocks
 
-  const featureImportance = metrics?.feature_importance
-    ? Object.entries(metrics.feature_importance)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 12)
-        .map(([name, value]) => ({
-          name: name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
-          importance: Number((value * 100).toFixed(1)),
-        }))
-    : []
+  const stateOptions = useMemo(() => Array.from(new Set(scopedBlocks.map((b) => b.district).filter(Boolean))).sort(), [scopedBlocks])
 
-  const confusionMatrix = metrics?.confusion_matrix || []
+  const filteredBlocks = useMemo(() => {
+    return scopedBlocks.filter((b) => {
+      if (fState !== 'ALL' && (b.district || '') !== fState) return false
+      if (fRisk !== 'ALL' && riskBand(b.risk_score).key !== fRisk) return false
+      return true
+    })
+  }, [scopedBlocks, fState, fRisk])
 
-  const mlDown = mlHealth?.status !== 'ok'
+  const highCount = scopedBlocks.filter((b) => Number(b.risk_score) >= 75).length
+  const modCount = scopedBlocks.filter((b) => Number(b.risk_score) >= 50 && Number(b.risk_score) < 75).length
+
+  const stateBars = useMemo(() => {
+    const by = {}
+    filteredBlocks.forEach((b) => {
+      const s = b.district || 'Unknown'
+      by[s] = by[s] || { count: 0, sum: 0, high: 0 }
+      by[s].count += 1
+      by[s].sum += Number(b.risk_score)
+      if (Number(b.risk_score) >= 75) by[s].high += 1
+    })
+    return Object.entries(by)
+      .map(([name, v]) => ({ name, avg: Math.round(v.sum / v.count), high: v.high }))
+      .sort((a, b) => b.avg - a.avg)
+      .slice(0, 10)
+  }, [filteredBlocks])
+
+  const topCluster = stateBars[0]?.name || '—'
+
+  const heatGrid = useMemo(() => {
+    return filteredBlocks
+      .map((b) => ({
+        name: b.name,
+        state: b.district,
+        risk: Number(b.risk_score),
+        projects: visibleProjects.filter((p) => (p.block || '') === b.name).length,
+        topFactor: projector(b),
+      }))
+      .sort((a, b) => b.risk - a.risk)
+  }, [filteredBlocks, visibleProjects])
+
+  function projector(block) {
+    const list = visibleProjects.filter((p) => (p.block || '') === block.name)
+    const counts = {}
+    list.forEach((p) => {
+      const f = Array.isArray(p.drivers) && p.drivers.length ? p.drivers[0].factor : (p.project_type || '')
+      counts[f] = (counts[f] || 0) + 1
+    })
+    const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]
+    return top ? top[0].slice(0, 28) : '—'
+  }
+
+  const pinned = heatGrid[0] || null
+  const legendCounts = heatGrid.reduce((acc, b) => {
+    acc[riskBand(b.risk).key] += 1
+    return acc
+  }, { high: 0, mod: 0, low: 0 })
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-10 h-10 border-4 border-navy-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-black text-sm">Loading ML dashboard...</p>
+      <AppShell title="District Analytics" subtitle={`${API_BASE}/api/blocks`}>
+        <div className="py-20 text-center">
+          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-text-secondary text-sm">Loading analytics…</p>
         </div>
-      </div>
+      </AppShell>
+    )
+  }
+
+  if (error) {
+    return (
+      <AppShell title="District Analytics" subtitle={`${API_BASE}/api/blocks`}>
+        <div className="bg-surface-card border border-error/30 rounded-lg p-6 max-w-md mx-auto text-center">
+          <p className="text-error font-semibold mb-2">Failed to load analytics</p>
+          <p className="text-sm text-text-secondary">{error}</p>
+        </div>
+      </AppShell>
     )
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link to="/" className="text-black text-sm font-semibold hover:underline">&larr; Home</Link>
-            <h1 className="text-lg font-bold text-black">ML Risk Prediction Dashboard</h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className={`w-2.5 h-2.5 rounded-full ${mlDown ? 'bg-red-500' : 'bg-emerald-500'}`}></span>
-            <span className="text-xs font-mono text-black">
-              {mlDown ? 'ML Server Offline' : 'ML Server Online'}
-            </span>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-
-        {mlDown && (
-          <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-            <p className="text-black font-semibold mb-2">ML Model Server is Offline</p>
-            <p className="text-sm text-black">Start the Python model server to enable predictions:</p>
-            <code className="block mt-3 bg-slate-100 text-black text-sm px-4 py-2 rounded-lg font-mono border border-slate-300">
-              cd ml/src &amp;&amp; python model_server.py
-            </code>
-          </div>
-        )}
-
-        {/* KPIs */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <StatCard label="Model Accuracy" value={metrics ? `${(metrics.accuracy * 100).toFixed(1)}%` : '---'}
-            sub={`Baseline: ${metrics ? (metrics.baseline_accuracy * 100).toFixed(1) + '%' : '---'}`}
-            color="text-black" />
-          <StatCard label="F1 Score (Weighted)" value={metrics ? `${(metrics.f1_weighted * 100).toFixed(1)}%` : '---'} sub="Macro-averaged F1" />
-          <StatCard label="CV Accuracy" value={metrics ? `${(metrics.cv_mean * 100).toFixed(1)}%` : '---'}
-            sub={metrics ? `+/- ${(metrics.cv_std * 100).toFixed(1)}% (5-fold)` : '---'} />
-          <StatCard label="Features" value={metrics?.n_features || '---'}
-            sub={`${metrics?.n_train || 0} train / ${metrics?.n_test || 0} test`} />
-        </div>
-
-        {/* Overall + Per-Type Predictions */}
+    <AppShell title="Analytics" subtitle="National infrastructure risk telemetry">
+      {/* Header strip */}
+      <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-space-md mb-space-md">
         <div>
-          <h2 className="text-lg font-bold text-black mb-1">Predictions by Project Type</h2>
-          <p className="text-xs text-black mb-4">Auto-predicted using default West Bengal parameters</p>
-
-          {/* Overall card - full width */}
-          <OverallCard predictions={typePredictions} loading={predictingTypes} />
-
-          {/* Per-type cards grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-            {PROJECT_TYPES.map(pt => (
-              <PredictionCard
-                key={pt.name}
-                title={pt.name}
-                icon={pt.icon}
-                desc={pt.desc}
-                prediction={typePredictions[pt.name]}
-                loading={predictingTypes && !typePredictions[pt.name]}
-              />
-            ))}
+          <div className="flex items-center gap-space-sm">
+            <span className="inline-flex items-center gap-1 px-space-xs py-0.5 rounded bg-primary-container text-primary font-code-xs text-code-xs font-semibold uppercase tracking-wider border border-primary/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+              Live Spatial Telemetry
+            </span>
+            <span className="font-code-xs text-code-xs text-text-muted">{scopedBlocks.length} blocks monitored</span>
           </div>
+          <h1 className="font-headline-lg text-headline-lg text-text-primary tracking-tight font-bold">District Risk Analytics</h1>
+          <p className="font-body-md text-body-md text-text-secondary max-w-2xl">Cross-district heat-mapping of acquisition delay probability with state-level aggregation and anomaly cluster detection.</p>
         </div>
+      </div>
 
-        {/* Feature Importance + Confusion Matrix */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-xl border border-slate-200 p-6">
-            <h2 className="text-lg font-bold text-black mb-1">Feature Importance</h2>
-            <p className="text-xs text-black mb-4">Top 12 features driving predictions</p>
-            {featureImportance.length > 0 ? (
-              <ResponsiveContainer width="100%" height={360}>
-                <BarChart data={featureImportance} layout="vertical" margin={{ left: 10, right: 20, top: 5, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                  <XAxis type="number" tick={{ fontSize: 11 }} unit="%" />
-                  <YAxis dataKey="name" type="category" width={180} tick={{ fontSize: 10 }} />
-                  <Tooltip formatter={(v) => [`${v}%`, 'Importance']} />
-                  <Bar dataKey="importance" fill="#6366f1" radius={[0, 4, 4, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <p className="text-sm text-black py-8 text-center">No feature importance data</p>
-            )}
+      {/* Filters */}
+      <div className="px-space-md py-space-md bg-surface-card rounded-lg border border-border-crisp shadow-sm flex flex-wrap items-center justify-between gap-space-sm mb-space-base">
+        <div className="flex items-center gap-space-xs">
+          <div className="flex items-center gap-space-xs bg-surface-card border border-border-crisp px-space-sm py-1 rounded-lg shadow-sm">
+            <span className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider">Jurisdiction:</span>
+            <select value={fState} onChange={(e) => setFState(e.target.value)} className="bg-transparent font-label-md text-label-md text-text-primary focus:outline-none cursor-pointer pr-space-xs">
+              <option value="ALL">All India ({stateOptions.length})</option>
+              {stateOptions.map((s) => <option key={s} value={s}>{s}</option>)}
+            </select>
           </div>
-
-          <div className="bg-white rounded-xl border border-slate-200 p-6">
-            <h2 className="text-lg font-bold text-black mb-1">Confusion Matrix</h2>
-            <p className="text-xs text-black mb-4">Actual vs predicted risk categories</p>
-            {confusionMatrix.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr>
-                      <th className="px-3 py-2 text-xs font-mono text-black text-left">Actual / Pred</th>
-                      {CATEGORY_ORDER.map(c => (
-                        <th key={c} className="px-3 py-2 text-xs font-mono text-black text-center">{c}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {CATEGORY_ORDER.map((rowCat, ri) => (
-                      <tr key={rowCat}>
-                        <td className="px-3 py-2 text-xs font-mono font-semibold text-black">{rowCat}</td>
-                        {CATEGORY_ORDER.map((colCat, ci) => {
-                          const val = confusionMatrix[ri]?.[ci] || 0
-                          const isDiag = ri === ci
-                          const bg = isDiag
-                            ? val > 0 ? 'bg-emerald-100 text-black' : 'bg-slate-50 text-black'
-                            : val > 0 ? 'bg-red-50 text-black' : 'bg-slate-50 text-black'
-                          return (
-                            <td key={colCat} className={`px-3 py-2 text-center font-mono font-bold rounded ${bg}`}>{val}</td>
-                          )
-                        })}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <p className="text-sm text-black py-8 text-center">No confusion matrix data</p>
-            )}
-            {featureMeta && (
-              <div className="mt-6 pt-4 border-t border-slate-100">
-                <p className="text-xs font-mono text-black mb-2">Target Classes</p>
-                <div className="flex gap-2 flex-wrap">
-                  {featureMeta.target_classes.map(c => (
-                    <span key={c} className="px-3 py-1 text-xs font-semibold rounded-full border" style={{ borderColor: RISK_COLORS[c] + '40', backgroundColor: RISK_COLORS[c] + '15', color: '#000' }}>{c}</span>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+          <button onClick={() => { setFState('ALL'); setFRisk('ALL') }} className="px-2.5 py-1 rounded-lg bg-surface-subtle hover:bg-surface-container-high border border-border-crisp text-text-secondary hover:text-text-primary font-label-sm text-label-sm flex items-center gap-1 transition-colors">
+            <span className="material-symbols-outlined text-[14px]">restart_alt</span>
+            Clear
+          </button>
         </div>
+        <div className="flex items-center gap-1 bg-surface-subtle border border-border-crisp p-0.5 rounded-lg">
+          <span className="font-code-xs text-code-xs text-text-muted px-1 uppercase font-medium">Risk:</span>
+          {[['ALL', 'All'], ['high', 'High'], ['mod', 'Medium'], ['low', 'Low']].map(([k, lbl]) => (
+            <button
+              key={k}
+              onClick={() => setFRisk(k)}
+              className={`px-2 py-0.5 rounded font-code-xs text-code-xs transition-colors ${fRisk === k ? 'bg-surface-card text-text-primary font-semibold shadow-sm' : 'hover:bg-white'}`}
+            >
+              {lbl}
+            </button>
+          ))}
+        </div>
+      </div>
 
-        {/* Model Details */}
-        {featureMeta && (
-          <div className="bg-white rounded-xl border border-slate-200 p-6">
-            <h2 className="text-lg font-bold text-black mb-4">Model Details</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <p className="text-xs font-mono text-black uppercase tracking-wider mb-2">Encoder Classes</p>
-                {featureMeta.encoder_classes && Object.entries(featureMeta.encoder_classes).map(([key, vals]) => (
-                  <div key={key} className="mb-2">
-                    <span className="text-xs font-semibold text-black">{key}:</span>
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {vals.filter(v => v !== null).map(v => (
-                        <span key={v} className="px-2 py-0.5 text-[10px] font-mono bg-slate-100 text-black rounded">{v}</span>
-                      ))}
-                    </div>
+      {/* Telemetry strip */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-base mb-space-base">
+        <div className="bg-surface-card p-space-md rounded-lg border border-border-crisp border-l-4 border-l-[#4059aa] shadow-sm">
+          <span className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider font-semibold">Monitored Blocks</span>
+          <p className="font-headline-xl text-headline-xl text-text-primary mt-1 font-bold tabular-nums">{scopedBlocks.length}</p>
+        </div>
+        <div className="bg-surface-card p-space-md rounded-lg border border-border-crisp border-l-4 border-l-error bg-gradient-to-r from-risk-critical-bg/40 to-surface-card shadow-sm">
+          <span className="font-code-xs text-code-xs text-error uppercase tracking-wider font-bold">Red Zones ≥ 75</span>
+          <p className="font-headline-xl text-headline-xl text-error mt-1 font-bold tabular-nums">{highCount}</p>
+        </div>
+        <div className="bg-surface-card p-space-md rounded-lg border border-border-crisp border-l-4 border-l-[#D97706] bg-gradient-to-r from-risk-warning-bg/60 to-surface-card shadow-sm">
+          <span className="font-code-xs text-code-xs text-risk-warning uppercase tracking-wider font-bold">Amber Zones 50-74</span>
+          <p className="font-headline-xl text-headline-xl text-text-primary mt-1 font-bold tabular-nums">{modCount}</p>
+        </div>
+        <div className="bg-surface-card p-space-md rounded-lg border border-border-crisp border-l-4 border-l-primary shadow-sm">
+          <span className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider font-semibold">Top Cluster</span>
+          <p className="font-headline-sm text-headline-sm text-primary mt-1 font-bold truncate">{topCluster}</p>
+          <p className="font-code-xs text-code-xs text-text-muted mt-1">by avg risk score</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-base items-start">
+        {/* LEFT: District risk matrix */}
+        <div className="lg:col-span-7 bg-surface-card border border-border-crisp rounded-xl shadow-sm overflow-hidden flex flex-col">
+          <div className="px-space-md py-space-md flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm border-b border-border-crisp">
+            <div>
+              <span className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider font-semibold">DISTRICT INSET • LGD 2026</span>
+              <h2 className="font-headline-sm text-headline-sm text-text-primary font-bold">Risk Heat Matrix</h2>
+            </div>
+            <div className="flex items-center gap-1">
+              <button className="w-7 h-7 rounded bg-surface-subtle border border-border-crisp flex items-center justify-center text-text-muted hover:text-primary transition-colors" title="Zoom in"><span className="material-symbols-outlined text-[15px]">add</span></button>
+              <button className="w-7 h-7 rounded bg-surface-subtle border border-border-crisp flex items-center justify-center text-text-muted hover:text-primary transition-colors" title="Zoom out"><span className="material-symbols-outlined text-[15px]">remove</span></button>
+              <button className="w-7 h-7 rounded bg-surface-subtle border border-border-crisp flex items-center justify-center text-text-muted hover:text-primary transition-colors" title="Layers"><span className="material-symbols-outlined text-[15px]">layers</span></button>
+              <button className="w-7 h-7 rounded bg-surface-subtle border border-border-crisp flex items-center justify-center text-text-muted hover:text-primary transition-colors" title="Opacity"><span className="material-symbols-outlined text-[15px]">opacity</span></button>
+            </div>
+          </div>
+
+          <div className="relative flex-1 p-space-md bg-surface-container-low/60 min-h-[300px]">
+            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 justify-items-stretch gap-1.5 pr-1">
+              {heatGrid.map((b) => {
+                const band = riskBand(b.risk)
+                return (
+                  <div
+                    key={b.name}
+                    title={`${b.name} (${b.state || '—'}) — ${b.risk}% · ${b.projects} projects`}
+                    className={`group relative h-8 rounded border border-border-crisp/70 ${band.tile} opacity-85 hover:opacity-100 hover:ring-1 hover:ring-primary transition-all cursor-pointer`}
+                  >
+                    <span className="absolute inset-x-0 bottom-0 text-center font-code-xs text-[8px] text-slate-800 font-semibold truncate px-0.5 leading-tight">
+                      {b.name.split(' ').slice(0, 2).join(' ').slice(0, 12)}
+                    </span>
                   </div>
-                ))}
-              </div>
-              <div>
-                <p className="text-xs font-mono text-black uppercase tracking-wider mb-2">Training Info</p>
-                <div className="space-y-1 text-sm text-black">
-                  <p><span className="font-semibold">Version:</span> {metrics?.model_version || '---'}</p>
-                  <p><span className="font-semibold">Trained:</span> {metrics?.training_date ? new Date(metrics.training_date).toLocaleDateString() : '---'}</p>
-                  <p><span className="font-semibold">Features:</span> {metrics?.n_features || '---'}</p>
-                  <p><span className="font-semibold">Train/Test:</span> {metrics?.n_train || 0} / {metrics?.n_test || 0}</p>
+                )
+              })}
+            </div>
+
+            {pinned && (
+              <div className="absolute left-space-sm bottom-space-sm z-30 w-72 bg-white/95 backdrop-blur-md p-space-md rounded-xl shadow-xl border border-border-crisp border-l-4 border-l-error hidden sm:block">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-headline-sm text-headline-sm text-text-primary font-bold">{pinned.name}</span>
+                      {pinned.state && <span className="font-code-xs text-code-xs text-primary px-1.5 py-0.5 rounded bg-sky-50 border border-sky-200 font-semibold">{pinned.state}</span>}
+                    </div>
+                    <span className="font-code-xs text-code-xs text-text-muted">Highest avg delay probability</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded bg-red-100 text-error font-code-xs text-code-xs font-bold uppercase tracking-wider border border-red-200">{riskBand(pinned.risk).label} Risk</span>
+                </div>
+                <div className="space-y-2 pt-1 font-body-sm text-body-sm">
+                  <div className="flex justify-between items-center bg-surface-subtle border border-border-crisp px-2 py-1 rounded">
+                    <span className="text-text-secondary font-medium"># Projects:</span>
+                    <span className="font-code-sm text-code-sm text-text-primary font-bold tabular-nums">{pinned.projects}</span>
+                  </div>
+                  <div className="flex justify-between items-center bg-surface-subtle border border-border-crisp px-2 py-1 rounded">
+                    <span className="text-text-secondary font-medium">Avg Risk Score:</span>
+                    <span className="font-code-sm text-code-sm text-error font-bold bg-red-100 rounded px-1.5 py-0.5 border border-red-200 tabular-nums">{pinned.risk}/100</span>
+                  </div>
+                  <div className="flex flex-col gap-1 bg-red-50/80 border border-red-200/60 p-2 rounded">
+                    <span className="font-label-sm text-label-sm text-error uppercase font-semibold">Top Factor</span>
+                    <span className="font-code-xs text-code-xs text-text-primary font-medium leading-tight">{pinned.topFactor}</span>
+                  </div>
                 </div>
               </div>
-              <div>
-                <p className="text-xs font-mono text-black uppercase tracking-wider mb-2">Performance</p>
-                <div className="space-y-1 text-sm text-black">
-                  <p><span className="font-semibold">Accuracy:</span> {metrics ? (metrics.accuracy * 100).toFixed(1) + '%' : '---'}</p>
-                  <p><span className="font-semibold">Precision:</span> {metrics ? (metrics.precision_weighted * 100).toFixed(1) + '%' : '---'}</p>
-                  <p><span className="font-semibold">Recall:</span> {metrics ? (metrics.recall_weighted * 100).toFixed(1) + '%' : '---'}</p>
-                  <p><span className="font-semibold">F1:</span> {metrics ? (metrics.f1_weighted * 100).toFixed(1) + '%' : '---'}</p>
-                  <p><span className="font-semibold">Baseline:</span> {metrics ? (metrics.baseline_accuracy * 100).toFixed(1) + '%' : '---'}</p>
-                </div>
+            )}
+
+            {/* Legend */}
+            <div className="absolute right-space-sm bottom-space-sm z-20 flex flex-col gap-1.5 bg-white/95 backdrop-blur-md p-space-sm rounded-xl shadow-md border border-border-crisp">
+              <span className="font-label-sm text-label-sm text-text-secondary font-bold uppercase tracking-wider flex items-center gap-1">
+                <span className="material-symbols-outlined text-[15px] text-primary">map</span>Map Risk Legend
+              </span>
+              <div className="flex flex-col gap-1.5 font-code-xs text-code-xs">
+                <div className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-[#ef4444]"></span><span className="text-text-primary font-medium">High Risk (70 - 100)</span><span className="text-text-muted ml-auto font-semibold tabular-nums">{legendCounts.high} Dists</span></div>
+                <div className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-[#f59e0b]"></span><span className="text-text-primary font-medium">Medium Risk (40 - 69)</span><span className="text-text-muted ml-auto font-semibold tabular-nums">{legendCounts.mod} Dists</span></div>
+                <div className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-[#10b981]"></span><span className="text-text-primary font-medium">Low Risk (0 - 39)</span><span className="text-text-muted ml-auto font-semibold tabular-nums">{legendCounts.low} Dists</span></div>
               </div>
             </div>
           </div>
-        )}
 
-        {/* West Bengal Projects */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
-          <h2 className="text-lg font-bold text-black mb-1">West Bengal Projects</h2>
-          <p className="text-xs text-black mb-4">Projects from the ML training dataset (West Bengal only - 56 projects - 8 districts)</p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {[
-              { district: 'Bardhaman', count: 10, color: 'bg-navy-500' },
-              { district: 'Jalpaiguri', count: 9, color: 'bg-emerald-500' },
-              { district: 'Hooghly', count: 8, color: 'bg-amber-500' },
-              { district: 'Kolkata', count: 8, color: 'bg-purple-500' },
-              { district: 'Howrah', count: 8, color: 'bg-rose-500' },
-              { district: 'Murshidabad', count: 6, color: 'bg-cyan-500' },
-              { district: 'Malda', count: 4, color: 'bg-orange-500' },
-              { district: 'Nadia', count: 3, color: 'bg-indigo-500' },
-            ].map(d => (
-              <div key={d.district} className="bg-slate-50 rounded-lg p-3">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className={`w-2 h-2 rounded-full ${d.color}`}></span>
-                  <span className="text-sm font-semibold text-black">{d.district}</span>
-                </div>
-                <p className="text-lg font-bold text-black">{d.count}</p>
-                <p className="text-[10px] text-black">projects</p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 pt-3 border-t border-slate-100 flex gap-4 text-xs text-black">
-            <span>Low: 24</span><span>Medium: 17</span><span>High: 12</span><span>Critical: 3</span>
+          <div className="px-space-md py-2 bg-surface-subtle border-t border-border-crisp flex items-center justify-between font-code-xs text-code-xs text-text-muted">
+            <div className="flex items-center gap-space-sm">
+              <span className="flex items-center gap-1 text-risk-success font-medium"><span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span> LGD Unified Boundary v2.8</span>
+              <span>•</span>
+              <span>EPSG: 4326 (WGS84)</span>
+            </div>
+            <span className="font-medium text-text-secondary">NIC Geospatial Sync</span>
           </div>
         </div>
-      </main>
-    </div>
+
+        {/* RIGHT column */}
+        <div className="lg:col-span-5 flex flex-col gap-space-md">
+          {/* Card 1: State-wise average risk */}
+          <div className="bg-surface-card p-space-md rounded-xl flex flex-col gap-space-sm shadow-sm border border-border-crisp">
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col">
+                <h2 className="font-headline-sm text-headline-sm text-text-primary font-bold">State-Wise Average Delay Risk</h2>
+                <span className="font-code-xs text-code-xs text-text-muted">Top {stateBars.length} states ranked by average risk score</span>
+              </div>
+              <span className="material-symbols-outlined text-text-muted text-[18px]">bar_chart</span>
+            </div>
+            <div className="flex flex-col gap-2 pt-space-xs font-body-sm text-body-sm">
+              {stateBars.map((s) => {
+                const band = riskBand(s.avg)
+                return (
+                  <div key={s.name} className="flex flex-col gap-1">
+                    <div className="flex justify-between items-baseline font-code-xs text-code-xs">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-text-primary font-semibold">{s.name} ({abbrState(s.name)})</span>
+                        <span className={`px-1 rounded font-bold text-[10px] ${s.high > 0 ? 'bg-red-100 text-error' : 'bg-emerald-100 text-risk-success'}`}>{s.high} High</span>
+                      </div>
+                      <span className={`font-bold text-code-xs tabular-nums ${band.text}`}>{s.avg} / 100</span>
+                    </div>
+                    <div className="w-full h-2.5 bg-surface-dim border border-border-crisp/80 rounded-sm overflow-hidden flex">
+                      <div className={`h-full ${band.bar} rounded-sm`} style={{ width: `${s.avg}%` }}></div>
+                    </div>
+                  </div>
+                )
+              })}
+              {stateBars.length === 0 && <p className="text-center text-text-muted font-code-xs text-code-xs py-4">No state data in range.</p>}
+            </div>
+          </div>
+
+          {/* Card 2: Top 10 high-risk districts table */}
+          <div className="bg-surface-card rounded-xl flex flex-col shadow-sm border border-border-crisp overflow-hidden">
+            <div className="p-space-md pb-space-xs flex items-center justify-between">
+              <div>
+                <h2 className="font-headline-sm text-headline-sm text-text-primary font-bold">Top {Math.min(10, heatGrid.length)} High-Risk Districts</h2>
+                <span className="font-code-xs text-code-xs text-error font-semibold">Ranked by Predictive Delay Probability</span>
+              </div>
+              <span className="font-code-xs text-code-xs bg-surface-subtle border border-border-crisp px-2 py-1 rounded text-primary font-bold tabular-nums">{heatGrid.length} Blocks</span>
+            </div>
+            <div className="overflow-x-auto w-full">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-surface-subtle border-y border-border-crisp font-label-sm text-label-sm text-text-muted uppercase tracking-wider">
+                  <tr>
+                    <th className="py-2 px-space-sm text-center">#</th>
+                    <th className="py-2 px-space-sm">District</th>
+                    <th className="py-2 px-space-sm text-center">State</th>
+                    <th className="py-2 px-space-sm text-right"># Projects</th>
+                    <th className="py-2 px-space-sm text-right">Avg Risk</th>
+                    <th className="py-2 px-space-sm">Top Factor</th>
+                  </tr>
+                </thead>
+                <tbody className="font-body-sm text-body-sm divide-y divide-border-crisp">
+                  {heatGrid.slice(0, 10).map((d, i) => {
+                    const band = riskBand(d.risk)
+                    return (
+                      <tr key={d.name} className={`transition-colors border-l-4 ${i === 0 ? 'bg-red-50/40 border-l-error hover:bg-red-50/70' : 'hover:bg-surface-subtle border-l-transparent'}`}>
+                        <td className="py-1.5 px-space-sm text-center font-code-xs text-code-xs text-text-muted font-bold tabular-nums">{String(i + 1).padStart(2, '0')}</td>
+                        <td className="py-1.5 px-space-sm font-semibold text-text-primary">{d.name}</td>
+                        <td className="py-1.5 px-space-sm text-center font-code-xs text-code-xs text-text-secondary font-semibold">{d.state ? abbrState(d.state) : '—'}</td>
+                        <td className="py-1.5 px-space-sm text-right font-code-xs text-code-xs text-text-primary font-medium tabular-nums">{d.projects}</td>
+                        <td className="py-1.5 px-space-sm text-right">
+                          <span className={`font-code-xs text-code-xs px-1.5 py-0.5 rounded font-bold tabular-nums ${i === 0 ? 'bg-red-100 text-error border border-red-200' : i < 3 ? 'bg-amber-100 text-risk-warning border border-amber-200' : 'bg-surface-subtle text-text-secondary border border-border-crisp'}`}>{d.risk}</span>
+                        </td>
+                        <td className="py-1.5 px-space-sm font-code-xs text-code-xs text-text-secondary truncate max-w-[120px]" title={d.topFactor}>{d.topFactor}</td>
+                      </tr>
+                    )
+                  })}
+                  {heatGrid.length === 0 && (
+                    <tr><td colSpan={6} className="py-4 text-center text-text-muted font-code-xs text-code-xs">No district data in range.</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Card 3: Cluster anomaly */}
+          <div className="bg-surface-card p-space-md rounded-xl flex flex-col gap-space-sm border border-border-crisp border-l-4 border-l-error shadow-sm relative overflow-hidden">
+            <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-red-100 rounded-full blur-2xl pointer-events-none"></div>
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-space-xs text-error font-headline-sm text-headline-sm font-bold">
+                <span className="material-symbols-outlined text-[20px]">warning</span>
+                Spatial Anomaly Detected
+              </div>
+              <span className="font-code-xs text-code-xs bg-red-100 text-error border border-red-200 font-semibold px-2 py-0.5 rounded">High Confidence</span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="font-label-md text-label-md text-primary font-semibold">{topCluster} Risk Cluster</span>
+              <p className="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+                {topCluster !== '—'
+                  ? `${topCluster} exhibits an elevated mean delay probability of ${stateBars[0]?.avg || '—'}/100 across ${stateBars[0]?.count || 0} monitored districts (${stateBars[0]?.high || 0} high-risk). High overlap between statutory clearance bottlenecks and compensation disbursal holds.
+                  `
+                  : 'No cluster detected in the current analytic scope'}
+              </p>
+            </div>
+            <div className="pt-space-xs flex items-center justify-between gap-space-sm border-t border-border-crisp">
+              <div className="font-code-xs text-code-xs text-text-secondary flex items-center gap-1 font-medium">
+                <span className="material-symbols-outlined text-[16px] text-risk-success">check_circle</span>
+                Joint Secy Alert Triggered
+              </div>
+              <button className="px-space-md py-1.5 rounded-lg bg-surface-subtle hover:bg-surface-container-high text-text-primary font-label-sm text-label-sm font-semibold transition-colors flex items-center gap-1.5 border border-border-crisp shadow-sm">
+                <span className="material-symbols-outlined text-[16px] text-primary">description</span>
+                Download Zonal Briefing Dossier
+              </button>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <Link to="/projects" className="font-code-xs text-code-xs text-text-muted hover:text-primary font-semibold hover:underline">← Back to projects</Link>
+          </div>
+        </div>
+      </div>
+    </AppShell>
   )
 }
