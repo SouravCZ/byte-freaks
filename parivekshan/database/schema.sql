@@ -8,11 +8,11 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 -- Lookup / reference tables
 -- ---------------------------------------------------------------------------
 
--- District blocks (West Bengal context)
+-- District blocks (state context)
 CREATE TABLE IF NOT EXISTS blocks (
     id            SERIAL PRIMARY KEY,
     name          TEXT NOT NULL UNIQUE,
-    district      TEXT NOT NULL DEFAULT 'West Bengal',
+    district      TEXT NOT NULL DEFAULT 'Unknown',
     mouza_count   INTEGER DEFAULT 0,
     risk_score    NUMERIC(5, 2) DEFAULT 0 CHECK (risk_score BETWEEN 0 AND 100),
     created_at    TIMESTAMPTZ NOT NULL DEFAULT now()

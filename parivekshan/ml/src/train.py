@@ -240,7 +240,7 @@ def train(csv_path=None):
 
     # Save model artifacts
     model_path = os.path.join(MODELS_DIR, 'xgb_risk_current.joblib')
-    model_versioned_path = os.path.join(MODELS_DIR, 'xgb_risk_real_v1.joblib')
+    model_versioned_path = os.path.join(MODELS_DIR, 'xgb_risk_real_v2.joblib')
     encoders_path = os.path.join(MODELS_DIR, 'label_encoders.joblib')
     meta_path = os.path.join(MODELS_DIR, 'feature_meta.json')
     metrics_path = os.path.join(MODELS_DIR, 'model_metrics.json')

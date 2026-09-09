@@ -1,62 +1,62 @@
 {
-  "model_version": "real_v1",
-  "accuracy": 0.5833333333333334,
-  "precision_weighted": 0.5625,
-  "recall_weighted": 0.5833333333333334,
-  "f1_weighted": 0.561111111111111,
+  "model_version": "real_v2",
+  "accuracy": 0.856687898089172,
+  "precision_weighted": 0.8571647670130741,
+  "recall_weighted": 0.856687898089172,
+  "f1_weighted": 0.8563128467773735,
   "confusion_matrix": [
     [
-      3,
-      2,
+      51,
+      7,
       0,
       0
     ],
     [
-      1,
-      3,
-      0,
+      6,
+      87,
+      12,
       0
     ],
     [
       0,
-      1,
-      1,
-      0
+      6,
+      105,
+      6
     ],
     [
       0,
       0,
-      1,
-      0
+      8,
+      26
     ]
   ],
-  "baseline_accuracy": 0.4166666666666667,
-  "cv_mean": 0.46515151515151515,
-  "cv_std": 0.09186367509832799,
+  "baseline_accuracy": 0.37261146496815284,
+  "cv_mean": 0.8633361144461855,
+  "cv_std": 0.02382167843756303,
   "feature_importance": {
-    "duration_award_to_compensation": 0.19691994786262512,
-    "dispute_type_enc": 0.1256217211484909,
-    "dispute_duration_days": 0.10573632270097733,
-    "legal_dispute_int": 0.08166858553886414,
-    "pending_approvals_count": 0.053735483437776566,
-    "duration_declaration_to_award": 0.0524759441614151,
-    "area_acquired_hectares": 0.03216185420751572,
-    "duration_scrutiny_to_notification": 0.032004985958337784,
-    "compensation_assessed_inr": 0.028564786538481712,
-    "compensation_disbursed_pct": 0.02762976661324501,
-    "compensation_gap_pct": 0.027100466191768646,
-    "displaced_ratio": 0.026799382641911507,
-    "avg_approval_turnaround_days": 0.024546829983592033,
-    "duration_notification_to_declaration": 0.023026837036013603,
-    "stakeholder_responsiveness_score": 0.021976711228489876,
-    "project_type_enc": 0.02072165533900261,
-    "rr_progress_percent": 0.019603926688432693,
-    "affected_families": 0.015843115746974945,
-    "total_stage_duration": 0.015403448604047298,
-    "duration_proposed_to_scrutiny": 0.013606400229036808
+    "compensation_gap_pct": 0.19011054933071136,
+    "rr_progress_percent": 0.1363392174243927,
+    "compensation_disbursed_pct": 0.1217409297823906,
+    "dispute_duration_days": 0.07333534210920334,
+    "pending_approvals_count": 0.061285749077796936,
+    "total_stage_duration": 0.04011610895395279,
+    "dispute_type_enc": 0.026855621486902237,
+    "compensation_disbursed_inr": 0.024690838530659676,
+    "stakeholder_responsiveness_score": 0.021535886451601982,
+    "duration_scrutiny_to_notification": 0.02125680260360241,
+    "documentation_int": 0.019291549921035767,
+    "duration_notification_to_declaration": 0.018147306516766548,
+    "compensation_assessed_inr": 0.01813049428164959,
+    "duration_award_to_compensation": 0.01793651469051838,
+    "duration_proposed_to_scrutiny": 0.01753813400864601,
+    "duration_declaration_to_award": 0.01651088520884514,
+    "status_enc": 0.01638936810195446,
+    "duration_possession_to_closed": 0.015546785667538643,
+    "avg_approval_turnaround_days": 0.014970612712204456,
+    "rr_required_int": 0.014095098711550236
   },
-  "n_train": 44,
-  "n_test": 12,
+  "n_train": 1252,
+  "n_test": 314,
   "n_features": 29,
-  "training_date": "2026-09-08T19:38:31.793996"
+  "training_date": "2026-09-09T14:16:10.527476"
 }

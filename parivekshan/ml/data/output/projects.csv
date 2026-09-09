@@ -1499,3 +1499,69 @@ PRJ-01496,High,88,77,172,121,56,84,72,1.96,14,2,43.6,0.3,121902.0,27867.0,0.2286
 PRJ-01497,Critical,82,50,161,140,82,126,66,12.27,151,7,9.6,3.3,29641.0,3924.0,0.1324,288,145,6.1,731,1,0,1,Resettlement,Andhra Pradesh,active,boundary
 PRJ-01498,High,69,70,97,115,90,138,80,10.78,156,0,6.5,4.2,209313.0,49147.0,0.2348,187,138,14.6,520,0,1,1,Railway,Andhra Pradesh,completed,none
 PRJ-01499,Critical,48,69,160,133,91,65,65,11.1,215,3,45.3,1.3,4317.0,150.0,0.0347,199,124,8.7,714,1,1,0,Railway,Gujarat,active,none
+PA-6001,High,22,58,120,110,114,47,113,410.38,289,0,21.0,46.9,155006691.0,52702274.0,0.34,302,66,0.0,529,1,1,0,Highway,Delhi,Under Scrutiny,Environmental Objection
+PA-6002,Medium,54,56,103,98,94,80,99,136.41,0,3,33.0,18.8,281724977.0,126776239.0,0.45,300,100,0.0,529,0,1,0,Industrial Corridor,Delhi,Under Scrutiny,none
+PA-6003,Medium,41,35,125,39,111,80,83,216.15,0,0,46.0,61.8,158598835.0,38063720.0,0.24,234,27,62.0,557,0,0,1,Urban Development,Delhi,Closed,none
+PA-6004,Critical,54,44,103,37,67,76,56,386.31,325,2,67.0,34.2,494240403.0,425046746.0,0.86,197,11,21.0,443,1,0,1,Irrigation,Delhi,Under Scrutiny,Compensation Dispute
+PA-6005,Medium,24,59,124,59,41,102,115,16.66,0,0,45.0,70.0,465227600.0,325659320.0,0.7,214,92,22.0,426,0,0,1,Urban Development,Delhi,Preliminary Notification Issued,none
+PA-6006,High,28,86,60,44,83,46,53,232.33,0,0,81.0,43.4,508400257.0,238948120.0,0.47,266,80,8.0,380,0,0,1,Irrigation,Delhi,Proposed,none
+PA-6007,High,34,40,58,43,83,73,101,24.35,0,2,87.0,41.0,211900842.0,50856202.0,0.24,269,120,61.0,557,0,0,1,Railway,Delhi,Preliminary Notification Issued,none
+PA-6008,Low,29,54,70,81,69,65,106,415.79,0,1,56.0,87.2,461925851.0,355682905.0,0.77,292,77,81.0,506,0,1,1,Highway,Delhi,Under Scrutiny,none
+PA-6009,High,45,30,101,74,122,50,55,208.6,0,1,54.0,91.2,471524801.0,99020208.0,0.21,72,10,26.0,479,0,0,1,Urban Development,Delhi,Closed,none
+PA-6010,High,45,74,59,100,110,56,42,228.27,111,2,26.0,12.3,579669927.0,463735941.0,0.8,94,27,0.0,383,1,1,0,Highway,Delhi,Closed,Environmental Objection
+PA-6011,High,57,96,93,94,56,108,59,368.49,153,1,51.0,32.0,529911297.0,434527263.0,0.82,51,21,58.0,514,1,0,1,Railway,Delhi,Award Passed,Tribal Land Rights Objection
+PA-6012,High,18,61,64,65,45,52,104,322.8,0,2,81.0,15.2,636572693.0,362846435.0,0.57,267,97,71.0,495,0,0,1,Railway,Delhi,Preliminary Notification Issued,none
+PA-6013,Low,27,87,57,83,55,90,96,188.48,0,1,71.0,53.2,345918391.0,245602057.0,0.71,152,63,0.0,460,0,1,0,Urban Development,Delhi,Award Passed,none
+PA-6014,High,40,73,93,55,85,80,51,239.39,269,2,22.0,43.9,603192278.0,168893837.0,0.28,134,15,65.0,473,1,1,1,Railway,Delhi,Preliminary Notification Issued,Ownership Dispute
+PA-6015,High,58,63,91,49,108,105,113,51.23,83,3,44.0,13.4,274939322.0,101727549.0,0.37,86,32,0.0,506,1,1,0,Urban Development,Delhi,Under Scrutiny,Ownership Dispute
+PA-6016,High,41,64,119,46,45,107,70,35.4,0,2,20.0,61.7,318808762.0,63761752.0,0.2,82,18,70.0,408,0,0,1,Highway,Delhi,Proposed,none
+PA-6017,Medium,50,54,105,90,71,97,53,280.89,0,1,44.0,39.5,99502484.0,94527359.0,0.95,38,2,0.0,548,0,0,0,Urban Development,Delhi,Award Passed,none
+PA-6018,Medium,31,85,60,37,50,88,104,113.1,0,4,91.0,21.9,453181306.0,425990427.0,0.94,86,4,0.0,551,0,1,0,Urban Development,Delhi,Declaration Issued,none
+PA-6019,High,32,94,123,55,71,104,40,73.27,310,1,14.0,92.1,412374551.0,131959856.0,0.32,113,5,60.0,403,1,1,1,Irrigation,Delhi,Proposed,Compensation Dispute
+PA-6020,Low,56,48,45,95,120,94,104,245.23,0,0,29.0,65.9,498240125.0,378662495.0,0.76,273,29,0.0,415,0,1,0,Irrigation,Delhi,Under Scrutiny,none
+PA-6021,Critical,44,38,104,98,51,107,48,357.68,214,1,58.0,81.0,134524949.0,87441216.0,0.65,292,94,0.0,501,1,0,1,Renewable Energy,Delhi,Under Scrutiny,Ownership Dispute
+PA-6022,Medium,59,68,119,102,57,41,101,408.87,0,0,46.0,75.2,292912401.0,61511604.0,0.21,95,17,0.0,395,0,1,0,Renewable Energy,Delhi,Closed,none
+PA-6023,Medium,43,64,89,56,66,49,114,121.03,0,1,80.0,26.9,172185305.0,154966774.0,0.9,28,4,64.0,403,0,0,1,Irrigation,Jammu and Kashmir,Closed,none
+PA-6024,Medium,24,83,84,78,80,55,82,354.84,0,1,72.0,43.5,250795036.0,37619255.0,0.15,271,87,93.0,380,0,1,1,Urban Development,Jammu and Kashmir,Under Scrutiny,none
+PA-6025,Critical,33,49,71,64,95,105,80,332.98,229,3,85.0,16.5,539618139.0,404713604.0,0.75,44,7,84.0,428,1,0,1,Highway,Jammu and Kashmir,Award Passed,Boundary Dispute
+PA-6026,Medium,50,46,61,90,93,83,76,179.51,0,3,62.0,48.3,228791121.0,153290051.0,0.67,166,40,0.0,456,0,1,0,Renewable Energy,Jammu and Kashmir,Declaration Issued,none
+PA-6027,Medium,43,84,57,100,64,71,51,51.89,0,2,74.0,87.0,613731058.0,362101324.0,0.59,251,103,0.0,424,0,1,0,Industrial Corridor,Jammu and Kashmir,Preliminary Notification Issued,none
+PA-6028,High,28,41,74,61,89,91,97,66.54,137,0,53.0,73.9,614880087.0,227505632.0,0.37,204,20,80.0,490,1,1,1,Railway,Jammu and Kashmir,Possession Taken,Tribal Land Rights Objection
+PA-6029,Critical,59,88,50,100,45,40,56,276.43,269,1,41.0,76.6,320303866.0,86482043.0,0.27,287,125,92.0,439,1,0,1,Industrial Corridor,Jammu and Kashmir,Proposed,Tribal Land Rights Objection
+PA-6030,Critical,32,70,122,61,100,107,70,404.05,298,2,34.0,43.0,320070455.0,249654954.0,0.78,20,1,58.0,520,1,0,1,Urban Development,Jammu and Kashmir,Under Scrutiny,Compensation Dispute
+PA-6031,High,47,38,66,93,65,79,64,122.33,247,2,39.0,51.9,442980106.0,318945676.0,0.72,205,66,37.0,439,1,0,1,Railway,Jammu and Kashmir,Possession Taken,Ownership Dispute
+PA-6032,Low,24,83,46,37,63,90,97,419.0,0,0,17.0,90.6,237177606.0,211088069.0,0.89,47,6,0.0,460,0,0,0,Urban Development,Jammu and Kashmir,Declaration Issued,none
+PA-6033,Critical,22,56,88,75,79,95,51,94.26,221,4,66.0,24.4,83082418.0,17447307.0,0.21,61,11,0.0,392,1,0,0,Urban Development,Jammu and Kashmir,Proposed,Boundary Dispute
+PA-6034,Low,31,54,48,107,83,86,74,121.18,0,0,90.0,75.2,123647055.0,55641174.0,0.45,257,19,0.0,465,0,1,0,Irrigation,Jammu and Kashmir,Proposed,none
+PA-6035,High,26,31,78,49,117,70,81,332.45,84,1,69.0,91.1,495017094.0,386113333.0,0.78,240,90,63.0,461,1,1,1,Irrigation,Jammu and Kashmir,Under Scrutiny,Ownership Dispute
+PA-6036,High,41,93,130,87,62,69,57,375.96,276,1,51.0,23.7,538009152.0,462687870.0,0.86,56,8,12.0,486,1,1,1,Railway,Jammu and Kashmir,Possession Taken,Environmental Objection
+PA-6037,Critical,52,54,81,38,90,72,71,278.1,167,3,43.0,26.9,345675002.0,103702500.0,0.3,140,15,0.0,509,1,1,0,Renewable Energy,Jammu and Kashmir,Award Passed,Tribal Land Rights Objection
+PA-6038,Low,27,39,87,95,62,97,117,57.84,0,1,67.0,87.7,123338216.0,104837483.0,0.85,139,13,74.0,446,0,1,1,Highway,Jammu and Kashmir,Closed,none
+PA-6039,High,19,56,44,93,110,101,48,283.93,160,3,93.0,87.7,92219006.0,74697394.0,0.81,229,73,39.0,484,1,1,1,Highway,Jammu and Kashmir,Compensation Disbursed,Ownership Dispute
+PA-6040,High,38,55,90,81,66,40,95,347.25,187,2,16.0,36.6,463520951.0,222490056.0,0.48,29,11,0.0,420,1,1,0,Railway,Jammu and Kashmir,Award Passed,Compensation Dispute
+PA-6041,Critical,21,79,102,55,78,56,45,261.1,233,1,89.0,88.8,621663093.0,180282296.0,0.29,198,32,8.0,503,1,1,1,Railway,Jammu and Kashmir,Proposed,Ownership Dispute
+PA-6042,Medium,37,45,59,61,64,45,111,62.68,0,3,35.0,80.5,276457752.0,165874651.0,0.6,41,8,49.0,552,0,0,1,Urban Development,Jammu and Kashmir,Declaration Issued,none
+PA-6043,Medium,44,60,97,109,98,62,100,67.02,0,1,94.0,41.2,620713189.0,310356594.0,0.5,31,1,0.0,482,0,1,0,Irrigation,Jammu and Kashmir,Award Passed,none
+PA-6044,Low,23,33,48,108,128,54,64,402.44,0,1,50.0,76.1,629199335.0,132131860.0,0.21,278,113,0.0,413,0,1,0,Urban Development,Jammu and Kashmir,Proposed,none
+PA-6045,Low,28,63,118,94,70,80,87,178.4,0,2,51.0,86.2,375271046.0,326485810.0,0.87,253,27,61.0,389,0,1,1,Railway,Meghalaya,Compensation Disbursed,none
+PA-6046,Low,31,98,120,80,87,73,88,160.9,0,0,56.0,92.1,566446482.0,334203424.0,0.59,316,102,0.0,474,0,1,0,Railway,Meghalaya,Under Scrutiny,none
+PA-6047,Low,42,83,105,76,46,56,102,24.03,0,1,91.0,92.1,415704106.0,307621038.0,0.74,37,5,80.0,438,0,1,1,Renewable Energy,Meghalaya,Award Passed,none
+PA-6048,High,43,42,48,48,125,74,91,276.2,331,1,56.0,63.0,589921940.0,165178143.0,0.28,27,11,19.0,447,1,1,1,Urban Development,Meghalaya,Declaration Issued,Compensation Dispute
+PA-6049,High,27,48,92,55,106,104,93,140.3,52,2,13.0,44.5,335194939.0,93854582.0,0.28,73,4,0.0,536,1,1,0,Urban Development,Meghalaya,Closed,Environmental Objection
+PA-6050,Critical,59,63,46,64,121,110,95,408.62,268,1,93.0,48.5,322610256.0,306479743.0,0.95,153,21,42.0,555,1,1,1,Renewable Energy,Meghalaya,Proposed,Boundary Dispute
+PA-6051,Critical,59,98,100,90,107,40,43,245.99,133,3,51.0,26.3,497371153.0,203922172.0,0.41,142,28,0.0,491,1,0,0,Railway,Meghalaya,Proposed,Ownership Dispute
+PA-6052,High,55,35,129,38,45,48,115,375.97,87,1,30.0,39.3,232301247.0,164933885.0,0.71,35,2,0.0,473,1,1,0,Urban Development,Meghalaya,Preliminary Notification Issued,Environmental Objection
+PA-6053,Critical,28,67,80,73,94,73,42,34.61,87,4,91.0,17.4,388555913.0,205934633.0,0.53,87,7,0.0,469,1,1,0,Renewable Energy,Meghalaya,Under Scrutiny,Ownership Dispute
+PA-6054,Medium,28,41,113,66,61,95,40,323.68,0,0,62.0,12.7,636866524.0,490387223.0,0.77,197,46,72.0,514,0,1,1,Urban Development,Meghalaya,Award Passed,none
+PA-6055,High,22,40,102,101,53,81,85,376.2,0,1,75.0,32.1,250612594.0,95232785.0,0.38,129,54,21.0,404,0,0,1,Industrial Corridor,Meghalaya,Closed,none
+PA-6056,Critical,43,100,81,51,99,96,72,150.29,286,2,90.0,29.9,574896208.0,143724052.0,0.25,37,7,19.0,528,1,1,1,Irrigation,Meghalaya,Award Passed,Tribal Land Rights Objection
+PA-6057,High,21,51,124,43,65,89,59,311.98,0,0,87.0,54.4,252791213.0,85949012.0,0.34,116,17,0.0,417,0,0,0,Renewable Energy,Meghalaya,Preliminary Notification Issued,none
+PA-6058,Medium,24,62,117,81,40,71,95,318.39,0,1,11.0,43.9,548718430.0,384102901.0,0.7,276,122,2.0,559,0,1,1,Highway,Meghalaya,Declaration Issued,none
+PA-6059,Low,55,50,72,84,101,98,42,224.89,0,1,50.0,32.1,185083685.0,161022805.0,0.87,144,52,0.0,539,0,1,0,Renewable Energy,Meghalaya,Preliminary Notification Issued,none
+PA-6060,Medium,44,99,66,90,105,42,87,315.55,0,1,42.0,56.2,252703437.0,181946474.0,0.72,122,31,73.0,513,0,1,1,Highway,Meghalaya,Closed,none
+PA-6061,Medium,52,63,53,58,78,91,107,202.16,0,1,58.0,44.0,94289723.0,19800841.0,0.21,235,70,0.0,436,0,1,0,Industrial Corridor,Meghalaya,Compensation Disbursed,none
+PA-6062,High,45,75,69,64,130,88,72,210.04,0,2,28.0,40.0,523762976.0,272356747.0,0.52,170,60,0.0,489,0,0,0,Renewable Energy,Meghalaya,Closed,none
+PA-6063,Medium,35,47,107,74,121,41,41,116.26,0,1,94.0,86.2,244017456.0,217175535.0,0.89,217,15,0.0,433,0,0,0,Irrigation,Meghalaya,Closed,none
+PA-6064,Medium,55,68,65,93,128,67,107,286.85,0,2,61.0,77.3,260294956.0,166588771.0,0.64,66,20,0.0,400,0,1,0,Railway,Meghalaya,Compensation Disbursed,none
+PA-6065,Medium,15,50,81,89,129,103,77,184.62,0,1,69.0,87.0,607606912.0,212662419.0,0.35,104,27,0.0,499,0,1,0,Railway,Meghalaya,Closed,none
+PA-6066,Medium,60,83,120,46,83,52,86,239.42,0,1,52.0,78.7,180905667.0,101307173.0,0.56,268,94,27.0,467,0,0,1,Renewable Energy,Meghalaya,Proposed,none

@@ -6,8 +6,8 @@ import { pool } from '../db.js'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const CSV_DEFAULT = process.env.USERPROFILE
-  ? join(process.env.USERPROFILE, 'Downloads', 'claude_synth2.csv')
-  : join(__dirname, 'claude_synth2.csv')
+  ? join(process.env.USERPROFILE, 'Downloads', 'new_states_mock_data.csv')
+  : join(__dirname, 'new_states_mock_data.csv')
 const CSV_PATH = process.argv[2] || CSV_DEFAULT
 
 const STATUS_MAP = {

@@ -38,14 +38,30 @@
   ],
   "encoder_classes": {
     "project_type": [
+      "Border Infrastructure",
       "Highway",
+      "Industrial",
       "Industrial Corridor",
       "Irrigation",
+      "Power Line",
       "Railway",
       "Renewable Energy",
+      "Resettlement",
       "Urban Development"
     ],
     "state": [
+      "Andhra Pradesh",
+      "Delhi",
+      "Gujarat",
+      "Jammu and Kashmir",
+      "Karnataka",
+      "Madhya Pradesh",
+      "Maharashtra",
+      "Meghalaya",
+      "Rajasthan",
+      "Tamil Nadu",
+      "Telangana",
+      "Uttar Pradesh",
       "West Bengal"
     ],
     "status": [
@@ -56,14 +72,24 @@
       "Possession Taken",
       "Preliminary Notification Issued",
       "Proposed",
-      "Under Scrutiny"
+      "Under Scrutiny",
+      "active",
+      "completed",
+      "on_hold",
+      "planned"
     ],
     "dispute_type": [
+      "Boundary Dispute",
       "Compensation Dispute",
       "Environmental Objection",
       "Ownership Dispute",
-      "Procedural Objection",
-      NaN
+      "Tribal Land Rights Objection",
+      "boundary",
+      "compensation",
+      "encroachment",
+      "legal_challenge",
+      "none",
+      "title_dispute"
     ]
   }
 }

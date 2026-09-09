@@ -34,12 +34,16 @@ function parseCSV(text) {
   })
 }
 
+function toBool(v) {
+  return String(v).trim().toLowerCase() === 'true' ? 1 : 0
+}
+
 function projectToMLPayload(p) {
   return {
     project_type: p.project_type || 'Infrastructure',
     state: p.state || 'West Bengal',
     status: p.status || 'active',
-    dispute_type: p.dispute_type || 'none',
+    dispute_type: (p.dispute_type && p.dispute_type !== 'NaN') ? p.dispute_type : 'none',
     area_acquired_hectares: Number(p.area_acquired_hectares) || 5,
     dispute_duration_days: Number(p.dispute_duration_days) || 0,
     pending_approvals_count: Number(p.pending_approvals_count) || 0,
@@ -52,9 +56,9 @@ function projectToMLPayload(p) {
     displaced_families: Number(p.displaced_families) || 20,
     rr_progress_percent: Number(p.rr_progress_percent) || 50,
     cohort_benchmark_days: Number(p.cohort_benchmark_days) || 450,
-    legal_dispute_flag: Number(p.legal_dispute_flag) || 0,
-    documentation_complete: Number(p.documentation_complete) || 1,
-    rr_required: Number(p.rr_required) || 0,
+    legal_dispute_flag: toBool(p.legal_dispute_flag),
+    documentation_complete: toBool(p.documentation_complete),
+    rr_required: toBool(p.rr_required),
     duration_proposed_to_scrutiny: Number(p.duration_proposed_to_scrutiny) || 25,
     duration_scrutiny_to_notification: Number(p.duration_scrutiny_to_notification) || 55,
     duration_notification_to_declaration: Number(p.duration_notification_to_declaration) || 75,
@@ -93,7 +97,12 @@ export default function MLProjects() {
               body: JSON.stringify(payload),
             })
             if (r.ok) {
-              preds.push(await r.json())
+              const result = await r.json()
+              result._case_id = data[i].case_id || ''
+              result._project_name = data[i].project_name || ''
+              result._state = data[i].state || ''
+              result._district = data[i].district || ''
+              preds.push(result)
             }
           } catch {
             // skip failed predictions
@@ -160,7 +169,15 @@ export default function MLProjects() {
           {results.map((r, i) => (
             <div key={i} className="bg-white rounded-xl border border-slate-200 p-5 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs text-black">#{i + 1}</span>
+                <div>
+                  <span className="font-mono text-xs text-black">{r._case_id || `#${i + 1}`}</span>
+                  {r._project_name && (
+                    <p className="text-sm font-semibold text-black mt-1">{r._project_name}</p>
+                  )}
+                  {r._state && (
+                    <p className="text-[10px] font-mono text-slate-500">{r._district ? `${r._district}, ` : ''}{r._state}</p>
+                  )}
+                </div>
                 {r.risk_category && (
                   <span className={riskBadge(r.risk_category)}>{r.risk_category}</span>
                 )}
