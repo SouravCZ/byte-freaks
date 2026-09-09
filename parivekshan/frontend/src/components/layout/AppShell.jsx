@@ -16,7 +16,7 @@ export default function AppShell({ icon, title, subtitle, children }) {
         </main>
         <footer className="border-t border-border-crisp bg-surface-card">
           <div className="max-w-[1680px] mx-auto px-space-lg lg:px-space-xl py-space-md flex items-center justify-between gap-2">
-            <p className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider">LandGuard AI · MoRD GeoRisk Suite · NSDSS</p>
+            <p className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider">Parivekshan AI · MoRD GeoRisk Suite · NSDSS</p>
             <p className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider">GovNet Session: {role || 'anonymous'}</p>
           </div>
         </footer>

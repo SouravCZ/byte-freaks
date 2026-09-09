@@ -15,10 +15,10 @@ export default function Sidebar() {
       <div className="flex flex-col flex-1 min-h-0">
         <div className="p-space-base bg-surface-container-low/80 border-b border-border-crisp">
           <div className="flex items-center gap-space-sm">
-            <span className="h-9 w-9 shrink-0 rounded-lg bg-primary text-on-primary flex items-center justify-center text-lg font-bold font-mono">L</span>
+            <span className="h-9 w-9 shrink-0 rounded-lg bg-primary text-on-primary flex items-center justify-center text-lg font-bold font-mono">P</span>
             <div className="flex flex-col min-w-0">
               <div className="flex items-center gap-space-xs">
-                <span className="font-headline-sm text-headline-sm tracking-tight text-primary font-bold truncate">LandGuard AI</span>
+                <span className="font-headline-sm text-headline-sm tracking-tight text-primary font-bold truncate">Parivekshan AI</span>
               </div>
               <span className="font-code-xs text-code-xs text-text-muted truncate">MoRD • GeoRisk Suite</span>
             </div>

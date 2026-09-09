@@ -15,8 +15,8 @@ INSERT INTO blocks (name, mouza_count, risk_score) VALUES
 ('Pathar Pratima', 70, 41.0)
 ON CONFLICT (name) DO NOTHING;
 
--- South 24 Parganas blocks (for District Officer scoping demo)
-UPDATE blocks SET district = 'South 24 Parganas' WHERE name IN ('Kakdwip', 'Pathar Pratima');
+-- All seed blocks are in West Bengal (district column stores state)
+-- No UPDATE needed — default 'West Bengal' already applies to all rows
 
 -- Projects
 WITH b AS (SELECT id, name FROM blocks)

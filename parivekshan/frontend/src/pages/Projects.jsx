@@ -93,7 +93,7 @@ export default function Projects() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = 'landguard-projects.csv'
+    a.download = 'parivekshan-projects.csv'
     a.click()
     URL.revokeObjectURL(url)
   }
