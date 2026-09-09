@@ -1,22 +1,9 @@
-import React, { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import React from 'react'
+import { Link } from 'react-router-dom'
 import Logo from '../components/Logo'
-import { useRole } from '../lib/roleContext'
-
-const ROLES = ['District Magistrate', 'Admin', 'Viewer']
+import LoginForm from '../components/auth/LoginForm'
 
 export default function Login() {
-  const navigate = useNavigate()
-  const { setRole } = useRole()
-  const [email, setEmail] = useState('dm@parivekshan.gov.in')
-  const [role, setRoleName] = useState('District Magistrate')
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setRole({ email: email.trim() || 'dev@parivekshan.gov.in', role })
-    navigate('/dashboard')
-  }
-
   return (
     <div className="min-h-screen bg-slate-50 flex">
       <div className="hidden lg:flex lg:w-1/2 bg-navy-500 relative items-center justify-center p-12">
@@ -46,49 +33,12 @@ export default function Login() {
             <h1 className="text-xl font-bold text-slate-900 mb-1">Sign in (mock — no auth)</h1>
             <p className="text-xs text-slate-400 mb-6">Dev/test gate only. Any email works.</p>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <label className="label-caps text-slate-500 mb-1.5 block">Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@parivekshan.gov.in"
-                  className="w-full px-3 py-2.5 rounded border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-navy-500/20 focus:border-navy-500"
-                />
-              </div>
-
-              <div>
-                <label className="label-caps text-slate-500 mb-1.5 block">Role</label>
-                <select
-                  value={role}
-                  onChange={(e) => setRoleName(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded border border-slate-300 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-navy-500/20 focus:border-navy-500"
-                >
-                  {ROLES.map((r) => (
-                    <option key={r} value={r}>{r}</option>
-                  ))}
-                </select>
-                {role === 'District Magistrate' && (
-                  <p className="text-xs text-slate-400 mt-1.5">National command view: all 20 states.</p>
-                )}
-                {role === 'Admin' && (
-                  <p className="text-xs text-slate-400 mt-1.5">Unrestricted view: all states & districts.</p>
-                )}
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-2.5 rounded bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition shadow-sm"
-              >
-                Enter dashboard
-              </button>
-            </form>
+            <LoginForm />
 
             <p className="text-xs text-slate-300 text-center mt-6">No password, no backend call, no security.</p>
           </div>
           <p className="text-center mt-4">
-            <Link to="/" className="text-xs text-navy-500 font-medium hover:underline">← Back to landing pages</Link>
+            <Link to="/" className="text-xs text-navy-500 font-medium hover:underline">← Back to Home</Link>
           </p>
         </div>
       </div>
