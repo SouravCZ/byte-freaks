@@ -1,0 +1,69 @@
+{
+  "feature_cols": [
+    "duration_proposed_to_scrutiny",
+    "duration_scrutiny_to_notification",
+    "duration_notification_to_declaration",
+    "duration_declaration_to_award",
+    "duration_award_to_compensation",
+    "duration_compensation_to_possession",
+    "duration_possession_to_closed",
+    "area_acquired_hectares",
+    "dispute_duration_days",
+    "pending_approvals_count",
+    "avg_approval_turnaround_days",
+    "stakeholder_responsiveness_score",
+    "compensation_assessed_inr",
+    "compensation_disbursed_inr",
+    "compensation_disbursed_pct",
+    "affected_families",
+    "displaced_families",
+    "rr_progress_percent",
+    "cohort_benchmark_days",
+    "total_stage_duration",
+    "compensation_gap_pct",
+    "displaced_ratio",
+    "legal_dispute_int",
+    "documentation_int",
+    "rr_required_int",
+    "project_type_enc",
+    "state_enc",
+    "status_enc",
+    "dispute_type_enc"
+  ],
+  "target_classes": [
+    "Low",
+    "Medium",
+    "High",
+    "Critical"
+  ],
+  "encoder_classes": {
+    "project_type": [
+      "Highway",
+      "Industrial Corridor",
+      "Irrigation",
+      "Railway",
+      "Renewable Energy",
+      "Urban Development"
+    ],
+    "state": [
+      "West Bengal"
+    ],
+    "status": [
+      "Award Passed",
+      "Closed",
+      "Compensation Disbursed",
+      "Declaration Issued",
+      "Possession Taken",
+      "Preliminary Notification Issued",
+      "Proposed",
+      "Under Scrutiny"
+    ],
+    "dispute_type": [
+      "Compensation Dispute",
+      "Environmental Objection",
+      "Ownership Dispute",
+      "Procedural Objection",
+      NaN
+    ]
+  }
+}

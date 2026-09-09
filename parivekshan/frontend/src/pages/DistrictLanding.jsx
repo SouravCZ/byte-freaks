@@ -49,9 +49,9 @@ const shapDrivers = [
 ]
 
 function RiskBadge({ risk }) {
-  if (risk >= 75) return <span className="px-2.5 py-0.5 text-xs font-semibold font-mono rounded bg-red-100 text-red-800 border border-red-300">{risk}% HIGH</span>
-  if (risk >= 50) return <span className="px-2.5 py-0.5 text-xs font-semibold font-mono rounded bg-amber-100 text-amber-800 border border-amber-300">{risk}% MOD</span>
-  return <span className="px-2.5 py-0.5 text-xs font-semibold font-mono rounded bg-emerald-100 text-emerald-800 border border-emerald-300">{risk}% LOW</span>
+  if (risk >= 75) return <span className="px-2.5 py-0.5 text-xs font-semibold font-mono rounded bg-red-100 text-black border border-red-300">{risk}% HIGH</span>
+  if (risk >= 50) return <span className="px-2.5 py-0.5 text-xs font-semibold font-mono rounded bg-amber-100 text-black border border-amber-300">{risk}% MOD</span>
+  return <span className="px-2.5 py-0.5 text-xs font-semibold font-mono rounded bg-emerald-100 text-black border border-emerald-300">{risk}% LOW</span>
 }
 
 function Navbar() {
@@ -62,22 +62,22 @@ function Navbar() {
           <div className="flex items-center gap-3">
             <Logo className="h-10 w-auto" />
             <div className="hidden md:block border-l border-slate-200 pl-3 ml-1">
-              <p className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">District Command Portal</p>
+              <p className="text-[10px] font-mono text-black uppercase tracking-widest">District Command Portal</p>
             </div>
           </div>
-          <div className="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-600">
-            <a href="#hero" className="hover:text-navy-500 transition">Home</a>
-            <a href="#context" className="hover:text-navy-500 transition">Context</a>
-            <a href="#how-it-works" className="hover:text-navy-500 transition">How It Works</a>
-            <a href="#features" className="hover:text-navy-500 transition">Features</a>
-            <a href="#dashboard" className="hover:text-navy-500 transition">Dashboard</a>
-            <a href="#impact" className="hover:text-navy-500 transition">Impact</a>
-            <a href="#use-cases" className="hover:text-navy-500 transition">Use Cases</a>
-            <a href="#faq" className="hover:text-navy-500 transition">FAQ</a>
-            <a href="#contact" className="hover:text-navy-500 transition">Contact</a>
+          <div className="hidden lg:flex items-center gap-6 text-sm font-medium text-black">
+            <a href="#hero" className="hover:text-black transition">Home</a>
+            <a href="#context" className="hover:text-black transition">Context</a>
+            <a href="#how-it-works" className="hover:text-black transition">How It Works</a>
+            <a href="#features" className="hover:text-black transition">Features</a>
+            <a href="#dashboard" className="hover:text-black transition">Dashboard</a>
+            <a href="#impact" className="hover:text-black transition">Impact</a>
+            <a href="#use-cases" className="hover:text-black transition">Use Cases</a>
+            <a href="#faq" className="hover:text-black transition">FAQ</a>
+            <a href="#contact" className="hover:text-black transition">Contact</a>
           </div>
           <div className="flex items-center gap-3">
-            <a href="#contact" className="hidden sm:inline-flex items-center px-4 py-2 bg-navy-500 text-white text-sm font-semibold rounded hover:bg-navy-600 transition">
+            <a href="#contact" className="hidden sm:inline-flex items-center px-4 py-2 bg-slate-200 text-black text-sm font-semibold rounded hover:bg-slate-300 transition">
               Request Demo
             </a>
           </div>
@@ -93,23 +93,23 @@ function Hero() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl">
           <div className="flex items-center gap-2 mb-4">
-            <span className="px-2 py-0.5 bg-navy-500/10 text-navy-500 text-[10px] font-mono font-semibold uppercase tracking-widest rounded">Office of the District Magistrate & Collector</span>
+            <span className="px-2 py-0.5 bg-navy-500/10 text-black text-[10px] font-mono font-semibold uppercase tracking-widest rounded">Office of the District Magistrate & Collector</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.08] tracking-tight mb-6">
-            Predict Land Acquisition Delays in North 24 Parganas — <span className="text-emerald-600">Before They Happen</span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-black leading-[1.08] tracking-tight mb-6">
+            Predict Land Acquisition Delays in North 24 Parganas — <span className="text-black">Before They Happen</span>
           </h1>
-          <p className="text-lg text-slate-600 leading-relaxed mb-8 max-w-2xl">
+          <p className="text-lg text-black leading-relaxed mb-8 max-w-2xl">
             An AI-powered decision support system for the District Collector's Office. Forecast delays, identify risk drivers, and prioritize interventions across all 42 blocks and 3,800+ mouzas.
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
-            <a href="#contact" className="inline-flex items-center px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition shadow-sm">
+            <a href="#contact" className="inline-flex items-center px-6 py-3 bg-slate-200 text-black border border-slate-300 font-semibold rounded-lg hover:bg-slate-300 transition shadow-sm">
               Request District Demo
             </a>
-            <a href="#dashboard" className="inline-flex items-center px-6 py-3 border border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-50 transition">
+            <a href="#dashboard" className="inline-flex items-center px-6 py-3 border border-slate-300 text-black font-semibold rounded-lg hover:bg-slate-50 transition">
               Explore Sample Dashboard
             </a>
           </div>
-          <div className="flex flex-wrap gap-4 text-xs font-mono text-slate-500 uppercase tracking-wider">
+          <div className="flex flex-wrap gap-4 text-xs font-mono text-black uppercase tracking-wider">
             <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> NIC-GIS Interoperable</span>
             <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Aligned with LARR Act 2013</span>
             <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Ministry of Rural Development</span>
@@ -133,11 +133,11 @@ function ContextSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           <div>
-            <p className="text-xs font-mono text-emerald-600 uppercase tracking-widest mb-3">Operational Ground Reality</p>
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-6">
+            <p className="text-xs font-mono text-black uppercase tracking-widest mb-3">Operational Ground Reality</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-black tracking-tight mb-6">
               Why North 24 Parganas Needs Predictive Land Monitoring
             </h2>
-            <div className="prose prose-slate text-slate-600 leading-relaxed space-y-4">
+            <div className="prose prose-slate text-black leading-relaxed space-y-4">
               <p>North 24 Parganas is one of West Bengal's most dynamic yet complex districts for land acquisition. Spanning 42 blocks, over 3,800 mouzas, and a population exceeding 10 million, the district faces unique challenges: riverine erosion along the Ichhamati and Kalindi, dense settlement patterns, contested compensation claims, legacy legal disputes, and inter-departmental coordination gaps.</p>
               <p>Recent infrastructure initiatives — including border fencing projects, NH12 expansion, industrial corridors, and rehabilitation schemes — have encountered significant delays due to prolonged administrative approvals, incomplete documentation, rehabilitation and resettlement (R&R) bottlenecks, and stakeholder resistance.</p>
               <p>Traditional monitoring systems rely on manual reporting and reactive interventions, often identifying delays only after critical milestones are missed. Parivekshan AI addresses this gap by providing an AI-enabled early warning system.</p>
@@ -145,18 +145,18 @@ function ContextSection() {
           </div>
           <div>
             <div className="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-6">
-              <h3 className="text-sm font-mono text-slate-500 uppercase tracking-wider mb-4">Live AI Risk Telemetry</h3>
+              <h3 className="text-sm font-mono text-black uppercase tracking-wider mb-4">Live AI Risk Telemetry</h3>
               <div className="grid grid-cols-2 gap-3">
                 {zones.map((z) => (
                   <div key={z.name} className="bg-white rounded-lg border border-slate-200 p-4 hover:border-slate-300 transition">
                     <div className="flex items-center gap-2 mb-1">
                       <span className={`w-2 h-2 rounded-full ${z.color}`}></span>
-                      <span className="font-semibold text-slate-900 text-sm">{z.name}</span>
+                      <span className="font-semibold text-black text-sm">{z.name}</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-2">{z.desc}</p>
+                    <p className="text-xs text-black mb-2">{z.desc}</p>
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono text-slate-400">Risk Score</span>
-                      <span className={`text-sm font-bold font-mono ${z.risk >= 75 ? 'text-red-600' : z.risk >= 50 ? 'text-amber-600' : 'text-emerald-600'}`}>{z.risk}%</span>
+                      <span className="text-xs font-mono text-black">Risk Score</span>
+                      <span className={`text-sm font-bold font-mono ${z.risk >= 75 ? 'text-black' : z.risk >= 50 ? 'text-black' : 'text-black'}`}>{z.risk}%</span>
                     </div>
                     <div className="mt-2 h-1.5 bg-slate-100 rounded-full overflow-hidden">
                       <div className={`h-full rounded-full ${z.color}`} style={{ width: `${z.risk}%` }}></div>
@@ -167,7 +167,7 @@ function ContextSection() {
             </div>
             <div className="flex flex-wrap gap-2">
               {['Legal Disputes', 'Compensation Delays', 'Documentation Gaps', 'R&R Challenges', 'Inter-Dept Coordination'].map((tag) => (
-                <span key={tag} className="px-3 py-1 bg-red-50 text-red-700 text-xs font-medium rounded-full border border-red-200">{tag}</span>
+                <span key={tag} className="px-3 py-1 bg-red-50 text-black text-xs font-medium rounded-full border border-red-200">{tag}</span>
               ))}
             </div>
           </div>
@@ -191,18 +191,18 @@ function HowItWorks() {
     <section id="how-it-works" className="py-20 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="text-xs font-mono text-emerald-600 uppercase tracking-widest mb-3">Intelligent Processing Architecture</p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-4">From Data to Decision: How It Works</h2>
-          <p className="text-slate-500 max-w-2xl mx-auto">A transparent, machine-learning-driven six-stage pipeline engineered for statutory compliance and prompt executive remediation.</p>
+          <p className="text-xs font-mono text-black uppercase tracking-widest mb-3">Intelligent Processing Architecture</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-black tracking-tight mb-4">From Data to Decision: How It Works</h2>
+          <p className="text-black max-w-2xl mx-auto">A transparent, machine-learning-driven six-stage pipeline engineered for statutory compliance and prompt executive remediation.</p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {steps.map((step) => (
             <div key={step.num} className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-md transition group">
               <div className="flex items-center gap-3 mb-4">
-                <span className="flex items-center justify-center w-10 h-10 rounded-lg bg-navy-500 text-white text-sm font-bold font-mono">{step.num}</span>
-                <h3 className="font-bold text-slate-900">{step.title}</h3>
+                <span className="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-200 text-black text-sm font-bold font-mono">{step.num}</span>
+                <h3 className="font-bold text-black">{step.title}</h3>
               </div>
-              <p className="text-sm text-slate-600 leading-relaxed">{step.desc}</p>
+              <p className="text-sm text-black leading-relaxed">{step.desc}</p>
             </div>
           ))}
         </div>
@@ -228,19 +228,19 @@ function Features() {
     <section id="features" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="text-xs font-mono text-emerald-600 uppercase tracking-widest mb-3">Enterprise Capabilities</p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-4">Comprehensive District Command Capabilities</h2>
-          <p className="text-slate-500 max-w-2xl mx-auto">Nine integrated modules built specifically for high-stakes governance and regulatory precision.</p>
+          <p className="text-xs font-mono text-black uppercase tracking-widest mb-3">Enterprise Capabilities</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-black tracking-tight mb-4">Comprehensive District Command Capabilities</h2>
+          <p className="text-black max-w-2xl mx-auto">Nine integrated modules built specifically for high-stakes governance and regulatory precision.</p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {features.map((f) => (
             <div key={f.title} className="bg-slate-50 rounded-xl border border-slate-200 p-6 hover:border-emerald-300 hover:bg-white transition group">
               <div className="flex items-start justify-between mb-3">
                 <span className="text-2xl">{f.icon}</span>
-                <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-mono font-semibold uppercase tracking-wider rounded">{f.badge}</span>
+                <span className="px-2 py-0.5 bg-emerald-100 text-black text-[10px] font-mono font-semibold uppercase tracking-wider rounded">{f.badge}</span>
               </div>
-              <h3 className="font-bold text-slate-900 mb-2">{f.title}</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">{f.desc}</p>
+              <h3 className="font-bold text-black mb-2">{f.title}</h3>
+              <p className="text-sm text-black leading-relaxed">{f.desc}</p>
             </div>
           ))}
         </div>
@@ -273,12 +273,12 @@ function DashboardPreview() {
   }, [])
 
   return (
-    <section id="dashboard" className="py-20 bg-slate-900 text-white">
+    <section id="dashboard" className="py-20 bg-slate-100 text-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-3">Live Telemetry Interface</p>
+          <p className="text-xs font-mono text-black uppercase tracking-widest mb-3">Live Telemetry Interface</p>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">District Command Center: Operational Telemetry</h2>
-          <p className="text-slate-400 max-w-2xl mx-auto">High-fidelity situational awareness designed for fast, data-backed administrative intervention.</p>
+          <p className="text-black max-w-2xl mx-auto">High-fidelity situational awareness designed for fast, data-backed administrative intervention.</p>
         </div>
 
         <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
@@ -288,8 +288,8 @@ function DashboardPreview() {
               <span className="w-3 h-3 rounded-full bg-amber-500"></span>
               <span className="w-3 h-3 rounded-full bg-emerald-500"></span>
             </div>
-            <span className="text-xs font-mono text-slate-400">parivekshan.wb.gov.in/district/north24parganas/live</span>
-            <span className="ml-auto flex items-center gap-1.5 text-[10px] font-mono text-emerald-400">
+            <span className="text-xs font-mono text-black">parivekshan.wb.gov.in/district/north24parganas/live</span>
+            <span className="ml-auto flex items-center gap-1.5 text-[10px] font-mono text-black">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
               Latency: 48ms
             </span>
@@ -297,23 +297,23 @@ function DashboardPreview() {
 
           <div className="grid lg:grid-cols-3 gap-0">
             <div className="lg:col-span-1 border-r border-slate-700 p-4">
-              <h4 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">Project Queue</h4>
+              <h4 className="text-xs font-mono text-black uppercase tracking-wider mb-3">Project Queue</h4>
               <div className="space-y-2">
                 {blocks.length > 0 ? (
                   blocks.map((p, i) => (
                     <button key={p.id} onClick={() => setActiveProject(i)}
-                      className={`w-full text-left p-3 rounded-lg transition text-sm ${activeProject === i ? 'bg-navy-500/30 border border-navy-400/30' : 'hover:bg-slate-700/50 border border-transparent'}`}>
+                      className={`w-full text-left p-3 rounded-lg transition text-sm ${activeProject === i ? 'bg-slate-200 border border-slate-400' : 'hover:bg-slate-200 border border-transparent'}`}>
                       <div className="flex items-center justify-between mb-1">
-                        <span className="font-medium text-white truncate">{p.name}</span>
+                        <span className="font-medium text-black truncate">{p.name}</span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-slate-400">{p.district}</span>
+                        <span className="text-xs text-black">{p.district}</span>
                         <RiskBadge risk={Number(p.risk_score)} />
                       </div>
                     </button>
                   ))
                 ) : (
-                  <p className="text-xs text-slate-400 py-4 text-center">{loading ? 'Loading telemetry...' : 'No block data available'}</p>
+                  <p className="text-xs text-black py-4 text-center">{loading ? 'Loading telemetry...' : 'No block data available'}</p>
                 )}
               </div>
             </div>
@@ -324,35 +324,35 @@ function DashboardPreview() {
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h3 className="text-lg font-bold">{blocks[activeProject].name}</h3>
-                  <p className="text-sm text-slate-400">Active Block: {blocks[activeProject].district} | Risk Level: {blocks[activeProject] && Number(blocks[activeProject].risk_score) >= 75 ? 'Critical' : Number(blocks[activeProject].risk_score) >= 50 ? 'Moderate' : 'Low'}</p>
+                  <p className="text-sm text-black">Active Block: {blocks[activeProject].district} | Risk Level: {blocks[activeProject] && Number(blocks[activeProject].risk_score) >= 75 ? 'Critical' : Number(blocks[activeProject].risk_score) >= 50 ? 'Moderate' : 'Low'}</p>
                 </div>
                 <RiskBadge risk={Number(blocks[activeProject].risk_score)} />
               </div>
 
               <div className="grid sm:grid-cols-3 gap-4 mb-6">
-                <div className="bg-slate-700/50 rounded-lg p-4">
-                  <p className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Delay Probability</p>
-                  <p className="text-2xl font-bold text-emerald-400">{Number(blocks[activeProject].risk_score).toFixed(0)}%</p>
+                <div className="bg-slate-200 rounded-lg p-4">
+                  <p className="text-xs font-mono text-black uppercase tracking-wider mb-1">Delay Probability</p>
+                  <p className="text-2xl font-bold text-black">{Number(blocks[activeProject].risk_score).toFixed(0)}%</p>
                 </div>
-                <div className="bg-slate-700/50 rounded-lg p-4">
-                  <p className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Mouzas Affected</p>
-                  <p className="text-2xl font-bold text-white">{blocks[activeProject].mouza_count}</p>
+                <div className="bg-slate-200 rounded-lg p-4">
+                  <p className="text-xs font-mono text-black uppercase tracking-wider mb-1">Mouzas Affected</p>
+                  <p className="text-2xl font-bold text-black">{blocks[activeProject].mouza_count}</p>
                 </div>
-                <div className="bg-slate-700/50 rounded-lg p-4">
-                  <p className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Lead Time</p>
-                  <p className="text-2xl font-bold text-amber-400">{Number(blocks[activeProject].risk_score) >= 75 ? '180d' : Number(blocks[activeProject].risk_score) >= 50 ? '120d' : '60d'}</p>
+                <div className="bg-slate-200 rounded-lg p-4">
+                  <p className="text-xs font-mono text-black uppercase tracking-wider mb-1">Lead Time</p>
+                  <p className="text-2xl font-bold text-black">{Number(blocks[activeProject].risk_score) >= 75 ? '180d' : Number(blocks[activeProject].risk_score) >= 50 ? '120d' : '60d'}</p>
                 </div>
               </div>
               </>
               )}
               {blocks.length === 0 && (
                 <div className="flex items-center justify-center h-64">
-                  <p className="text-slate-400">{loading ? 'Loading live telemetry...' : 'No telemetry available'}</p>
+                  <p className="text-black">{loading ? 'Loading live telemetry...' : 'No telemetry available'}</p>
                 </div>
               )}
 
-              <div className="bg-slate-700/30 rounded-lg p-4 mb-6">
-                <h4 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">Delay Probability Curve</h4>
+              <div className="bg-slate-200 rounded-lg p-4 mb-6">
+                <h4 className="text-xs font-mono text-black uppercase tracking-wider mb-3">Delay Probability Curve</h4>
                 <ResponsiveContainer width="100%" height={200}>
                   <AreaChart data={delayData}>
                     <defs>
@@ -370,16 +370,16 @@ function DashboardPreview() {
                 </ResponsiveContainer>
               </div>
 
-              <div className="bg-slate-700/30 rounded-lg p-4">
-                <h4 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">SHAP Risk Drivers</h4>
+              <div className="bg-slate-200 rounded-lg p-4">
+                <h4 className="text-xs font-mono text-black uppercase tracking-wider mb-3">SHAP Risk Drivers</h4>
                 <div className="space-y-2">
                   {shapDrivers.map((d) => (
                     <div key={d.factor} className="flex items-center gap-3">
-                      <span className="text-xs text-slate-300 w-48 shrink-0">{d.factor}</span>
-                      <div className="flex-1 h-2 bg-slate-700 rounded-full overflow-hidden">
+                      <span className="text-xs text-black w-48 shrink-0">{d.factor}</span>
+                      <div className="flex-1 h-2 bg-slate-300 rounded-full overflow-hidden">
                         <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${d.impact}%` }}></div>
                       </div>
-                      <span className="text-xs font-mono text-slate-400 w-10 text-right">{d.impact}%</span>
+                      <span className="text-xs font-mono text-black w-10 text-right">{d.impact}%</span>
                     </div>
                   ))}
                 </div>
@@ -404,21 +404,21 @@ function Impact() {
     <section id="impact" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="text-xs font-mono text-emerald-600 uppercase tracking-widest mb-3">Measurable Outcomes</p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">District-Specific Impact Metrics</h2>
+          <p className="text-xs font-mono text-black uppercase tracking-widest mb-3">Measurable Outcomes</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-black tracking-tight">District-Specific Impact Metrics</h2>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((s) => (
             <div key={s.label} className="text-center p-6 bg-slate-50 rounded-xl border border-slate-200">
-              <p className="text-4xl font-extrabold text-navy-500 mb-2">{s.value}</p>
-              <p className="font-bold text-slate-900 mb-2">{s.label}</p>
-              <p className="text-sm text-slate-500 leading-relaxed">{s.desc}</p>
+              <p className="text-4xl font-extrabold text-black mb-2">{s.value}</p>
+              <p className="font-bold text-black mb-2">{s.label}</p>
+              <p className="text-sm text-black leading-relaxed">{s.desc}</p>
             </div>
           ))}
         </div>
 
         <div className="mt-12 bg-slate-50 rounded-xl border border-slate-200 p-8">
-          <h3 className="text-lg font-bold text-slate-900 mb-6">District Vulnerability Distribution</h3>
+          <h3 className="text-lg font-bold text-black mb-6">District Vulnerability Distribution</h3>
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={milestoneData}>
@@ -431,7 +431,7 @@ function Impact() {
               </BarChart>
             </ResponsiveContainer>
             <div>
-              <h4 className="text-sm font-mono text-slate-400 uppercase tracking-wider mb-3">Risk Category Breakdown</h4>
+              <h4 className="text-sm font-mono text-black uppercase tracking-wider mb-3">Risk Category Breakdown</h4>
               <div className="flex items-center gap-6">
                 <ResponsiveContainer width={160} height={160}>
                   <PieChart>
@@ -444,7 +444,7 @@ function Impact() {
                   {riskPieData.map((d) => (
                     <div key={d.name} className="flex items-center gap-2">
                       <span className="w-3 h-3 rounded" style={{ backgroundColor: d.color }}></span>
-                      <span className="text-sm text-slate-600">{d.name}: <strong>{d.value}%</strong></span>
+                      <span className="text-sm text-black">{d.name}: <strong>{d.value}%</strong></span>
                     </div>
                   ))}
                 </div>
@@ -471,34 +471,34 @@ function UseCases() {
     <section id="use-cases" className="py-20 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="text-xs font-mono text-emerald-600 uppercase tracking-widest mb-3">Operational Ground Scenarios</p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-4">District Use Cases & Practical Interventions</h2>
+          <p className="text-xs font-mono text-black uppercase tracking-widest mb-3">Operational Ground Scenarios</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-black tracking-tight mb-4">District Use Cases & Practical Interventions</h2>
         </div>
         <div className="space-y-4">
           {cases.map((c, i) => (
             <div key={c.id} className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:border-slate-300 transition">
               <button onClick={() => setExpanded(expanded === i ? -1 : i)} className="w-full text-left p-6 flex items-center gap-4">
-                <span className={`flex items-center justify-center w-10 h-10 rounded-lg text-white text-sm font-bold font-mono shrink-0 ${c.risk >= 75 ? 'bg-red-500' : c.risk >= 50 ? 'bg-amber-500' : 'bg-emerald-500'}`}>
+                <span className={`flex items-center justify-center w-10 h-10 rounded-lg text-black text-sm font-bold font-mono shrink-0 ${c.risk >= 75 ? 'bg-red-500' : c.risk >= 50 ? 'bg-amber-500' : 'bg-emerald-500'}`}>
                   {c.risk}%
                 </span>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-slate-900">{c.title}</h3>
-                  <p className="text-sm text-slate-500">{c.blocks}</p>
+                  <h3 className="font-bold text-black">{c.title}</h3>
+                  <p className="text-sm text-black">{c.blocks}</p>
                 </div>
-                <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">Scenario #{c.id}</span>
-                <svg className={`w-5 h-5 text-slate-400 transition-transform ${expanded === i ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                <span className="text-xs font-mono text-black uppercase tracking-wider">Scenario #{c.id}</span>
+                <svg className={`w-5 h-5 text-black transition-transform ${expanded === i ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
               </button>
               {expanded === i && (
                 <div className="px-6 pb-6 border-t border-slate-100 pt-4">
-                  <p className="text-sm text-slate-600 leading-relaxed mb-4">{c.desc}</p>
+                  <p className="text-sm text-black leading-relaxed mb-4">{c.desc}</p>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="bg-red-50 rounded-lg p-4 border border-red-100">
-                      <p className="text-xs font-mono text-red-600 uppercase tracking-wider mb-1">Delay Driver</p>
-                      <p className="text-sm text-slate-700">{c.driver}</p>
+                      <p className="text-xs font-mono text-black uppercase tracking-wider mb-1">Delay Driver</p>
+                      <p className="text-sm text-black">{c.driver}</p>
                     </div>
                     <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-100">
-                      <p className="text-xs font-mono text-emerald-600 uppercase tracking-wider mb-1">Recommended Intervention</p>
-                      <p className="text-sm text-slate-700">{c.intervention}</p>
+                      <p className="text-xs font-mono text-black uppercase tracking-wider mb-1">Recommended Intervention</p>
+                      <p className="text-sm text-black">{c.intervention}</p>
                     </div>
                   </div>
                 </div>
@@ -523,26 +523,26 @@ function Architecture() {
     <section id="architecture" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="text-xs font-mono text-emerald-600 uppercase tracking-widest mb-3">Technical Standards & Compliance</p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-4">Enterprise Technical Architecture</h2>
-          <p className="text-slate-500 max-w-2xl mx-auto">Built to sovereign government IT standards with ISO 27001 certified data flow pipeline.</p>
+          <p className="text-xs font-mono text-black uppercase tracking-widest mb-3">Technical Standards & Compliance</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-black tracking-tight mb-4">Enterprise Technical Architecture</h2>
+          <p className="text-black max-w-2xl mx-auto">Built to sovereign government IT standards with ISO 27001 certified data flow pipeline.</p>
         </div>
         <div className="space-y-4">
           {tiers.map((t, i) => (
             <div key={t.tier} className="bg-slate-50 rounded-xl border border-slate-200 p-6 flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="flex items-center gap-3 shrink-0">
-                <span className="flex items-center justify-center w-10 h-10 rounded-lg bg-navy-500 text-white text-xs font-bold font-mono">{t.tier}</span>
-                <h3 className="font-bold text-slate-900">{t.title}</h3>
+                <span className="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-200 text-black text-xs font-bold font-mono">{t.tier}</span>
+                <h3 className="font-bold text-black">{t.title}</h3>
               </div>
               <div className="flex flex-wrap gap-2 sm:ml-auto">
                 {t.items.map((item) => (
-                  <span key={item} className="px-3 py-1 bg-white border border-slate-200 text-slate-600 text-xs font-medium rounded-lg">{item}</span>
+                  <span key={item} className="px-3 py-1 bg-white border border-slate-200 text-black text-xs font-medium rounded-lg">{item}</span>
                 ))}
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-8 flex flex-wrap justify-center gap-6 text-xs font-mono text-slate-500">
+        <div className="mt-8 flex flex-wrap justify-center gap-6 text-xs font-mono text-black">
           <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> AES-256 In-Rest</span>
           <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> MeitY Empanelled Cloud</span>
           <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> WCAG 2.1 AA Compliant</span>
@@ -569,19 +569,19 @@ function FAQ() {
     <section id="faq" className="py-20 bg-slate-50">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="text-xs font-mono text-emerald-600 uppercase tracking-widest mb-3">Administrative Clarity</p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">Frequently Asked Questions</h2>
+          <p className="text-xs font-mono text-black uppercase tracking-widest mb-3">Administrative Clarity</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-black tracking-tight">Frequently Asked Questions</h2>
         </div>
         <div className="space-y-3">
           {faqs.map((faq, i) => (
             <div key={i} className="bg-white rounded-xl border border-slate-200 overflow-hidden">
               <button onClick={() => setOpenFaq(openFaq === i ? -1 : i)} className="w-full text-left p-5 flex items-center justify-between gap-4">
-                <span className="font-semibold text-slate-900 text-sm">{faq.q}</span>
-                <svg className={`w-5 h-5 text-slate-400 shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                <span className="font-semibold text-black text-sm">{faq.q}</span>
+                <svg className={`w-5 h-5 text-black shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
               </button>
               {openFaq === i && (
                 <div className="px-5 pb-5 border-t border-slate-100 pt-3">
-                  <p className="text-sm text-slate-600 leading-relaxed">{faq.a}</p>
+                  <p className="text-sm text-black leading-relaxed">{faq.a}</p>
                 </div>
               )}
             </div>
@@ -598,34 +598,34 @@ function Contact() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16">
           <div>
-            <p className="text-xs font-mono text-emerald-600 uppercase tracking-widest mb-3">Statutory Implementation</p>
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-6">Request a District-Level Demo</h2>
-            <p className="text-slate-500 mb-8">See how Parivekshan AI can transform land acquisition monitoring in North 24 Parganas.</p>
-            <div className="space-y-4 text-sm text-slate-600">
+            <p className="text-xs font-mono text-black uppercase tracking-widest mb-3">Statutory Implementation</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-black tracking-tight mb-6">Request a District-Level Demo</h2>
+            <p className="text-black mb-8">See how Parivekshan AI can transform land acquisition monitoring in North 24 Parganas.</p>
+            <div className="space-y-4 text-sm text-black">
               <div>
-                <p className="font-semibold text-slate-900 mb-1">District Liaison Office</p>
+                <p className="font-semibold text-black mb-1">District Liaison Office</p>
                 <p>Office of the District Magistrate & Collector,<br/>North 24 Parganas, Barasat - 700124,<br/>West Bengal, India</p>
               </div>
               <div>
-                <p className="font-mono text-emerald-600">support@parivekshan-n24p.gov.in</p>
+                <p className="font-mono text-black">support@parivekshan-n24p.gov.in</p>
                 <p className="font-mono">+91-33-2584-XXXX / NIC Extension 204</p>
               </div>
-              <p className="text-xs text-slate-400 italic">Demos are restricted to authorized government personnel, project executing agencies, and administrative stakeholders.</p>
+              <p className="text-xs text-black italic">Demos are restricted to authorized government personnel, project executing agencies, and administrative stakeholders.</p>
             </div>
           </div>
           <div className="bg-slate-50 rounded-xl border border-slate-200 p-6">
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Full Name *</label>
+                <label className="block text-sm font-medium text-black mb-1">Full Name *</label>
                 <input type="text" className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-navy-500/20 focus:border-navy-500 transition" placeholder="Enter your full name" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Official Designation *</label>
+                <label className="block text-sm font-medium text-black mb-1">Official Designation *</label>
                 <input type="text" className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-navy-500/20 focus:border-navy-500 transition" placeholder="e.g., District Magistrate" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Department / Office *</label>
-                <select className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-navy-500/20 focus:border-navy-500 transition">
+                <label className="block text-sm font-medium text-black mb-1">Department / Office *</label>
+                <select className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg text-sm text-black focus:outline-none focus:ring-2 focus:ring-navy-500/20 focus:border-navy-500 transition">
                   <option>Select Official Authority</option>
                   <option>District Collector's Office</option>
                   <option>Block Development Office (BDO)</option>
@@ -635,8 +635,8 @@ function Contact() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Target Block / Mouza *</label>
-                <select className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-navy-500/20 focus:border-navy-500 transition">
+                <label className="block text-sm font-medium text-black mb-1">Target Block / Mouza *</label>
+                <select className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg text-sm text-black focus:outline-none focus:ring-2 focus:ring-navy-500/20 focus:border-navy-500 transition">
                   <option>Select District Block</option>
                   <option>Basirhat I</option>
                   <option>Basirhat II</option>
@@ -650,18 +650,18 @@ function Contact() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Official Email *</label>
+                <label className="block text-sm font-medium text-black mb-1">Official Email *</label>
                 <input type="email" className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-navy-500/20 focus:border-navy-500 transition" placeholder=".gov.in / .nic.in preferred" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Mobile / CUG Contact *</label>
+                <label className="block text-sm font-medium text-black mb-1">Mobile / CUG Contact *</label>
                 <input type="tel" className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-navy-500/20 focus:border-navy-500 transition" placeholder="+91" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Project Scope / Notes</label>
+                <label className="block text-sm font-medium text-black mb-1">Project Scope / Notes</label>
                 <textarea rows={3} className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-navy-500/20 focus:border-navy-500 transition resize-none" placeholder="Describe your inquiry..." />
               </div>
-              <button className="w-full px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition">
+              <button className="w-full px-6 py-3 bg-slate-200 text-black border border-slate-300 font-semibold rounded-lg hover:bg-slate-300 transition">
                 Schedule District Demonstration
               </button>
             </div>
@@ -674,27 +674,27 @@ function Contact() {
 
 function Footer() {
   return (
-    <footer className="bg-navy-500 text-white py-16">
+    <footer className="bg-slate-200 text-black py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           <div>
             <Logo className="h-12 w-auto brightness-0 invert mb-4" />
-            <p className="text-sm text-navy-200 leading-relaxed">Predictive Analytics for Land Acquisition. Empowering sovereign governance through predictive machine learning.</p>
-            <p className="text-xs text-navy-300 mt-3 font-mono">Node: WB-N24P-DC-01 | Secure Sandbox v4.1.2</p>
+            <p className="text-sm text-black leading-relaxed">Predictive Analytics for Land Acquisition. Empowering sovereign governance through predictive machine learning.</p>
+            <p className="text-xs text-black mt-3 font-mono">Node: WB-N24P-DC-01 | Secure Sandbox v4.1.2</p>
           </div>
           <div>
             <h4 className="font-semibold text-sm mb-4">Statutory Links</h4>
-            <ul className="space-y-2 text-sm text-navy-200">
-              <li><a href="#hero" className="hover:text-white transition">About Portal</a></li>
-              <li><a href="#features" className="hover:text-white transition">Command Features</a></li>
-              <li><a href="#dashboard" className="hover:text-white transition">Telemetry Dashboard</a></li>
-              <li><a href="#use-cases" className="hover:text-white transition">District Case Studies</a></li>
-              <li><a href="#faq" className="hover:text-white transition">FAQ</a></li>
+            <ul className="space-y-2 text-sm text-black">
+              <li><a href="#hero" className="hover:text-black transition">About Portal</a></li>
+              <li><a href="#features" className="hover:text-black transition">Command Features</a></li>
+              <li><a href="#dashboard" className="hover:text-black transition">Telemetry Dashboard</a></li>
+              <li><a href="#use-cases" className="hover:text-black transition">District Case Studies</a></li>
+              <li><a href="#faq" className="hover:text-black transition">FAQ</a></li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold text-sm mb-4">Affiliations</h4>
-            <ul className="space-y-2 text-sm text-navy-200">
+            <ul className="space-y-2 text-sm text-black">
               <li>Ministry of Rural Development, Govt of India</li>
               <li>Department of Land Resources (DoLR)</li>
               <li>Government of West Bengal — L&LR Department</li>
@@ -703,7 +703,7 @@ function Footer() {
           </div>
           <div>
             <h4 className="font-semibold text-sm mb-4">Compliance</h4>
-            <ul className="space-y-2 text-sm text-navy-200">
+            <ul className="space-y-2 text-sm text-black">
               <li>Aligned with RFCTLARR Act 2013</li>
               <li>ISO 27001 Certified Environment</li>
               <li>WCAG 2.1 AA Compliant</li>
@@ -712,11 +712,11 @@ function Footer() {
           </div>
         </div>
         <div className="border-t border-navy-400/30 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-navy-300">© 2026 Parivekshan AI, North 24 Parganas. All rights reserved.</p>
-          <div className="flex gap-4 text-xs text-navy-300">
-            <a href="#" className="hover:text-white transition">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition">Terms of Use</a>
-            <a href="#" className="hover:text-white transition">Cyber Security Norms</a>
+          <p className="text-xs text-black">© 2026 Parivekshan AI, North 24 Parganas. All rights reserved.</p>
+          <div className="flex gap-4 text-xs text-black">
+            <a href="#" className="hover:text-black transition">Privacy Policy</a>
+            <a href="#" className="hover:text-black transition">Terms of Use</a>
+            <a href="#" className="hover:text-black transition">Cyber Security Norms</a>
           </div>
         </div>
       </div>
