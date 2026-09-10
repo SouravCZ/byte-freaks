@@ -56,6 +56,7 @@ router.get('/projects', async (req, res) => {
     SELECT p.id, p.code, p.name, p.project_type, p.description,
            p.status, p.risk_score, p.delay_days, p.lead_time_days,
            p.mouzas_affected, p.start_date, p.target_date,
+           p.latitude, p.longitude,
            b.name AS block, b.district
     FROM projects p
     LEFT JOIN blocks b ON b.id = p.block_id
@@ -75,9 +76,10 @@ router.get('/projects/:id', async (req, res) => {
   try {
     const { id } = req.params
     const projectRows = await query(
-      `SELECT p.id, p.code, p.name, p.project_type, p.description,
+      `       SELECT p.id, p.code, p.name, p.project_type, p.description,
               p.status, p.risk_score, p.delay_days, p.lead_time_days,
               p.mouzas_affected, p.start_date, p.target_date, p.actual_date,
+              p.latitude, p.longitude,
               b.name AS block, b.district
        FROM projects p
        LEFT JOIN blocks b ON b.id = p.block_id

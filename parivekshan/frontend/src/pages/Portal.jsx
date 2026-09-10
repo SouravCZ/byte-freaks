@@ -475,14 +475,14 @@ function Hero() {
 
           <div className="flex flex-wrap items-center gap-3">
             <a
-              href="#contact"
+              href="/contact"
               className="group inline-flex items-center gap-2 rounded-full bg-[#bef264] px-6 py-3 text-[13px] font-bold text-[#0F2C59] shadow-[0_14px_30px_-12px_rgba(190,242,100,0.7)] transition hover:bg-[#d0f581]"
             >
               Request National Demo
               <span className="transition-transform group-hover:translate-x-0.5">{ICONS.arrowRight}</span>
             </a>
             <a
-              href="#how-it-works"
+              href="/how-it-works"
               className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-[13px] font-bold text-white transition hover:border-white/60 hover:bg-white/5"
             >
               How it works

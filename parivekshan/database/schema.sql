@@ -4,6 +4,9 @@
 -- Enable UUID generation
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
+-- Enable PostGIS for geospatial queries
+CREATE EXTENSION IF NOT EXISTS "postgis";
+
 -- ---------------------------------------------------------------------------
 -- Lookup / reference tables
 -- ---------------------------------------------------------------------------
@@ -35,6 +38,9 @@ CREATE TABLE IF NOT EXISTS projects (
     start_date      DATE,
     target_date     DATE,
     actual_date     DATE,
+    latitude        DOUBLE PRECISION,
+    longitude       DOUBLE PRECISION,
+    geom            GEOMETRY(Point, 4326),
     created_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at      TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -86,6 +92,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE INDEX IF NOT EXISTS idx_projects_block      ON projects(block_id);
 CREATE INDEX IF NOT EXISTS idx_projects_status     ON projects(status);
 CREATE INDEX IF NOT EXISTS idx_projects_risk       ON projects(risk_score DESC);
+CREATE INDEX IF NOT EXISTS idx_projects_geom       ON projects USING GIST(geom);
 CREATE INDEX IF NOT EXISTS idx_risk_drivers_proj   ON risk_drivers(project_id);
 CREATE INDEX IF NOT EXISTS idx_risk_history_proj   ON risk_history(project_id, recorded_on);
 CREATE INDEX IF NOT EXISTS idx_alerts_project      ON alerts(project_id);
@@ -104,3 +111,19 @@ DROP TRIGGER IF EXISTS trg_projects_updated ON projects;
 CREATE TRIGGER trg_projects_updated
 BEFORE UPDATE ON projects
 FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+-- Auto-populate PostGIS geometry from lat/lng
+CREATE OR REPLACE FUNCTION set_project_geom()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.latitude IS NOT NULL AND NEW.longitude IS NOT NULL THEN
+        NEW.geom := ST_SetSRID(ST_MakePoint(NEW.longitude, NEW.latitude), 4326);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_projects_geom ON projects;
+CREATE TRIGGER trg_projects_geom
+BEFORE INSERT OR UPDATE ON projects
+FOR EACH ROW EXECUTE FUNCTION set_project_geom();

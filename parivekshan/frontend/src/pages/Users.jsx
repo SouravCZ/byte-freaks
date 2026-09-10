@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import AppShell from '../components/layout/AppShell'
+import EmptyState from '../components/EmptyState'
 import { useRole } from '../lib/roleContext'
 import { can } from '../lib/permissions'
 
@@ -354,7 +355,13 @@ export default function Users() {
                 })}
                 {visible.length === 0 && (
                   <tr>
-                    <td colSpan={8} className="py-10 text-center text-text-muted text-[12px]">No officials match the current filters.</td>
+                    <td colSpan={8} className="p-0">
+                      <EmptyState
+                        icon="person_search"
+                        title="No officials match"
+                        message="No officials match the current filters. Adjust the role or search term to see more results."
+                      />
+                    </td>
                   </tr>
                 )}
               </tbody>

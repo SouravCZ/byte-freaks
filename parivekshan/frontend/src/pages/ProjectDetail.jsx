@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts'
 import AppShell from '../components/layout/AppShell'
+import ProjectMap from '../components/dashboard/ProjectMap'
 import { useRole } from '../lib/roleContext'
 import { can, canEditProject } from '../lib/permissions'
 
@@ -121,8 +123,8 @@ export default function ProjectDetail() {
   }
 
   return (
-    <AppShell title={project.name} subtitle={`${project.code} · ${project.block || '—'} · ${project.district || ''}`}>
-      <Link to="/projects" className="inline-flex items-center gap-1 text-[12px] font-medium text-text-muted hover:text-primary transition-colors mb-4">
+    <AppShell title={project.name} subtitle={`PA-${project.code} · ${project.block || '—'} · ${project.district || ''}`}>
+      <Link to="/projects" className="inline-flex items-center gap-1 text-[12px] font-medium text-text-muted hover:text-primary transition-colors mb-4" id="project-detail-back-link">
         <span className="material-symbols-outlined text-[15px]">arrow_back</span>
         All projects
       </Link>
@@ -258,6 +260,14 @@ export default function ProjectDetail() {
         </div>
 
         <div className="lg:col-span-5 flex flex-col gap-space-base lg:sticky lg:top-20">
+          <div className={`${cardCls} overflow-hidden`}>
+            <div className="px-space-lg pt-space-lg pb-2">
+              <p className="text-[12px] font-semibold text-text-muted uppercase tracking-wider">Geospatial</p>
+              <h2 className="text-base font-semibold text-text-primary mt-0.5">Project location</h2>
+            </div>
+            <ProjectMap project={project} className="h-[340px]" />
+          </div>
+
           <div className="grid grid-cols-2 gap-space-base">
             {[
               { label: 'Delay days', value: `${project.delay_days}d`, meta: 'since target baseline', cls: 'text-error' },

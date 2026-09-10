@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import AppShell from '../components/layout/AppShell'
+import EmptyState from '../components/EmptyState'
 import { useRole } from '../lib/roleContext'
 import { can, canManageAlert, scopeAlertsByRole } from '../lib/permissions'
 
@@ -318,9 +319,13 @@ export default function Alerts() {
                 )
               })}
               {visible.length === 0 && (
-                <div className="bg-surface-card border border-border-crisp rounded-xl p-8 text-center">
-                  <span className="material-symbols-outlined text-[28px] text-text-muted mb-2">inbox</span>
-                  <p className="text-[14px] text-text-muted">No {filter === 'all' ? '' : `${filter} `}alerts{ q ? ' matching search' : ''}.</p>
+                <div className="bg-surface-card border border-border-crisp rounded-xl">
+                  <EmptyState
+                    icon="notifications_off"
+                    title={filter === 'all' ? 'No alerts' : `No ${filter} alerts`}
+                    message={q ? `No alerts match your search for "${q}". Try different keywords or clear the search.` : 'Nothing needs attention right now. New alerts appear here as projects breach statutory timelines or risk thresholds.'}
+                    action={{ to: '/alerts', label: 'Clear search', icon: 'restart_alt' }}
+                  />
                 </div>
               )}
             </div>

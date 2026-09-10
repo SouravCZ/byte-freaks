@@ -4,6 +4,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { useRole } from '../lib/roleContext'
 import { scopeProjects, isDistrictOfficer, DISTRICT_OFFICER_DISTRICT } from '../lib/scoping'
 import AppShell from '../components/layout/AppShell'
+import EmptyState from '../components/EmptyState'
 import RiskTag from '../components/ui/RiskTag'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
@@ -537,8 +538,12 @@ export default function Overview() {
                     })}
                     {attentionRows.length === 0 && (
                       <tr>
-                        <td colSpan={8} className="py-8 px-4 text-center text-text-muted text-[13px]">
-                          No escalated projects — all in-scope projects are below the attention threshold.
+                        <td colSpan={8} className="p-0">
+                          <EmptyState
+                            icon="task_alt"
+                            title="No escalated projects"
+                            message="All in-scope projects are below the attention threshold. Check back after the next re-score cycle."
+                          />
                         </td>
                       </tr>
                     )}
