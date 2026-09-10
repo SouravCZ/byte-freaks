@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import EmptyState from '../components/EmptyState'
 
 const ML_BASE = import.meta.env.VITE_ML_URL || 'http://localhost:8001'
 
@@ -169,6 +170,15 @@ export default function MLProjects() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {results.length === 0 && (
+            <div className="md:col-span-2 bg-surface-card rounded-xl border border-border-crisp shadow-card">
+              <EmptyState
+                icon="model_training"
+                title="Predictions loading"
+                message="The ML server is scoring the West Bengal project dataset. Results appear here within a few seconds — or verify the model server is running on port 8000."
+              />
+            </div>
+          )}
           {results.map((r, i) => (
             <div key={i} className="bg-surface-card rounded-xl border border-border-crisp shadow-card p-5 space-y-4">
               <div className="flex items-center justify-between gap-3">

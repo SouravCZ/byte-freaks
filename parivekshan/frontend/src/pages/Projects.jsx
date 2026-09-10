@@ -4,6 +4,7 @@ import { useRole } from '../lib/roleContext'
 import { scopeProjects, isDistrictOfficer, DISTRICT_OFFICER_DISTRICT } from '../lib/scoping'
 import AppShell from '../components/layout/AppShell'
 import RiskTag from '../components/ui/RiskTag'
+import EmptyState from '../components/EmptyState'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -309,7 +310,14 @@ export default function Projects() {
               })}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={10} className="px-4 py-10 text-center text-text-muted text-[13px]">No projects match the current filters.</td>
+                  <td colSpan={10} className="p-0">
+                    <EmptyState
+                      icon="search_off"
+                      title="No projects match"
+                      message="No projects in the directory match the current filters. Try widening your search or clearing the filter selections."
+                      action={{ to: '/projects', label: 'Clear filters', icon: 'restart_alt' }}
+                    />
+                  </td>
                 </tr>
               )}
             </tbody>

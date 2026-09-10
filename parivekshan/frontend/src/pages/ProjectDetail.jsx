@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts'
 import AppShell from '../components/layout/AppShell'
@@ -122,8 +123,8 @@ export default function ProjectDetail() {
   }
 
   return (
-    <AppShell title={project.name} subtitle={`${project.code} · ${project.block || '—'} · ${project.district || ''}`}>
-      <Link to="/projects" className="inline-flex items-center gap-1 text-[12px] font-medium text-text-muted hover:text-primary transition-colors mb-4">
+    <AppShell title={project.name} subtitle={`PA-${project.code} · ${project.block || '—'} · ${project.district || ''}`}>
+      <Link to="/projects" className="inline-flex items-center gap-1 text-[12px] font-medium text-text-muted hover:text-primary transition-colors mb-4" id="project-detail-back-link">
         <span className="material-symbols-outlined text-[15px]">arrow_back</span>
         All projects
       </Link>

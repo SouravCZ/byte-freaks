@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback } from 'react'
-import * as maplibregl from 'maplibre-gl'
+import * as maplibregl from 'maplibre-gl/dist/maplibre-gl.mjs'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 /*
@@ -63,7 +63,6 @@ export default function ProjectMap({ project, className = '' }) {
     }
     const fallback = DISTRICT_COORDS[project.block]
     if (fallback) return [fallback[1], fallback[0]]
-    // Default to India center if nothing matches
     return [78.9629, 22.5937]
   }, [project])
 
@@ -104,34 +103,25 @@ export default function ProjectMap({ project, className = '' }) {
       attributionControl: false,
     })
 
-    // Navigation controls (zoom/pan) – top-right
     map.addControl(new maplibregl.NavigationControl({ showCompass: true, showZoom: true }), 'top-right')
-
-    // Scale bar – bottom-left
     map.addControl(new maplibregl.ScaleControl({ maxWidth: 200, unit: 'metric' }), 'bottom-left')
-
-    // Attribution – bottom-right
     map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right')
 
     map.on('load', () => {
       const r = riskRadius(score)
-      const dotSize = r * 2
-      const ringSize = r * 4
+      const dotSize = r + 2
+      const ringSize = r * 3 + 6
 
-      // Outer wrapper — fixed-size, centered on the geo point
       const el = document.createElement('div')
       el.className = 'project-map-marker'
       el.style.cssText = `
         width: ${dotSize}px;
         height: ${dotSize}px;
         cursor: pointer;
-        transform-origin: center center;
-        transition: transform 0.15s ease;
         overflow: visible;
         position: relative;
       `
 
-      // Inner dot — the visible circle
       const dot = document.createElement('div')
       dot.style.cssText = `
         width: ${dotSize}px;
@@ -142,16 +132,17 @@ export default function ProjectMap({ project, className = '' }) {
         box-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 0 0 2px ${color}40;
         position: absolute;
         top: 0; left: 0;
+        transform-origin: center center;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
         z-index: 2;
-        transition: box-shadow 0.15s ease;
       `
       el.appendChild(dot)
 
-      // Pulsing ring — absolutely positioned, extends outside the dot
       const ring = document.createElement('div')
       ring.style.cssText = `
         position: absolute;
-        top: 50%; left: 50%;
+        top: 50%;
+        left: 50%;
         width: ${ringSize}px;
         height: ${ringSize}px;
         margin-top: -${ringSize / 2}px;
@@ -164,25 +155,23 @@ export default function ProjectMap({ project, className = '' }) {
       `
       el.appendChild(ring)
 
+      el.addEventListener('mouseenter', () => {
+        dot.style.transform = 'scale(1.3)'
+        dot.style.boxShadow = `0 4px 16px rgba(0,0,0,0.5), 0 0 0 4px ${color}60`
+        map.getCanvas().style.cursor = 'pointer'
+      })
+      el.addEventListener('mouseleave', () => {
+        dot.style.transform = 'scale(1)'
+        dot.style.boxShadow = `0 2px 8px rgba(0,0,0,0.4), 0 0 0 2px ${color}40`
+        map.getCanvas().style.cursor = ''
+      })
+
       const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
         .setLngLat(coords)
         .addTo(map)
 
       markerRef.current = marker
 
-      // Hover — scale the outer wrapper from center
-      el.addEventListener('mouseenter', () => {
-        el.style.transform = 'scale(1.3)'
-        dot.style.boxShadow = `0 4px 16px rgba(0,0,0,0.5), 0 0 0 4px ${color}60`
-        map.getCanvas().style.cursor = 'pointer'
-      })
-      el.addEventListener('mouseleave', () => {
-        el.style.transform = 'scale(1)'
-        dot.style.boxShadow = `0 2px 8px rgba(0,0,0,0.4), 0 0 0 2px ${color}40`
-        map.getCanvas().style.cursor = ''
-      })
-
-      // Click popup
       const popupContent = `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-width: 240px; padding: 2px;">
           <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
@@ -204,7 +193,7 @@ export default function ProjectMap({ project, className = '' }) {
       `
 
       const popup = new maplibregl.Popup({
-        offset: riskRadius(score) + 8,
+        offset: 18,
         closeButton: true,
         maxWidth: '320px',
         className: 'project-map-popup',
@@ -224,7 +213,6 @@ export default function ProjectMap({ project, className = '' }) {
         }
       })
 
-      // Fit bounds with padding
       map.flyTo({
         center: coords,
         zoom: 13,
@@ -282,7 +270,6 @@ export default function ProjectMap({ project, className = '' }) {
         className="w-full h-full min-h-[320px] rounded-xl overflow-hidden border border-border-crisp"
         style={{ minHeight: 320 }}
       />
-      {/* Risk legend overlay */}
       <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg border border-border-crisp px-3 py-2 shadow-sm z-10">
         <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wider mb-1.5">Risk Level</p>
         <div className="flex flex-col gap-1">
@@ -298,7 +285,6 @@ export default function ProjectMap({ project, className = '' }) {
           ))}
         </div>
       </div>
-      {/* Coordinate info overlay */}
       {project.latitude && project.longitude && (
         <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm rounded-lg border border-border-crisp px-2.5 py-1.5 shadow-sm z-10">
           <p className="text-[10px] font-mono text-text-muted">
