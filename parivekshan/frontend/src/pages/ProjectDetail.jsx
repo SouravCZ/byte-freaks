@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts'
 import AppShell from '../components/layout/AppShell'
+import ProjectMap from '../components/dashboard/ProjectMap'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -229,6 +230,14 @@ export default function ProjectDetail() {
         </div>
 
         <div className="lg:col-span-5 flex flex-col gap-space-base lg:sticky lg:top-20">
+          <div className={`${cardCls} overflow-hidden`}>
+            <div className="px-space-lg pt-space-lg pb-2">
+              <p className="text-[12px] font-semibold text-text-muted uppercase tracking-wider">Geospatial</p>
+              <h2 className="text-base font-semibold text-text-primary mt-0.5">Project location</h2>
+            </div>
+            <ProjectMap project={project} className="h-[340px]" />
+          </div>
+
           <div className="grid grid-cols-2 gap-space-base">
             {[
               { label: 'Delay days', value: `${project.delay_days}d`, meta: 'since target baseline', cls: 'text-error' },
