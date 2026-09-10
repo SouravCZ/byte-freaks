@@ -141,11 +141,13 @@ async function main() {
       const leadTime = int(collate(r, 'actual_total_duration_days'))
       const families = int(collate(r, 'affected_families'))
       const startDate = collate(r, 'start_date') || null
+      const lat = num(collate(r, 'latitude')) || null
+      const lng = num(collate(r, 'longitude')) || null
 
       const { rows: insRows } = await client.query(
         `INSERT INTO projects
-          (code, name, block_id, project_type, status, risk_score, delay_days, lead_time_days, mouzas_affected, start_date)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+          (code, name, block_id, project_type, status, risk_score, delay_days, lead_time_days, mouzas_affected, start_date, latitude, longitude)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
          RETURNING id`,
         [
           code,
@@ -158,6 +160,8 @@ async function main() {
           leadTime,
           families,
           startDate,
+          lat,
+          lng,
         ]
       )
       projectIds.set(code, insRows[0].id)

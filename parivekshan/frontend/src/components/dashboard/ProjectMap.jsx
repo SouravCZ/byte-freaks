@@ -114,52 +114,71 @@ export default function ProjectMap({ project, className = '' }) {
     map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right')
 
     map.on('load', () => {
-      // Add a marker at the project location
+      const r = riskRadius(score)
+      const dotSize = r * 2
+      const ringSize = r * 4
+
+      // Outer wrapper — fixed-size, centered on the geo point
       const el = document.createElement('div')
       el.className = 'project-map-marker'
       el.style.cssText = `
-        width: ${riskRadius(score) * 2}px;
-        height: ${riskRadius(score) * 2}px;
+        width: ${dotSize}px;
+        height: ${dotSize}px;
+        cursor: pointer;
+        transform-origin: center center;
+        transition: transform 0.15s ease;
+        overflow: visible;
+        position: relative;
+      `
+
+      // Inner dot — the visible circle
+      const dot = document.createElement('div')
+      dot.style.cssText = `
+        width: ${dotSize}px;
+        height: ${dotSize}px;
         background: ${color};
         border: 3px solid white;
         border-radius: 50%;
         box-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 0 0 2px ${color}40;
-        cursor: pointer;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        position: absolute;
+        top: 0; left: 0;
+        z-index: 2;
+        transition: box-shadow 0.15s ease;
       `
+      el.appendChild(dot)
 
-      // Pulsing ring animation
+      // Pulsing ring — absolutely positioned, extends outside the dot
       const ring = document.createElement('div')
       ring.style.cssText = `
         position: absolute;
         top: 50%; left: 50%;
-        width: ${riskRadius(score) * 4}px;
-        height: ${riskRadius(score) * 4}px;
-        margin-top: -${riskRadius(score) * 2}px;
-        margin-left: -${riskRadius(score) * 2}px;
+        width: ${ringSize}px;
+        height: ${ringSize}px;
+        margin-top: -${ringSize / 2}px;
+        margin-left: -${ringSize / 2}px;
         border: 2px solid ${color};
         border-radius: 50%;
         animation: pulse-ring 2s ease-out infinite;
         pointer-events: none;
+        z-index: 1;
       `
-      el.style.position = 'relative'
       el.appendChild(ring)
 
-      const marker = new maplibregl.Marker({ element: el })
+      const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
         .setLngLat(coords)
         .addTo(map)
 
       markerRef.current = marker
 
-      // Hover effect
+      // Hover — scale the outer wrapper from center
       el.addEventListener('mouseenter', () => {
         el.style.transform = 'scale(1.3)'
-        el.style.boxShadow = `0 4px 16px rgba(0,0,0,0.5), 0 0 0 4px ${color}60`
+        dot.style.boxShadow = `0 4px 16px rgba(0,0,0,0.5), 0 0 0 4px ${color}60`
         map.getCanvas().style.cursor = 'pointer'
       })
       el.addEventListener('mouseleave', () => {
         el.style.transform = 'scale(1)'
-        el.style.boxShadow = `0 2px 8px rgba(0,0,0,0.4), 0 0 0 2px ${color}40`
+        dot.style.boxShadow = `0 2px 8px rgba(0,0,0,0.4), 0 0 0 2px ${color}40`
         map.getCanvas().style.cursor = ''
       })
 
@@ -231,8 +250,8 @@ export default function ProjectMap({ project, className = '' }) {
           0% { transform: scale(0.5); opacity: 1; }
           100% { transform: scale(1.5); opacity: 0; }
         }
-        .project-map-marker:hover {
-          z-index: 10 !important;
+        .project-map-marker {
+          transform-origin: center center;
         }
         .project-map-popup .maplibregl-popup-content {
           border-radius: 12px !important;
