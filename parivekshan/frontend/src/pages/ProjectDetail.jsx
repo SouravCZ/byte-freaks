@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts'
 import AppShell from '../components/layout/AppShell'
 import ProjectMap from '../components/dashboard/ProjectMap'
+import { useRole } from '../lib/roleContext'
+import { can, canEditProject } from '../lib/permissions'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -41,6 +43,8 @@ function riskBand(score) {
 
 export default function ProjectDetail() {
   const { id } = useParams()
+  const navigate = useNavigate()
+  const { role } = useRole()
   const [project, setProject] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -101,6 +105,22 @@ export default function ProjectDetail() {
   const history = Array.isArray(project.history) ? project.history : []
   const alerts = Array.isArray(project.alerts) ? project.alerts : []
 
+  const canEdit = canEditProject(role, project.district)
+  const canDelete = can(role, 'delete_project')
+
+  const handleDelete = () => {
+    if (!window.confirm(`Delete ${project.code} — ${project.name}? This cannot be undone.`)) return
+    fetch(`${API_BASE}/api/projects/${id}`, { method: 'DELETE' })
+      .then(async (r) => {
+        if (!r.ok) {
+          const body = await r.json().catch(() => ({}))
+          throw new Error(body.error || `HTTP ${r.status}`)
+        }
+        navigate('/projects')
+      })
+      .catch((err) => window.alert(`Delete request failed: ${err.message}. The demo backend is read-only.`))
+  }
+
   return (
     <AppShell title={project.name} subtitle={`${project.code} · ${project.block || '—'} · ${project.district || ''}`}>
       <Link to="/projects" className="inline-flex items-center gap-1 text-[12px] font-medium text-text-muted hover:text-primary transition-colors mb-4">
@@ -122,6 +142,15 @@ export default function ProjectDetail() {
               {project.code}
             </p>
             {project.description && <p className="text-[14px] text-text-secondary leading-relaxed mt-3 max-w-3xl">{project.description}</p>}
+            {canDelete && (
+              <div className="mt-3 flex items-center gap-2">
+                <button onClick={handleDelete} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-risk-critical-bg border border-error/25 text-error text-[12px] font-semibold transition-colors hover:bg-risk-critical hover:text-white">
+                  <span className="material-symbols-outlined text-[14px]">delete</span>
+                  Delete project
+                </button>
+                {!canEdit && <span className="text-[11px] font-mono text-text-muted">Ministry Admin · full access</span>}
+              </div>
+            )}
           </div>
 
           <div className="shrink-0 bg-surface-container-low border border-border-crisp rounded-xl p-space-md flex items-center gap-space-md">
@@ -264,10 +293,23 @@ export default function ProjectDetail() {
                   ? `Elevated delay probability (${score.toFixed(0)}%) — monitor ${drivers[0]?.factor || 'gazette notification timelines'} and streamline consent documentation.`
                   : `Low delay probability (${score.toFixed(0)}%). Acquisition pipeline on track; re-score recommended at next statutory milestone.`}
             </p>
-            <div className="mt-4 flex items-center gap-2 pt-3 border-t border-border-crisp">
-              <button className="px-3.5 py-2 rounded-lg bg-risk-critical-bg border border-error/25 text-error text-[13px] font-semibold transition-colors hover:bg-risk-critical hover:text-white">Escalate review</button>
-              <button className="px-3.5 py-2 rounded-lg bg-primary text-white text-[13px] font-semibold transition-colors hover:bg-accent-cyan-deep">Run re-score</button>
-            </div>
+            {canEdit && (
+              <div className="mt-4 pt-3 border-t border-border-crisp">
+                <div className="flex items-center gap-2">
+                  <label htmlFor="project-status" className="text-[12px] font-medium text-text-muted">Update status</label>
+                  <select id="project-status" value={project.status || 'planned'} onChange={(e) => setProject((p) => ({ ...p, status: e.target.value }))} className="bg-surface-container border border-border-crisp text-text-primary text-[13px] font-medium py-1.5 pl-3 pr-8 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer appearance-none">
+                    {['planned', 'active', 'on_hold', 'completed', 'cancelled'].map((s) => (
+                      <option key={s} value={s}>{String(s).replace(/_/g, ' ')}</option>
+                    ))}
+                  </select>
+                  <span className="ml-auto text-[11px] text-text-muted font-mono">demo · local state</span>
+                </div>
+                <div className="mt-3 flex items-center gap-2">
+                  <button className="px-3.5 py-2 rounded-lg bg-risk-critical-bg border border-error/25 text-error text-[13px] font-semibold transition-colors hover:bg-risk-critical hover:text-white">Escalate review</button>
+                  <button className="px-3.5 py-2 rounded-lg bg-primary text-white text-[13px] font-semibold transition-colors hover:bg-accent-cyan-deep">Run re-score</button>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className={`${cardCls} p-space-lg`}>

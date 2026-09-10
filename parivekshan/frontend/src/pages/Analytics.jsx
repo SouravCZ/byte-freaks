@@ -222,17 +222,17 @@ export default function Analytics() {
             </div>
 
             <div className="relative flex-1 p-space-md bg-surface-container-low min-h-[300px]">
-              <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 justify-items-stretch gap-1.5 pr-1">
+              <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-1.5">
                 {heatGrid.map((b) => {
                   const band = riskBand(b.risk)
                   return (
                     <div
                       key={b.name}
                       title={`${b.name} (${b.state || '—'}) — ${b.risk}% · ${b.projects} projects`}
-                      className={`group relative h-9 rounded-md border-2 ${band.tile} opacity-90 hover:opacity-100 hover:ring-1 hover:ring-primary transition-all cursor-pointer`}
+                      className={`group relative aspect-square rounded-md border-2 ${band.tile} opacity-90 hover:opacity-100 hover:ring-1 hover:ring-primary transition-all cursor-pointer flex items-center justify-center px-1`}
                     >
-                      <span className="absolute inset-x-0 bottom-0 text-center text-[8px] font-mono font-semibold truncate px-0.5 leading-tight">
-                        {b.name.split(' ').slice(0, 2).join(' ').slice(0, 12)}
+                      <span className="text-center text-[9px] font-mono font-semibold leading-tight line-clamp-2 wrap-anywhere">
+                        {b.name.split(' ').slice(0, 2).join(' ')}
                       </span>
                     </div>
                   )
