@@ -2,28 +2,27 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts'
 import AppShell from '../components/layout/AppShell'
-import RiskTag from '../components/ui/RiskTag'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 function severityCls(sev) {
   switch (sev) {
-    case 'critical': return 'bg-risk-critical-bg text-error border-error/20'
-    case 'high': return 'bg-risk-warning-bg text-risk-warning border-risk-warning/20'
-    case 'moderate': return 'bg-amber-50 text-amber-700 border-amber-200'
-    case 'low': return 'bg-risk-success-bg text-risk-success border-risk-success/20'
-    default: return 'bg-surface-subtle text-text-secondary border-border-crisp'
+    case 'critical': return 'bg-risk-critical-bg text-error border-error/25'
+    case 'high': return 'bg-risk-warning-bg text-risk-warning border-risk-warning/25'
+    case 'moderate': return 'bg-risk-warning-bg text-risk-warning border-risk-warning/25'
+    case 'low': return 'bg-risk-success-bg text-risk-success border-risk-success/25'
+    default: return 'bg-surface-container text-text-secondary border-border-crisp'
   }
 }
 
 function statusCls(status) {
   switch (status) {
-    case 'completed': return 'bg-risk-success-bg text-risk-success border-risk-success/20'
-    case 'active': return 'bg-primary-container text-primary border-primary/20'
-    case 'on_hold': return 'bg-risk-warning-bg text-risk-warning border-risk-warning/20'
-    case 'planned': return 'bg-surface-subtle text-text-secondary border-border-crisp'
-    case 'cancelled': return 'bg-risk-critical-bg text-error border-error/20'
-    default: return 'bg-surface-subtle text-text-secondary border-border-crisp'
+    case 'completed': return 'bg-risk-success-bg text-risk-success border-risk-success/25'
+    case 'active': return 'bg-primary-container text-on-primary-container border-primary/20'
+    case 'on_hold': return 'bg-risk-warning-bg text-risk-warning border-risk-warning/25'
+    case 'planned': return 'bg-surface-container text-text-secondary border-border-crisp'
+    case 'cancelled': return 'bg-risk-critical-bg text-error border-error/25'
+    default: return 'bg-surface-container text-text-secondary border-border-crisp'
   }
 }
 
@@ -34,9 +33,9 @@ function fmtDate(d) {
 
 function riskBand(score) {
   const n = Number(score)
-  if (n >= 75) return { label: 'HIGH RISK', color: '#DC2626', ring: '#DC2626', text: 'text-error' }
-  if (n >= 50) return { label: 'MODERATE', color: '#D97706', ring: '#D97706', text: 'text-risk-warning' }
-  return { label: 'LOW RISK', color: '#059669', ring: '#059669', text: 'text-risk-success' }
+  if (n >= 75) return { label: 'High risk', color: '#c0392b', ring: '#c0392b', text: 'text-error' }
+  if (n >= 50) return { label: 'Moderate risk', color: '#b4650a', ring: '#b4650a', text: 'text-risk-warning' }
+  return { label: 'Low risk', color: '#0e7c66', ring: '#0e7c66', text: 'text-risk-success' }
 }
 
 export default function ProjectDetail() {
@@ -65,12 +64,14 @@ export default function ProjectDetail() {
     return () => ctrl.abort()
   }, [id])
 
+  const cardCls = 'bg-surface-card rounded-xl border border-border-crisp shadow-card'
+
   if (loading) {
     return (
-      <AppShell title="Project Detail" subtitle={id}>
-        <div className="py-20 text-center">
-          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-text-secondary text-sm">Loading project…</p>
+      <AppShell title="Project detail" subtitle={id}>
+        <div className="py-24 text-center">
+          <div className="w-9 h-9 border-[3px] border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-[14px] text-text-muted">Loading project…</p>
         </div>
       </AppShell>
     )
@@ -78,11 +79,12 @@ export default function ProjectDetail() {
 
   if (error || !project) {
     return (
-      <AppShell title="Project Detail" subtitle={id}>
-        <div className="bg-surface-card border border-error/30 rounded-lg p-6 max-w-md mx-auto text-center">
-          <p className="text-error font-semibold mb-2">Could not load project</p>
-          <p className="text-sm text-text-secondary">{error || 'Project not found'}</p>
-          <Link to="/projects" className="inline-block mt-4 text-primary text-sm font-semibold hover:underline">← Back to projects</Link>
+      <AppShell title="Project detail" subtitle={id}>
+        <div className="bg-surface-card border border-error/25 rounded-xl p-6 max-w-md mx-auto text-center shadow-card">
+          <span className="material-symbols-outlined text-[32px] text-error mb-2">error_outline</span>
+          <p className="font-semibold text-text-primary mb-1">Could not load project</p>
+          <p className="text-sm text-text-muted">{error || 'Project not found'}</p>
+          <Link to="/projects" className="inline-block mt-4 text-[13px] text-primary font-semibold hover:underline">← Back to projects</Link>
         </div>
       </AppShell>
     )
@@ -100,48 +102,48 @@ export default function ProjectDetail() {
 
   return (
     <AppShell title={project.name} subtitle={`${project.code} · ${project.block || '—'} · ${project.district || ''}`}>
-      <Link to="/projects" className="inline-flex items-center gap-1 font-code-xs text-code-xs text-text-muted hover:text-primary font-semibold mb-4 transition-colors">
-        <span className="material-symbols-outlined text-[14px]">arrow_back</span>
-        ALL PROJECTS DIRECTORY
+      <Link to="/projects" className="inline-flex items-center gap-1 text-[12px] font-medium text-text-muted hover:text-primary transition-colors mb-4">
+        <span className="material-symbols-outlined text-[15px]">arrow_back</span>
+        All projects
       </Link>
 
-      {/* Header card */}
-      <div className="bg-surface-card rounded-lg border border-border-crisp p-space-lg shadow-sm flex flex-col gap-space-lg">
+      <div className={`${cardCls} p-space-lg flex flex-col gap-space-lg`}>
         <div className="flex flex-col xl:flex-row xl:items-center gap-space-lg">
           <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-2 mb-2">
-              <span className="font-code-xs text-code-xs px-2 py-0.5 rounded bg-surface-subtle border border-border-crisp text-text-secondary font-semibold uppercase tracking-wider">{project.project_type}</span>
-              <span className={`px-2 py-0.5 rounded font-code-xs text-code-xs font-semibold capitalize border ${statusCls(project.status)}`}>{String(project.status || 'unknown').replace(/_/g, ' ')}</span>
-              <span className="font-code-xs text-code-xs px-2 py-0.5 rounded bg-primary-container text-primary border border-primary/20 font-semibold">MoRD • {project.block || '—'}, {project.district || ''}</span>
+            <div className="flex flex-wrap items-center gap-2 mb-2.5">
+              <span className="text-[12px] font-mono px-2 py-0.5 rounded-md bg-surface-container border border-border-crisp text-text-secondary font-semibold">{project.project_type}</span>
+              <span className={`px-2 py-0.5 rounded-md text-[12px] font-semibold capitalize border ${statusCls(project.status)}`}>{String(project.status || 'unknown').replace(/_/g, ' ')}</span>
+              <span className="text-[12px] px-2 py-0.5 rounded-md bg-primary-container text-on-primary-container border border-primary/20 font-semibold">{project.block || '—'}, {project.district || ''}</span>
             </div>
-            <h1 className="font-headline-lg text-headline-lg text-text-primary font-bold tracking-tight">{project.name}</h1>
-            <p className="font-code-sm text-code-sm text-text-muted mt-1">
-              <span className="material-symbols-outlined text-[14px] align-[-2px]">tag</span> {project.code}
+            <h1 className="text-2xl font-bold text-text-primary tracking-tight">{project.name}</h1>
+            <p className="flex items-center gap-1.5 font-mono text-[12px] text-text-muted mt-1.5">
+              <span className="material-symbols-outlined text-[14px]">tag</span>
+              {project.code}
             </p>
-            {project.description && <p className="font-body-md text-body-md text-text-secondary leading-relaxed mt-space-md max-w-3xl">{project.description}</p>}
+            {project.description && <p className="text-[14px] text-text-secondary leading-relaxed mt-3 max-w-3xl">{project.description}</p>}
           </div>
 
-          {/* Risk gauge */}
-          <div className="shrink-0 bg-surface-subtle border border-border-crisp rounded-lg p-space-md flex items-center gap-space-md">
-            <div className="relative w-28 h-28">
-              <svg className="w-28 h-28 -rotate-90" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="40" fill="none" stroke="#E2E8F0" strokeWidth="10" />
+          <div className="shrink-0 bg-surface-container-low border border-border-crisp rounded-xl p-space-md flex items-center gap-space-md">
+            <div className="relative w-[104px] h-[104px]">
+              <svg className="w-[104px] h-[104px] -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" fill="none" stroke="#dfe6ee" strokeWidth="9" />
                 <circle
                   cx="50" cy="50" r="40" fill="none"
-                  stroke={band.ring} strokeWidth="10" strokeLinecap="round"
+                  stroke={band.ring} strokeWidth="9" strokeLinecap="round"
                   strokeDasharray={C} strokeDashoffset={dashOffset}
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="font-code-lg text-code-lg font-bold text-text-primary tabular-nums">{score.toFixed(0)}</span>
-                <span className="font-label-sm text-label-sm uppercase tracking-wider text-text-muted">/ 100</span>
+                <span className="text-xl font-bold text-text-primary tabular-nums">{score.toFixed(0)}</span>
+                <span className="text-[10px] font-medium text-text-muted tracking-wider">/ 100</span>
               </div>
             </div>
-            <div className="flex flex-col gap-1">
-              <span className={`font-headline-sm text-headline-sm font-bold ${band.text}`}>{band.label}</span>
-              <span className="font-code-xs text-code-xs text-text-muted">XGBoost Delay Engine</span>
-              <span className="inline-flex w-fit items-center gap-1 px-1.5 py-0.5 rounded bg-surface-card border border-border-crisp font-code-xs text-code-xs text-text-secondary">
-                <span className="material-symbols-outlined text-[12px] text-risk-warning">schedule</span>{project.delay_days}d delayed
+            <div className="flex flex-col gap-1.5">
+              <span className={`text-base font-bold ${band.text}`}>{band.label}</span>
+              <span className="text-[12px] text-text-muted">XGBoost delay engine</span>
+              <span className="inline-flex w-fit items-center gap-1 px-2 py-0.5 rounded-md bg-surface-card border border-border-crisp text-[12px] text-text-secondary">
+                <span className="material-symbols-outlined text-[13px] text-risk-warning">schedule</span>
+                {project.delay_days}d delayed
               </span>
             </div>
           </div>
@@ -149,29 +151,28 @@ export default function ProjectDetail() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-base mt-space-lg items-start">
-        {/* Left column */}
         <div className="lg:col-span-7 flex flex-col gap-space-base">
           {drivers.length > 0 && (
-            <div className="bg-surface-card border border-border-crisp p-space-lg rounded-lg shadow-sm">
-              <div className="flex items-center justify-between mb-1">
+            <div className={`${cardCls} p-space-lg`}>
+              <div className="flex items-center justify-between mb-4">
                 <div>
-                  <span className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider font-semibold">SHAP-STYLE ATTRIBUTION</span>
-                  <h2 className="font-headline-sm text-headline-sm text-text-primary font-bold">Risk Driver Breakdown</h2>
+                  <p className="text-[12px] font-semibold text-text-muted uppercase tracking-wider">SHAP-style attribution</p>
+                  <h2 className="text-base font-semibold text-text-primary mt-0.5">Risk driver breakdown</h2>
                 </div>
-                <span className="font-code-xs text-code-xs px-2 py-0.5 rounded bg-risk-critical-bg border border-error/20 text-error font-bold">Top Driver: {drivers[0]?.factor}</span>
+                <span className="text-[12px] px-2 py-1 rounded-md bg-risk-critical-bg border border-error/25 text-error font-semibold">Top: {drivers[0]?.factor}</span>
               </div>
-              <div className="space-y-3 mt-space-md">
+              <div className="space-y-3">
                 {drivers.map((d, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <span className="font-code-xs text-code-xs text-text-muted w-6 tabular-nums shrink-0">{String(i + 1).padStart(2, '0')}</span>
-                    <span className="text-sm text-text-primary w-56 shrink-0 font-medium truncate" title={d.factor}>{d.factor}</span>
+                    <span className="font-mono text-[12px] text-text-muted w-6 tabular-nums shrink-0">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="text-[13px] text-text-primary w-56 shrink-0 font-medium truncate" title={d.factor}>{d.factor}</span>
                     <div className="flex-1 h-2 bg-surface-dim rounded-full overflow-hidden">
                       <div
-                        className={`h-full rounded-full ${i === 0 ? 'bg-error' : i === 1 ? 'bg-risk-warning' : 'bg-primary'}`}
+                        className={`h-full rounded-full ${i === 0 ? 'bg-risk-critical' : i === 1 ? 'bg-risk-warning' : 'bg-primary'}`}
                         style={{ width: `${(Number(d.impact_pct) / maxDriver) * 100}%` }}
                       ></div>
                     </div>
-                    <span className="text-sm font-code-sm text-text-secondary w-12 text-right tabular-nums shrink-0">{Number(d.impact_pct).toFixed(0)}%</span>
+                    <span className="text-[13px] font-mono text-text-secondary w-12 text-right tabular-nums shrink-0">{Number(d.impact_pct).toFixed(0)}%</span>
                   </div>
                 ))}
               </div>
@@ -179,20 +180,21 @@ export default function ProjectDetail() {
           )}
 
           {history.length > 0 && (
-            <div className="bg-surface-card border border-border-crisp p-space-lg rounded-lg shadow-sm">
-              <span className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider font-semibold">12-MONTH SNAPSHOT</span>
-              <h2 className="font-headline-sm text-headline-sm text-text-primary font-bold mb-3">Risk History Trajectory</h2>
-              <ResponsiveContainer width="100%" height={200}>
+            <div className={`${cardCls} p-space-lg`}>
+              <p className="text-[12px] font-semibold text-text-muted uppercase tracking-wider">12-month snapshot</p>
+              <h2 className="text-base font-semibold text-text-primary mt-0.5 mb-3">Risk history trajectory</h2>
+              <ResponsiveContainer width="100%" height={204}>
                 <BarChart data={history.map((h) => ({ ...h, month: new Date(h.recorded_on).toLocaleDateString(undefined, { month: 'short' }) }))}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
-                  <XAxis dataKey="month" stroke="#64748B" fontSize={10} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#64748B" fontSize={10} domain={[0, 100]} tickLine={false} axisLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8ee" vertical={false} />
+                  <XAxis dataKey="month" stroke="#7d8a99" fontSize={10} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#7d8a99" fontSize={10} domain={[0, 100]} tickLine={false} axisLine={false} width={32} />
                   <Tooltip
-                    contentStyle={{ borderRadius: 8, border: '1px solid #e2e8f0', fontSize: 12, boxShadow: '0 4px 12px rgba(0,0,0,.08)' }}
+                    cursor={{ fill: 'rgba(43,76,126,0.06)' }}
+                    contentStyle={{ borderRadius: 10, border: '1px solid #e2e8ee', fontSize: 12, boxShadow: '0 4px 12px rgba(16,24,40,.08)' }}
                   />
-                  <Bar dataKey="risk_score" radius={[4, 4, 0, 0]}>
+                  <Bar dataKey="risk_score" name="Risk score" radius={[4, 4, 0, 0]}>
                     {history.map((h, i) => (
-                      <Cell key={i} fill={Number(h.risk_score) >= 75 ? '#DC2626' : Number(h.risk_score) >= 50 ? '#F59E0B' : '#059669'} />
+                      <Cell key={i} fill={Number(h.risk_score) >= 75 ? '#c0392b' : Number(h.risk_score) >= 50 ? '#b4650a' : '#0e7c66'} />
                     ))}
                   </Bar>
                 </BarChart>
@@ -201,24 +203,24 @@ export default function ProjectDetail() {
           )}
 
           {alerts.length > 0 && (
-            <div className="bg-surface-card border border-border-crisp p-space-lg rounded-lg shadow-sm">
-              <div className="flex items-center justify-between mb-3">
+            <div className={`${cardCls} p-space-lg`}>
+              <div className="flex items-center justify-between mb-4">
                 <div>
-                  <span className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider font-semibold">DISCRETE EVENTS</span>
-                  <h2 className="font-headline-sm text-headline-sm text-text-primary font-bold">Project Alerts</h2>
+                  <p className="text-[12px] font-semibold text-text-muted uppercase tracking-wider">Discrete events</p>
+                  <h2 className="text-base font-semibold text-text-primary mt-0.5">Project alerts</h2>
                 </div>
-                <span className="font-code-xs text-code-xs px-2 py-0.5 rounded bg-surface-subtle border border-border-crisp text-text-secondary font-bold tabular-nums">{alerts.length}</span>
+                <span className="text-[12px] px-2 py-0.5 rounded-md bg-surface-container border border-border-crisp text-text-secondary font-semibold tabular-nums">{alerts.length}</span>
               </div>
               <div className="space-y-3">
                 {alerts.map((a) => (
-                  <div key={a.id} className="border border-border-crisp rounded-lg p-4">
+                  <div key={a.id} className="border border-border-crisp rounded-xl p-4">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className={`px-2 py-0.5 text-[10px] font-code-xs font-semibold uppercase tracking-wider rounded border ${severityCls(a.severity)}`}>{a.severity}</span>
-                      <span className="font-semibold text-text-primary text-sm">{a.title}</span>
-                      {!a.is_read && <span className="px-1.5 py-0.5 rounded bg-error text-on-error font-code-xs text-[9px] font-bold uppercase">Unread</span>}
+                      <span className={`px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider rounded-md border ${severityCls(a.severity)}`}>{a.severity}</span>
+                      <span className="font-semibold text-text-primary text-[13px]">{a.title}</span>
+                      {!a.is_read && <span className="px-1.5 py-0.5 rounded bg-risk-critical-bg text-error font-mono text-[10px] font-bold uppercase border border-error/25">Unread</span>}
                     </div>
-                    {a.message && <p className="text-sm text-text-secondary">{a.message}</p>}
-                    <p className="text-xs text-text-muted mt-2 font-code-xs">{new Date(a.created_at).toLocaleString()}</p>
+                    {a.message && <p className="text-[13px] text-text-secondary leading-relaxed">{a.message}</p>}
+                    <p className="text-[12px] text-text-muted mt-2 font-mono">{new Date(a.created_at).toLocaleString()}</p>
                   </div>
                 ))}
               </div>
@@ -226,69 +228,61 @@ export default function ProjectDetail() {
           )}
         </div>
 
-        {/* Right column */}
         <div className="lg:col-span-5 flex flex-col gap-space-base lg:sticky lg:top-20">
           <div className="grid grid-cols-2 gap-space-base">
-            <div className="bg-surface-card border border-border-crisp rounded-lg p-space-md">
-              <span className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider font-semibold">Delay Days</span>
-              <p className="font-headline-md text-headline-md font-bold text-error mt-1 tabular-nums">{project.delay_days}d</p>
-              <p className="font-code-xs text-code-xs text-text-muted mt-1">since target baseline</p>
-            </div>
-            <div className="bg-surface-card border border-border-crisp rounded-lg p-space-md">
-              <span className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider font-semibold">Est. Lead Time</span>
-              <p className="font-headline-md text-headline-md font-bold text-text-primary mt-1 tabular-nums">{project.lead_time_days}d</p>
-              <p className="font-code-xs text-code-xs text-text-muted mt-1">acquisition lifecycle</p>
-            </div>
-            <div className="bg-surface-card border border-border-crisp rounded-lg p-space-md">
-              <span className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider font-semibold">PAFs / Mouzas</span>
-              <p className="font-headline-md text-headline-md font-bold text-text-primary mt-1 tabular-nums">{Number(project.mouzas_affected || 0).toLocaleString()}</p>
-              <p className="font-code-xs text-code-xs text-text-muted mt-1">affected families</p>
-            </div>
-            <div className="bg-surface-card border border-border-crisp rounded-lg p-space-md">
-              <span className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider font-semibold">Start / Target</span>
-              <p className="text-sm font-semibold text-text-primary mt-1">{fmtDate(project.start_date)}</p>
-              <p className="text-sm font-semibold text-text-primary">→ {fmtDate(project.target_date)}</p>
-            </div>
+            {[
+              { label: 'Delay days', value: `${project.delay_days}d`, meta: 'since target baseline', cls: 'text-error' },
+              { label: 'Est. lead time', value: `${project.lead_time_days}d`, meta: 'acquisition lifecycle', cls: 'text-text-primary' },
+              { label: 'PAFs / Mouzas', value: Number(project.mouzas_affected || 0).toLocaleString(), meta: 'affected families', cls: 'text-text-primary' },
+              { label: 'Start → Target', value: `${fmtDate(project.start_date)}`, value2: `→ ${fmtDate(project.target_date)}`, meta: 'schedule window', cls: 'text-text-primary' },
+            ].map((c) => (
+              <div key={c.label} className={`${cardCls} p-space-md`}>
+                <span className="text-[11px] font-semibold text-text-muted uppercase tracking-wider">{c.label}</span>
+                <p className={`text-lg font-bold mt-1 tabular-nums ${c.cls}`}>{c.value}</p>
+                {c.value2 && <p className="text-[13px] font-semibold text-text-primary">{c.value2}</p>}
+                <p className="text-[11px] text-text-muted mt-1">{c.meta}</p>
+              </div>
+            ))}
           </div>
 
-          <div className="bg-surface-card border border-border-crisp rounded-lg p-space-lg shadow-sm border-l-4 border-l-primary">
-            <span className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider font-semibold">AI DIAGNOSTIC</span>
-            <h2 className="font-headline-sm text-headline-sm text-text-primary font-bold mt-1 mb-2">Execution Readiness</h2>
-            <p className="font-body-md text-body-md text-text-secondary leading-relaxed">
+          <div className={`${cardCls} p-space-lg border-l-4 border-l-primary`}>
+            <p className="text-[12px] font-semibold text-text-muted uppercase tracking-wider">AI diagnostic</p>
+            <h2 className="text-base font-semibold text-text-primary mt-1 mb-2">Execution readiness</h2>
+            <p className="text-[13px] text-text-secondary leading-relaxed">
               {score >= 75
                 ? `Critical delay probability (${score.toFixed(0)}%) driven primarily by ${drivers[0]?.factor || 'statutory bottlenecks'}. Recommended immediate empowered-committee escalation and compensation disbursal acceleration.`
                 : score >= 50
                   ? `Elevated delay probability (${score.toFixed(0)}%) — monitor ${drivers[0]?.factor || 'gazette notification timelines'} and streamline consent documentation.`
                   : `Low delay probability (${score.toFixed(0)}%). Acquisition pipeline on track; re-score recommended at next statutory milestone.`}
             </p>
-            <div className="mt-space-md flex items-center gap-space-sm pt-space-xs border-t border-border-crisp">
-              <button className="px-space-md py-1.5 rounded-lg bg-risk-critical-bg border border-error/30 text-error font-label-sm text-label-sm font-semibold transition-colors">Escalate Review</button>
-              <button className="px-space-md py-1.5 rounded-lg bg-primary text-on-primary font-label-sm text-label-sm font-semibold transition-colors hover:bg-accent-cyan-deep">Run Re-score</button>
+            <div className="mt-4 flex items-center gap-2 pt-3 border-t border-border-crisp">
+              <button className="px-3.5 py-2 rounded-lg bg-risk-critical-bg border border-error/25 text-error text-[13px] font-semibold transition-colors hover:bg-risk-critical hover:text-white">Escalate review</button>
+              <button className="px-3.5 py-2 rounded-lg bg-primary text-white text-[13px] font-semibold transition-colors hover:bg-accent-cyan-deep">Run re-score</button>
             </div>
           </div>
 
-          <div className="bg-surface-card border border-border-crisp rounded-lg p-space-lg shadow-sm">
-            <h2 className="font-headline-sm text-headline-sm text-text-primary font-bold mb-3">Project Snapshot</h2>
-            <dl className="divide-y divide-border-crisp font-body-sm text-body-sm">
+          <div className={`${cardCls} p-space-lg`}>
+            <h2 className="text-base font-semibold text-text-primary mb-2">Project snapshot</h2>
+            <dl className="divide-y divide-border-crisp text-[13px]">
               {[
                 ['Project ID', project.code],
-                ['Sector / Type', project.project_type],
+                ['Sector / type', project.project_type],
                 ['State', project.district],
                 ['District', project.block],
-                ['Risk Score', `${score.toFixed(0)} / 100`],
+                ['Risk score', `${score.toFixed(0)} / 100`],
                 ['Status', project.status],
               ].map(([k, v]) => (
                 <div key={k} className="flex items-center justify-between py-2">
                   <dt className="text-text-muted">{k}</dt>
-                  <dd className="font-code-sm text-code-sm text-text-primary font-semibold capitalize">{v || '—'}</dd>
+                  <dd className="font-mono text-[13px] text-text-primary font-semibold capitalize">{v || '—'}</dd>
                 </div>
               ))}
             </dl>
           </div>
 
-          <Link to="/analytics" className="inline-flex items-center gap-1 font-code-xs text-code-xs text-text-muted hover:text-primary font-semibold transition-colors">
+          <Link to="/analytics" className="inline-flex items-center gap-1 text-[12px] font-medium text-text-muted hover:text-primary transition-colors">
             View district analytics
-            <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+            <span className="material-symbols-outlined text-[15px]">arrow_forward</span>
           </Link>
         </div>
       </div>

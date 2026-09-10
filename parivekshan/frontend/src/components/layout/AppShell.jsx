@@ -3,7 +3,7 @@ import { useRole } from '../../lib/roleContext'
 import Sidebar from './Sidebar'
 import Topbar from './Topbar'
 
-export default function AppShell({ icon, title, subtitle, children }) {
+export default function AppShell({ title, subtitle, children }) {
   const { role } = useRole()
 
   return (
@@ -15,9 +15,9 @@ export default function AppShell({ icon, title, subtitle, children }) {
           {children}
         </main>
         <footer className="border-t border-border-crisp bg-surface-card">
-          <div className="max-w-[1680px] mx-auto px-space-lg lg:px-space-xl py-space-md flex items-center justify-between gap-2">
-            <p className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider">Parivekshan AI · MoRD GeoRisk Suite · NSDSS</p>
-            <p className="font-code-xs text-code-xs text-text-muted uppercase tracking-wider">GovNet Session: {role || 'anonymous'}</p>
+          <div className="max-w-[1680px] mx-auto px-space-lg lg:px-space-xl py-space-md flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p className="font-code-xs text-code-xs text-text-muted">Parivekshan AI · MoRD GeoRisk Suite · NSDSS</p>
+            <p className="font-code-xs text-code-xs text-text-muted">GovNet session: {role || 'anonymous'}</p>
           </div>
         </footer>
       </div>
