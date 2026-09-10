@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import AppShell from '../components/layout/AppShell'
+import { useRole } from '../lib/roleContext'
+import { can, canManageAlert, scopeAlertsByRole } from '../lib/permissions'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -35,20 +37,38 @@ const FILTERS = [
 ]
 
 export default function Alerts() {
+  const { role } = useRole()
   const [alerts, setAlerts] = useState([])
+  const [projects, setProjects] = useState([])
   const [filter, setFilter] = useState('all')
   const [q, setQ] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  const districtByCode = useMemo(() => {
+    const map = {}
+    if (Array.isArray(projects)) projects.forEach((p) => { map[p.code] = p.district })
+    return map
+  }, [projects])
+
+  const scopedAlerts = useMemo(() => scopeAlertsByRole(alerts, role, districtByCode), [alerts, role, districtByCode])
+
   const load = useCallback(() => {
     const ctrl = new AbortController()
-    fetch(`${API_BASE}/api/alerts`, { signal: ctrl.signal })
-      .then((r) => {
+    Promise.all([
+      fetch(`${API_BASE}/api/alerts`, { signal: ctrl.signal }).then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`)
         return r.json()
+      }),
+      fetch(`${API_BASE}/api/projects`, { signal: ctrl.signal }).then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      }),
+    ])
+      .then(([alertData, projectData]) => {
+        setAlerts(Array.isArray(alertData) ? alertData : [])
+        setProjects(Array.isArray(projectData) ? projectData : [])
       })
-      .then((data) => setAlerts(Array.isArray(data) ? data : []))
       .catch((err) => {
         if (err.name !== 'AbortError') setError(err.message)
       })
@@ -70,37 +90,39 @@ export default function Alerts() {
   }
 
   const counts = useMemo(
-    () => alerts.reduce((acc, a) => {
+    () => scopedAlerts.reduce((acc, a) => {
       acc.total += 1
       acc[a.severity] = (acc[a.severity] || 0) + 1
       if (!a.is_read) acc.unread += 1
       if (a.severity === 'critical' || a.severity === 'high') acc.escalated += 1
       return acc
     }, { total: 0, unread: 0, escalated: 0 }),
-    [alerts]
+    [scopedAlerts]
   )
 
   const meanHours = useMemo(() => {
-    const withTime = alerts.filter((a) => a.created_at)
+    const withTime = scopedAlerts.filter((a) => a.created_at)
     if (!withTime.length) return null
     const sum = withTime.reduce((s, a) => s + Math.max(0, Date.now() - new Date(a.created_at).getTime()), 0)
     return sum / withTime.length / 3600000
-  }, [alerts])
+  }, [scopedAlerts])
 
   const visible = useMemo(() => {
     const term = q.trim().toLowerCase()
-    return alerts.filter((a) => {
+    return scopedAlerts.filter((a) => {
       if (filter !== 'all' && a.severity !== filter) return false
       if (term && !`${a.title} ${a.message || ''} ${a.project_name || ''} ${a.project_code || ''} ${a.district || ''}`.toLowerCase().includes(term)) return false
       return true
     })
-  }, [alerts, filter, q])
+  }, [scopedAlerts, filter, q])
+
+  const canMarkFiltered = can(role, 'mark_alert_read')
 
   const markFilteredReviewed = () => {
     visible.filter((a) => !a.is_read).forEach((a) => markRead(a.id, true))
   }
 
-  const escalationQueue = useMemo(() => alerts.filter((a) => a.severity === 'critical' || a.severity === 'high').sort((a, b) => new Date(a.created_at) - new Date(b.created_at)), [alerts])
+  const escalationQueue = useMemo(() => scopedAlerts.filter((a) => a.severity === 'critical' || a.severity === 'high').sort((a, b) => new Date(a.created_at) - new Date(b.created_at)), [scopedAlerts])
 
   const slaCompliant = meanHours !== null && meanHours < 6
 
@@ -128,7 +150,7 @@ export default function Alerts() {
   }
 
   return (
-    <AppShell title="Alerts" subtitle={`${counts.unread} unread of ${alerts.length} total`}>
+    <AppShell title="Alerts" subtitle={`${counts.unread} unread of ${scopedAlerts.length} total`}>
       <div className="flex flex-col gap-space-lg">
         <div className="flex flex-col gap-space-md">
           <div className="flex items-center gap-space-sm">
@@ -150,10 +172,12 @@ export default function Alerts() {
                 <span className="material-symbols-outlined text-[16px] text-primary">download</span>
                 Export register
               </button>
-              <button onClick={markFilteredReviewed} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white text-[13px] font-semibold hover:bg-accent-cyan-deep transition-colors shadow-card">
-                <span className="material-symbols-outlined text-[16px]">done_all</span>
-                Mark filtered as reviewed
-              </button>
+              {canMarkFiltered && (
+                <button onClick={markFilteredReviewed} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white text-[13px] font-semibold hover:bg-accent-cyan-deep transition-colors shadow-card">
+                  <span className="material-symbols-outlined text-[16px]">done_all</span>
+                  Mark filtered as reviewed
+                </button>
+              )}
             </div>
           </div>
 
@@ -273,14 +297,22 @@ export default function Alerts() {
                       </p>
                     </div>
                     <div className="shrink-0 flex flex-col gap-1.5">
-                      {a.is_read ? (
-                        <button onClick={() => markRead(a.id, false)} className="text-[11px] font-medium text-text-muted hover:text-primary border border-border-crisp rounded-lg px-2.5 py-1.5 transition">Mark unread</button>
+                      {canManageAlert(role, districtByCode[a.project_code]) ? (
+                        <>
+                          {a.is_read ? (
+                            <button onClick={() => markRead(a.id, false)} className="text-[11px] font-medium text-text-muted hover:text-primary border border-border-crisp rounded-lg px-2.5 py-1.5 transition">Mark unread</button>
+                          ) : (
+                            <button onClick={() => markRead(a.id, true)} className="text-[11px] font-medium text-risk-success hover:text-white hover:bg-risk-success border border-risk-success/30 rounded-lg px-2.5 py-1.5 transition">Acknowledge</button>
+                          )}
+                          <button className="text-[11px] font-medium text-text-secondary hover:text-error border border-border-crisp rounded-lg px-2.5 py-1.5 transition inline-flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[12px]">priority_high</span>Escalate
+                          </button>
+                        </>
                       ) : (
-                        <button onClick={() => markRead(a.id, true)} className="text-[11px] font-medium text-risk-success hover:text-white hover:bg-risk-success border border-risk-success/30 rounded-lg px-2.5 py-1.5 transition">Acknowledge</button>
+                        <button title="No write access for this alert" className="text-[11px] font-medium text-text-muted/60 border border-border-crisp rounded-lg px-2.5 py-1.5 transition inline-flex items-center gap-1 pointer-events-none">
+                          <span className="material-symbols-outlined text-[12px]">lock</span>Read only
+                        </button>
                       )}
-                      <button className="text-[11px] font-medium text-text-secondary hover:text-error border border-border-crisp rounded-lg px-2.5 py-1.5 transition inline-flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[12px]">priority_high</span>Escalate
-                      </button>
                     </div>
                   </div>
                 )
@@ -313,7 +345,7 @@ export default function Alerts() {
                           <p className="font-mono text-[11px] text-text-muted truncate">#{a.id} · {timeAgo(a.created_at)}</p>
                           {a.project_name && <p className="font-mono text-[11px] text-text-muted truncate">{a.project_name}</p>}
                         </div>
-                        {!a.is_read && (
+                        {!a.is_read && canManageAlert(role, districtByCode[a.project_code]) && (
                           <button onClick={() => markRead(a.id, true)} className="text-[10px] font-medium text-risk-success border border-risk-success/30 rounded px-1.5 py-1 hover:bg-risk-success hover:text-white transition">Ack</button>
                         )}
                       </div>

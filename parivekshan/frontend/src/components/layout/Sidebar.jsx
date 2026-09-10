@@ -1,18 +1,20 @@
 import React from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { useRole } from '../../lib/roleContext'
+import { can } from '../../lib/permissions'
 import Logo from '../Logo'
 
 const NAV = [
-  { to: '/dashboard', label: 'Overview', icon: 'dashboard' },
-  { to: '/projects', label: 'Projects', icon: 'folder_managed' },
-  { to: '/analytics', label: 'Analytics', icon: 'location_on' },
-  { to: '/alerts', label: 'Alerts', icon: 'notifications_active' },
-  { to: '/users', label: 'Users', icon: 'verified_user' },
+  { to: '/dashboard', label: 'Overview', icon: 'dashboard', action: 'view_dashboard' },
+  { to: '/projects', label: 'Projects', icon: 'folder_managed', action: 'view_projects' },
+  { to: '/analytics', label: 'Analytics', icon: 'location_on', action: 'view_analytics' },
+  { to: '/alerts', label: 'Alerts', icon: 'notifications_active', action: 'view_alerts' },
+  { to: '/users', label: 'Users', icon: 'verified_user', action: 'manage_users' },
 ]
 
 export default function Sidebar() {
   const { role } = useRole()
+  const items = NAV.filter((item) => can(role, item.action))
 
   return (
     <aside className="hidden lg:flex fixed left-0 top-0 h-screen w-sidebar-width bg-surface-container-lowest border-r border-border-crisp z-50 flex-col justify-between select-none">
@@ -27,7 +29,7 @@ export default function Sidebar() {
           <p className="px-space-sm pb-space-sm font-code-xs text-code-xs text-text-muted tracking-wider uppercase">
             Command Suite
           </p>
-          {NAV.map((item) => (
+          {items.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}

@@ -1,4 +1,4 @@
-export const DISTRICT_OFFICER_DISTRICT = null
+export const DISTRICT_OFFICER_DISTRICT = 'Delhi'
 
 export function isDistrictOfficer(role) {
   return role === 'District Magistrate'

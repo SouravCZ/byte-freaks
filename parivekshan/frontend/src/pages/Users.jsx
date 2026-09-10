@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import AppShell from '../components/layout/AppShell'
+import { useRole } from '../lib/roleContext'
+import { can } from '../lib/permissions'
 
 const SEEDED_USERS = [
   {
@@ -69,6 +71,8 @@ function statusPill(status) {
 }
 
 export default function Users() {
+  const { role } = useRole()
+  const allowed = can(role, 'manage_users')
   const [tab, setTab] = useState('All Users')
   const [q, setQ] = useState('')
   const [jurisdiction, setJurisdiction] = useState('National')
@@ -101,6 +105,18 @@ export default function Users() {
   const states = Array.from(new Set(SEEDED_USERS.map((u) => u.state).filter((s) => s !== 'National'))).sort()
 
   const cardCls = 'bg-surface-card border border-border-crisp shadow-card'
+
+  if (!allowed) {
+    return (
+      <AppShell title="Users" subtitle="Identity, roles & scope governance">
+        <div className="bg-surface-card border border-error/25 rounded-xl p-6 max-w-md mx-auto text-center shadow-card">
+          <span className="material-symbols-outlined text-[32px] text-error mb-2">lock</span>
+          <p className="font-semibold text-text-primary mb-1">User management is restricted</p>
+          <p className="text-sm text-text-muted">Only Ministry Admins can provision or edit user roles and scopes.</p>
+        </div>
+      </AppShell>
+    )
+  }
 
   return (
     <AppShell title="Users" subtitle="Identity, roles & scope governance">
