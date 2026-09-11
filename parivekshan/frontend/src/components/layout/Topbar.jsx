@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useRole } from '../../lib/roleContext'
-import { isDistrictOfficer, DISTRICT_OFFICER_DISTRICT } from '../../lib/scoping'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 export default function Topbar({ title, subtitle }) {
   const { email, role, clearRole } = useRole()
-  const scoped = isDistrictOfficer(role)
   const [unread, setUnread] = useState(null)
 
   useEffect(() => {
@@ -30,13 +28,6 @@ export default function Topbar({ title, subtitle }) {
         </div>
 
         <div className="flex items-center gap-space-md shrink-0">
-          {scoped && DISTRICT_OFFICER_DISTRICT && (
-            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary-container text-primary font-code-xs text-code-xs font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-risk-success"></span>
-              {DISTRICT_OFFICER_DISTRICT} · District scope
-            </span>
-          )}
-
           <button className="hidden md:flex items-center gap-2 w-60 lg:w-72 px-3 py-1.5 rounded-lg bg-surface-container border border-border-crisp text-text-muted text-[13px] focus:outline-none focus:ring-2 focus:ring-primary/30" title="Search projects, districts, alerts…">
             <span className="material-symbols-outlined text-[17px]">search</span>
             <span>Search portal…</span>

@@ -31,8 +31,8 @@ const DISTRICT_COORDS = {
 
 function riskColor(score) {
   const n = Number(score) || 0
-  if (n >= 75) return '#c0392b'   // High – red
-  if (n >= 50) return '#b4650a'   // Medium – amber
+  if (n >= 75) return '#ef4444'   // High – red
+  if (n >= 50) return '#d97706'   // Medium – amber
   return '#0e7c66'                 // Low – green
 }
 
@@ -187,7 +187,7 @@ export default function ProjectMap({ project, className = '' }) {
             <tr><td style="color: #64748b; padding: 3px 8px 3px 0;">Risk</td>
                 <td style="font-weight: 700; color: ${color}; padding: 3px 0;">${riskCategory(score)} (${score.toFixed(0)}/100)</td></tr>
             <tr><td style="color: #64748b; padding: 3px 8px 3px 0;">Mouzas</td><td style="font-weight: 600; color: #334155; padding: 3px 0;">${Number(project.mouzas_affected || 0).toLocaleString()}</td></tr>
-            <tr><td style="color: #64748b; padding: 3px 8px 3px 0;">Delay</td><td style="font-weight: 600; color: #c0392b; padding: 3px 0;">${project.delay_days || 0} days</td></tr>
+            <tr><td style="color: #64748b; padding: 3px 8px 3px 0;">Delay</td><td style="font-weight: 600; color: #ef4444; padding: 3px 0;">${project.delay_days || 0} days</td></tr>
           </table>
         </div>
       `
@@ -274,8 +274,8 @@ export default function ProjectMap({ project, className = '' }) {
         <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wider mb-1.5">Risk Level</p>
         <div className="flex flex-col gap-1">
           {[
-            { label: 'Critical (≥75)', color: '#c0392b' },
-            { label: 'High (50–74)', color: '#b4650a' },
+            { label: 'Critical (≥75)', color: '#ef4444' },
+            { label: 'High (50–74)', color: '#d97706' },
             { label: 'Low (<50)', color: '#0e7c66' },
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-1.5">

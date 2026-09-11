@@ -6,8 +6,8 @@ const ML_BASE = import.meta.env.VITE_ML_URL || 'http://localhost:8001'
 
 const RISK_COLORS = {
   Low: '#0e7c66',
-  Medium: '#b4650a',
-  High: '#c0392b',
+  Medium: '#d97706',
+  High: '#ef4444',
   Critical: '#6d28d9',
 }
 
@@ -144,17 +144,17 @@ export default function MLProjects() {
 
   return (
     <div className="min-h-screen bg-background pb-12">
-      <header className="bg-navy-900">
+      <header className="bg-[#0F2C59]">
         <div className="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link to="/analytics" className="flex items-center gap-1 text-[13px] font-medium text-navy-200 hover:text-white transition-colors">
+            <Link to="/analytics" className="flex items-center gap-1 text-[13px] font-medium text-white/70 hover:text-white transition-colors">
               <span className="material-symbols-outlined text-[16px]">arrow_back</span>
               ML Dashboard
             </Link>
             <span className="h-5 w-px bg-white/15"></span>
             <h1 className="text-base font-semibold text-white tracking-tight">ML risk predictions · West Bengal</h1>
           </div>
-          <span className="text-[12px] font-mono text-navy-200">{results.length} predictions</span>
+          <span className="text-[12px] font-mono text-white/50">{results.length} predictions</span>
         </div>
       </header>
 

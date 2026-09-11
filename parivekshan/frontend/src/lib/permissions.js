@@ -39,7 +39,5 @@ export function canManageAlert(role, district) {
 export function scopeAlertsByRole(alerts, role, districtByCode) {
   if (!Array.isArray(alerts)) return []
   if (!can(role, 'view_alerts')) return []
-  if (role === ROLE_ADMIN) return alerts
-  const assigned = DISTRICT_OFFICER_DISTRICT || ''
-  return alerts.filter((a) => (districtByCode?.[a.project_code] || '') === assigned)
+  return alerts
 }

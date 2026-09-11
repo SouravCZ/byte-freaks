@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useRole } from '../lib/roleContext'
-import { scopeProjects, isDistrictOfficer, DISTRICT_OFFICER_DISTRICT } from '../lib/scoping'
+import { scopeProjects } from '../lib/scoping'
 import AppShell from '../components/layout/AppShell'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 function riskBand(score) {
   const n = Number(score)
-  if (n >= 75) return { key: 'high', label: 'High', hex: '#c0392b', tile: 'bg-risk-critical-bg border-risk-critical/25 text-on-error-container', bar: 'bg-risk-critical', text: 'text-error' }
-  if (n >= 50) return { key: 'mod', label: 'Medium', hex: '#b4650a', tile: 'bg-risk-warning-bg border-risk-warning/25 text-on-tertiary-container', bar: 'bg-risk-warning', text: 'text-risk-warning' }
+  if (n >= 75) return { key: 'high', label: 'High', hex: '#ef4444', tile: 'bg-risk-critical-bg border-risk-critical/25 text-on-error-container', bar: 'bg-risk-critical', text: 'text-error' }
+  if (n >= 50) return { key: 'mod', label: 'Medium', hex: '#d97706', tile: 'bg-risk-warning-bg border-risk-warning/25 text-on-tertiary-container', bar: 'bg-risk-warning', text: 'text-risk-warning' }
   return { key: 'low', label: 'Low', hex: '#0e7c66', tile: 'bg-risk-success-bg border-risk-success/25 text-on-secondary-container', bar: 'bg-risk-success', text: 'text-risk-success' }
 }
 
@@ -54,11 +54,8 @@ export default function Analytics() {
     return () => ctrl.abort()
   }, [])
 
-  const scoped = isDistrictOfficer(role)
   const visibleProjects = scopeProjects(projects, role)
-  const scopedBlocks = scoped
-    ? blocks.filter((b) => (b.district || '') === DISTRICT_OFFICER_DISTRICT)
-    : blocks
+  const scopedBlocks = blocks
 
   const stateOptions = useMemo(() => Array.from(new Set(scopedBlocks.map((b) => b.district).filter(Boolean))).sort(), [scopedBlocks])
 

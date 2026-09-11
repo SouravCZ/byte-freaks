@@ -37,8 +37,8 @@ function fmtDate(d) {
 
 function riskBand(score) {
   const n = Number(score)
-  if (n >= 75) return { label: 'High risk', color: '#c0392b', ring: '#c0392b', text: 'text-error' }
-  if (n >= 50) return { label: 'Moderate risk', color: '#b4650a', ring: '#b4650a', text: 'text-risk-warning' }
+  if (n >= 75) return { label: 'High risk', color: '#ef4444', ring: '#ef4444', text: 'text-error' }
+  if (n >= 50) return { label: 'Moderate risk', color: '#d97706', ring: '#d97706', text: 'text-risk-warning' }
   return { label: 'Low risk', color: '#0e7c66', ring: '#0e7c66', text: 'text-risk-success' }
 }
 
@@ -157,7 +157,7 @@ export default function ProjectDetail() {
           <div className="shrink-0 bg-surface-container-low border border-border-crisp rounded-xl p-space-md flex items-center gap-space-md">
             <div className="relative w-[104px] h-[104px]">
               <svg className="w-[104px] h-[104px] -rotate-90" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="40" fill="none" stroke="#dfe6ee" strokeWidth="9" />
+                <circle cx="50" cy="50" r="40" fill="none" stroke="#ede7db" strokeWidth="9" />
                 <circle
                   cx="50" cy="50" r="40" fill="none"
                   stroke={band.ring} strokeWidth="9" strokeLinecap="round"
@@ -216,16 +216,16 @@ export default function ProjectDetail() {
               <h2 className="text-base font-semibold text-text-primary mt-0.5 mb-3">Risk history trajectory</h2>
               <ResponsiveContainer width="100%" height={204}>
                 <BarChart data={history.map((h) => ({ ...h, month: new Date(h.recorded_on).toLocaleDateString(undefined, { month: 'short' }) }))}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8ee" vertical={false} />
-                  <XAxis dataKey="month" stroke="#7d8a99" fontSize={10} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#7d8a99" fontSize={10} domain={[0, 100]} tickLine={false} axisLine={false} width={32} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e7e2d6" vertical={false} />
+                  <XAxis dataKey="month" stroke="#8495b1" fontSize={10} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#8495b1" fontSize={10} domain={[0, 100]} tickLine={false} axisLine={false} width={32} />
                   <Tooltip
-                    cursor={{ fill: 'rgba(43,76,126,0.06)' }}
-                    contentStyle={{ borderRadius: 10, border: '1px solid #e2e8ee', fontSize: 12, boxShadow: '0 4px 12px rgba(16,24,40,.08)' }}
+                    cursor={{ fill: 'rgba(15,44,89,0.06)' }}
+                    contentStyle={{ borderRadius: 10, border: '1px solid #e7e2d6', fontSize: 12, boxShadow: '0 4px 12px rgba(16,24,40,.08)' }}
                   />
                   <Bar dataKey="risk_score" name="Risk score" radius={[4, 4, 0, 0]}>
                     {history.map((h, i) => (
-                      <Cell key={i} fill={Number(h.risk_score) >= 75 ? '#c0392b' : Number(h.risk_score) >= 50 ? '#b4650a' : '#0e7c66'} />
+                      <Cell key={i} fill={Number(h.risk_score) >= 75 ? '#ef4444' : Number(h.risk_score) >= 50 ? '#d97706' : '#0e7c66'} />
                     ))}
                   </Bar>
                 </BarChart>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useRole } from '../lib/roleContext'
-import { scopeProjects, isDistrictOfficer, DISTRICT_OFFICER_DISTRICT } from '../lib/scoping'
+import { scopeProjects } from '../lib/scoping'
 import AppShell from '../components/layout/AppShell'
 import RiskTag from '../components/ui/RiskTag'
 import EmptyState from '../components/EmptyState'
@@ -209,14 +209,6 @@ export default function Projects() {
             </div>
           </div>
         </div>
-
-        {isDistrictOfficer(role) && (
-          <div className="flex items-center gap-2 bg-primary-container/70 border border-primary/15 rounded-xl px-4 py-3">
-            <span className="material-symbols-outlined text-[16px] text-primary">my_location</span>
-            <span className="text-[13px] font-semibold text-on-primary-container">{DISTRICT_OFFICER_DISTRICT} — District scope</span>
-            <span className="text-[13px] text-text-muted">Projects are filtered to your jurisdiction.</span>
-          </div>
-        )}
 
         <div className="flex flex-wrap items-center gap-3">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-risk-critical-bg border border-error/25">

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { useRole } from '../lib/roleContext'
-import { scopeProjects, isDistrictOfficer, DISTRICT_OFFICER_DISTRICT } from '../lib/scoping'
+import { scopeProjects } from '../lib/scoping'
 import AppShell from '../components/layout/AppShell'
 import EmptyState from '../components/EmptyState'
 import RiskTag from '../components/ui/RiskTag'
@@ -71,7 +71,6 @@ export default function Overview() {
     return () => ctrl.abort()
   }, [])
 
-  const scoped = isDistrictOfficer(role)
   const visibleProjects = scopeProjects(projects, role)
   const stateOptions = useMemo(() => Array.from(new Set(blocks.map((b) => b.district).filter(Boolean))).sort(), [blocks])
   const districtOptions = useMemo(
@@ -139,7 +138,7 @@ export default function Overview() {
   const cardCls = 'bg-surface-card rounded-xl border border-border-crisp shadow-card'
 
   return (
-    <AppShell title="Command Dashboard" subtitle={`Signed in as ${role}${scoped ? ' · District Magistrate' : ''}`}>
+    <AppShell title="Command Dashboard" subtitle={`Signed in as ${role}`}>
       <div className="flex flex-col gap-space-lg">
         <section className={`${cardCls} px-space-lg py-space-md flex flex-wrap items-center justify-between gap-space-sm`}>
           <div className="flex items-center gap-space-sm flex-wrap">
@@ -159,14 +158,6 @@ export default function Overview() {
             <span className="px-2 py-0.5 rounded-md bg-surface-container text-text-secondary text-[12px] font-medium">AES-256 encrypted</span>
           </div>
         </section>
-
-        {scoped && (
-          <div className="flex items-center gap-2 bg-primary-container/70 border border-primary/15 rounded-xl px-4 py-3">
-            <span className="material-symbols-outlined text-[16px] text-primary">my_location</span>
-            <span className="text-[13px] font-semibold text-on-primary-container">{DISTRICT_OFFICER_DISTRICT} — District scope</span>
-            <span className="text-[13px] text-text-muted">Projects are filtered to your jurisdiction.</span>
-          </div>
-        )}
 
         {loading && (
           <div className="py-24 text-center">
@@ -389,19 +380,19 @@ export default function Overview() {
                       <AreaChart data={trendData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                         <defs>
                           <linearGradient id="predAreaGrad" x1="0" x2="0" y1="0" y2="1">
-                            <stop offset="0%" stopColor="#3a5583" stopOpacity={0.2} />
-                            <stop offset="100%" stopColor="#3a5583" stopOpacity={0.01} />
+                            <stop offset="0%" stopColor="#0F2C59" stopOpacity={0.2} />
+                            <stop offset="100%" stopColor="#0F2C59" stopOpacity={0.01} />
                           </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8ee" vertical={false} />
-                        <XAxis dataKey="key" stroke="#7d8a99" fontSize={10} tickLine={false} axisLine={false} />
-                        <YAxis stroke="#7d8a99" fontSize={10} domain={[0, 100]} tickLine={false} axisLine={false} width={32} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e7e2d6" vertical={false} />
+                        <XAxis dataKey="key" stroke="#8495b1" fontSize={10} tickLine={false} axisLine={false} />
+                        <YAxis stroke="#8495b1" fontSize={10} domain={[0, 100]} tickLine={false} axisLine={false} width={32} />
                         <Tooltip
-                          cursor={{ stroke: '#c8d2dc' }}
-                          contentStyle={{ borderRadius: 10, border: '1px solid #e2e8ee', fontSize: 12, boxShadow: '0 4px 12px rgba(16,24,40,.08)' }}
+                          cursor={{ stroke: '#d5ccb8' }}
+                          contentStyle={{ borderRadius: 10, border: '1px solid #e7e2d6', fontSize: 12, boxShadow: '0 4px 12px rgba(16,24,40,.08)' }}
                           labelFormatter={(_, payload) => (payload && payload.length ? payload[0].payload.name : '')}
                         />
-                        <Area type="monotone" dataKey="probability" name="Delay probability" stroke="#3a5583" strokeWidth={2.5} fill="url(#predAreaGrad)" />
+                        <Area type="monotone" dataKey="probability" name="Delay probability" stroke="#0F2C59" strokeWidth={2.5} fill="url(#predAreaGrad)" />
                       </AreaChart>
                     </ResponsiveContainer>
                   ) : (

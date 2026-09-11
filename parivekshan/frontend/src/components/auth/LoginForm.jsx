@@ -11,8 +11,8 @@ const ROLES = [
 export default function LoginForm({ onSuccess }) {
   const navigate = useNavigate()
   const { setRole } = useRole()
-  const [email, setEmail] = useState('dm@parivekshan.gov.in')
-  const [roleLabel, setRoleLabel] = useState('District Magistrate')
+  const [email, setEmail] = useState('admin@parivekshan.gov.in')
+  const [roleLabel, setRoleLabel] = useState('Admin')
 
   const selectedRole = ROLES.find((r) => r.id === roleLabel)
 
@@ -53,16 +53,16 @@ export default function LoginForm({ onSuccess }) {
               key={r.id}
               type="button"
               onClick={() => setRoleLabel(r.id)}
-              className={`w-full text-left px-3.5 py-2.5 rounded-lg border transition-all ${
+              className={`w-full text-left px-3.5 py-2.5 rounded-xl border transition-all ${
                 roleLabel === r.id
-                  ? 'border-primary bg-primary-container/60 ring-1 ring-primary/20'
+                  ? 'border-primary bg-[#eef7dd] ring-1 ring-primary/20'
                   : 'border-border-strong bg-surface-container-low hover:border-outline'
               }`}
             >
               <span className="flex items-center justify-between gap-2">
-                <span className={`text-[13px] font-semibold ${roleLabel === r.id ? 'text-on-primary-container' : 'text-text-primary'}`}>{r.label}</span>
+                <span className={`text-[13px] font-semibold ${roleLabel === r.id ? 'text-[#3E7D0D]' : 'text-text-primary'}`}>{r.label}</span>
                 {roleLabel === r.id && (
-                  <span className="material-symbols-outlined text-[15px] text-primary">check_circle</span>
+                  <span className="material-symbols-outlined text-[15px] text-[#3E7D0D]">check_circle</span>
                 )}
               </span>
               <span className="block text-[12px] text-text-muted mt-0.5">{r.desc}</span>
@@ -73,7 +73,7 @@ export default function LoginForm({ onSuccess }) {
 
       <button
         type="submit"
-        className="w-full py-2.5 rounded-lg bg-primary text-white text-[14px] font-semibold hover:bg-accent-cyan-deep active:scale-[0.99] transition-all shadow-card"
+        className="w-full py-3 rounded-full bg-[#0F2C59] text-[#bef264] text-[14px] font-bold tracking-[0.02em] hover:bg-[#111625] active:scale-[0.99] transition-all shadow-card"
       >
         Enter dashboard
       </button>
