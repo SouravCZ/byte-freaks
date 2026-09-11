@@ -393,11 +393,6 @@ function Hero() {
     <section id="hero" className="scroll-mt-24 px-4 pb-0 pt-24 sm:px-6 lg:px-8 lg:pt-28">
       <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[28px] bg-[#0F2C59] shadow-[0_30px_80px_-30px_rgba(15,44,89,0.6)]">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-35"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1800&q=80&auto=format&fit=crop')" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0F2C59]/95 via-[#122d5c]/90 to-[#0b1c38]/95" />
-        <div
           className="absolute inset-0 opacity-[0.07]"
           style={{
             backgroundImage:
@@ -406,53 +401,70 @@ function Hero() {
           }}
         />
 
-        <div className="relative z-10 flex flex-col gap-8 px-6 py-12 sm:px-12 sm:py-16 lg:px-16 lg:py-20">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#bef264]/30 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#bef264] backdrop-blur">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#bef264]" />
-              PM Gati Shakti · RFCTLARR 2013 · MoRD
-            </span>
+        <div className="relative z-10 grid items-center gap-0 lg:grid-cols-[1fr_1.1fr]">
+          <div className="flex flex-col gap-8 px-6 py-12 sm:px-12 sm:py-16 lg:px-16 lg:py-20">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#bef264]/30 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#bef264] backdrop-blur">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#bef264]" />
+                PM Gati Shakti · RFCTLARR 2013 · MoRD
+              </span>
+            </div>
+
+            <h1 className="max-w-3xl text-balance text-4xl font-extrabold leading-[1.05] tracking-[-0.02em] text-white sm:text-5xl lg:text-[64px]">
+              National land records,
+              <br />
+              put to <span className="text-[#bef264]">foresight.</span>
+            </h1>
+
+            <p className="max-w-xl text-balance text-[15px] leading-[1.7] text-white/70 sm:text-base">
+              Parivekshan AI maps four decades of land acquisition, payment, and notification filings into decision-ready briefs
+              for District Collectors and infrastructure ministries — before delays become defaults.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <a
+                href="/contact"
+                className="group inline-flex items-center gap-2 rounded-full bg-[#bef264] px-6 py-3 text-[13px] font-bold text-[#0F2C59] shadow-[0_14px_30px_-12px_rgba(190,242,100,0.7)] transition hover:bg-[#d0f581]"
+              >
+                Request National Demo
+                <span className="transition-transform group-hover:translate-x-0.5">{ICONS.arrowRight}</span>
+              </a>
+              <a
+                href="/how-it-works"
+                className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-[13px] font-bold text-white transition hover:border-white/60 hover:bg-white/5"
+              >
+                How it works
+              </a>
+            </div>
+
+            <div className="mt-2 grid grid-cols-2 gap-4 border-t border-white/10 pt-8 sm:grid-cols-4">
+              {[
+                ['32%', 'avg. delay reduction'],
+                ['42', 'active districts'],
+                ['12,500+', 'projects monitored'],
+                ['94.8%', 'model accuracy'],
+              ].map(([v, label]) => (
+                <div key={label}>
+                  <p className="text-2xl font-extrabold tracking-[-0.02em] text-white sm:text-3xl">{v}</p>
+                  <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.08em] text-white/50">{label}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <h1 className="max-w-3xl text-balance text-4xl font-extrabold leading-[1.05] tracking-[-0.02em] text-white sm:text-5xl lg:text-[64px]">
-            National land records,
-            <br />
-            put to <span className="text-[#bef264]">foresight.</span>
-          </h1>
-
-          <p className="max-w-2xl text-balance text-[15px] leading-[1.7] text-white/70 sm:text-base">
-            Parivekshan AI maps four decades of land acquisition, payment, and notification filings into decision-ready briefs
-            for District Collectors and infrastructure ministries — before delays become defaults.
-          </p>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <a
-              href="/contact"
-              className="group inline-flex items-center gap-2 rounded-full bg-[#bef264] px-6 py-3 text-[13px] font-bold text-[#0F2C59] shadow-[0_14px_30px_-12px_rgba(190,242,100,0.7)] transition hover:bg-[#d0f581]"
-            >
-              Request National Demo
-              <span className="transition-transform group-hover:translate-x-0.5">{ICONS.arrowRight}</span>
-            </a>
-            <a
-              href="/how-it-works"
-              className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-[13px] font-bold text-white transition hover:border-white/60 hover:bg-white/5"
-            >
-              How it works
-            </a>
-          </div>
-
-          <div className="mt-2 grid grid-cols-2 gap-4 border-t border-white/10 pt-8 sm:grid-cols-4">
-            {[
-              ['32%', 'avg. delay reduction'],
-              ['42', 'active districts'],
-              ['12,500+', 'projects monitored'],
-              ['94.8%', 'model accuracy'],
-            ].map(([v, label]) => (
-              <div key={label}>
-                <p className="text-2xl font-extrabold tracking-[-0.02em] text-white sm:text-3xl">{v}</p>
-                <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.08em] text-white/50">{label}</p>
-              </div>
-            ))}
+          <div className="relative hidden h-full min-h-[320px] lg:block">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0F2C59] via-transparent to-transparent z-10" />
+            <div className="absolute inset-0 rounded-bl-[32px] overflow-hidden">
+              <img
+                src="/hero-image.webp"
+                alt="Land acquisition monitoring dashboard"
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="absolute bottom-6 right-6 z-20 rounded-2xl border border-white/10 bg-white/10 px-5 py-3 backdrop-blur-md">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#bef264]">Live Monitoring</p>
+              <p className="mt-0.5 text-xs font-medium text-white/80">12,500+ projects tracked</p>
+            </div>
           </div>
         </div>
       </div>
