@@ -21,8 +21,6 @@ const MARQUEE = [
   'Sagarmala Coastal Connectivity',
 ]
 
-const ALLOCATION = '$18,00,000 Cr',
-  ALLOC_NOTE = 'Allocated under RFCTLARR-aligned acquisition pipeline (FY21–FY25)'
 
 const CORRIDORS = [
   {
@@ -121,37 +119,6 @@ const USE_CASES = [
     status: 'Completed →',
     statusCls: 'text-emerald-700',
   },
-]
-
-const REVIEWS = [
-  {
-    quote: 'Finally, the RFCTLARR numbers exit the spreadsheet and enter a decision.',
-    name: 'Sandeep Mehta',
-    role: 'District Collector, Moradabad',
-    initials: 'SM',
-    color: 'bg-[#0F2C59]',
-  },
-  {
-    quote: 'We walked into the first review with the compensation lag map pre-loaded.',
-    name: 'Anjali Kulkarni',
-    role: 'Joint Director, Land Acquisition',
-    initials: 'AK',
-    color: 'bg-emerald-600',
-  },
-  {
-    quote: 'It does not feel like a pilot anymore — the alerting survived our Monday meetings.',
-    name: 'Col. Rajeev Menon (Retd.)',
-    role: 'PMO Lead, NHIDCL',
-    initials: 'RM',
-    color: 'bg-[#111625]',
-  },
-]
-
-const TEAM = [
-  { name: 'Vanya Sharma', role: 'ML Lead', bio: 'Twelve years at the seam of statutory data and predictive tools.', initials: 'VS', color: 'bg-[#0F2C59]' },
-  { name: 'Arjun Bhatt', role: 'Systems & Analytics', bio: 'Former MoRD MIS architect. Owns the national baseline.', initials: 'AB', color: 'bg-emerald-600' },
-  { name: 'Rhea Kapoor', role: 'Design & Research', bio: 'Field interviews across 42 districts shaped every screen.', initials: 'RK', color: 'bg-amber-500' },
-  { name: 'Kabir Anand', role: 'Engineering', bio: 'Builds the ingestion pipelines that keep districts honest.', initials: 'KA', color: 'bg-[#111625]' },
 ]
 
 const FAQS = [
@@ -265,11 +232,6 @@ const ICONS = {
       <path d="M12 5v14M5 12h14" />
     </svg>
   ),
-  quote: (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-      <path d="M3 21c3 0 5-2 5-5v-2H3v-4h5V5h4c0 6-1.5 10-5 14l-4 2zm13 0c3 0 5-2 5-5v-2h-5v-4h5V5h4c0 6-1.5 10-5 14l-4 2z" transform="scale(0.9) translate(1 0)" />
-    </svg>
-  ),
   mail: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
       <rect x="2" y="4" width="20" height="16" rx="2" />
@@ -328,21 +290,11 @@ export default function Portal() {
         <DashboardPreview />
         <ImpactMetrics />
         <UseCases />
-        <ReviewsAndTeam />
-        <QuoteBand />
         <Faq openFaq={openFaq} setOpenFaq={setOpenFaq} />
         <Contact submitDemo={submitDemo} demoSent={demoSent} />
       </main>
 
       <Footer />
-
-      <Link
-        to="/login"
-        className="portico-no-print fixed bottom-6 right-6 z-[200] hidden items-center gap-2 rounded-full bg-[#0F2C59] px-5 py-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#bef264] shadow-[0_18px_40px_-10px_rgba(15,44,89,0.55)] transition hover:bg-[#111625] sm:flex"
-      >
-        Book a demo
-        {ICONS.arrowUpRight}
-      </Link>
     </div>
   )
 }
@@ -393,9 +345,9 @@ function Header({ scrolled, mobileOpen, setMobileOpen, onPrint }) {
 
           <Link
             to="/login"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-[#bef264] bg-[#0F2C59] text-[#bef264] transition hover:bg-[#16244a]"
-            aria-label="Log in"
+            className="flex items-center gap-2 rounded-full border border-[#bef264] bg-[#0F2C59] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#bef264] transition hover:bg-[#16244a]"
           >
+            Login
             {ICONS.arrowUpRight}
           </Link>
 
@@ -424,8 +376,8 @@ function Header({ scrolled, mobileOpen, setMobileOpen, onPrint }) {
               </li>
             ))}
             <li>
-              <Link to="/login" className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-[#bef264] px-3 py-2.5 text-sm font-bold text-[#0F2C59]">
-                Log In
+              <Link to="/login" className="mt-2 flex items-center justify-center gap-2 rounded-full bg-[#bef264] px-4 py-2.5 text-sm font-bold text-[#0F2C59]">
+                Login
                 {ICONS.arrowUpRight}
               </Link>
             </li>
@@ -756,11 +708,9 @@ function DashboardPreview() {
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-5 py-4">
-              <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-white/70">
-                <span className="h-2 w-2 rounded-full bg-[#bef264] shadow-[0_0_10px_#bef264]" />
-                Live · 42 districts
+              <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-white/70">
+                42 districts
               </div>
-              <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-white/35">Last sync 08:41 IST</span>
             </div>
           </div>
         </div>
@@ -834,81 +784,7 @@ function UseCases() {
   )
 }
 
-function Avatar({ initials, color, size = 'h-11 w-11' }) {
-  return (
-    <span className={`flex items-center justify-center rounded-full text-[11px] font-bold text-[#bef264] ${color} ${size}`}>
-      {initials}
-    </span>
-  )
-}
 
-function ReviewsAndTeam() {
-  return (
-    <section id="reviews-and-team" className="scroll-mt-24 px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
-      <div className="mx-auto max-w-7xl">
-        <div className="mx-auto max-w-3xl text-center">
-          <SectionPill>Reviews & Team</SectionPill>
-          <h2 className="mt-6 text-balance text-3xl font-extrabold leading-[1.12] tracking-[-0.02em] text-[#0F2C59] sm:text-4xl lg:text-[44px]">
-            Practitioners in the loop, not just in spirit.
-          </h2>
-        </div>
-
-        <div className="mt-14 grid gap-5 md:grid-cols-3">
-          {REVIEWS.map((r) => (
-            <div key={r.name} className="flex flex-col rounded-3xl border border-[#0F2C59]/10 bg-white p-7">
-              <div className="flex items-center justify-between">
-                <span className="text-[#bef264]">{ICONS.quote}</span>
-                <span className="flex gap-1">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <svg key={i} viewBox="0 0 24 24" fill="#F59E0B" className="h-3.5 w-3.5">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" />
-                    </svg>
-                  ))}
-                </span>
-              </div>
-              <p className="mt-4 flex-1 text-[15px] font-semibold leading-[1.6] text-[#0F2C59]">&quot;{r.quote}&quot;</p>
-              <div className="mt-6 flex items-center gap-3 border-t border-[#0F2C59]/10 pt-5">
-                <Avatar initials={r.initials} color={r.color} />
-                <div>
-                  <p className="text-sm font-extrabold text-[#0F2C59]">{r.name}</p>
-                  <p className="text-[11px] uppercase tracking-[0.06em] text-[#0F2C59]/50">{r.role}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-16 text-center">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0F2C59]/40">The team</p>
-          <div className="mt-8 grid grid-cols-2 gap-5 lg:grid-cols-4">
-            {TEAM.map((t) => (
-              <div key={t.name} className="flex flex-col items-center rounded-3xl border border-[#0F2C59]/10 bg-white p-6 text-center">
-                <Avatar initials={t.initials} color={t.color} size="h-14 w-14 text-[13px]" />
-                <p className="mt-4 text-sm font-extrabold text-[#0F2C59]">{t.name}</p>
-                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-brandEmeraldDark">{t.role}</p>
-                <p className="mt-2 text-[12px] leading-[1.6] text-[#0F2C59]/50">{t.bio}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function QuoteBand() {
-  return (
-    <section className="portico-no-print px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl rounded-[32px] bg-gradient-to-br from-[#0F2C59] via-[#122d5c] to-[#0b1c38] px-8 py-16 text-center sm:py-20">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#bef264]">Parivekshan AI</p>
-        <blockquote className="mx-auto mt-6 max-w-3xl text-balance text-2xl font-extrabold leading-[1.3] tracking-[-0.01em] text-white sm:text-3xl">
-          &quot;The best plans are the ones on watermarked briefs — signed before the corridor ever breaks ground.&quot;
-        </blockquote>
-        <p className="mt-6 text-sm text-white/50">— Internal design principle</p>
-      </div>
-    </section>
-  )
-}
 
 function Faq({ openFaq, setOpenFaq }) {
   return (
@@ -1094,20 +970,15 @@ function Footer() {
       links: [
         { label: 'About', href: '#context' },
         { label: 'How it Works', href: '#how-it-works' },
-        { label: 'Reviews', href: '#reviews-and-team' },
         { label: 'Contact', href: '#contact' },
       ],
-    },
-    {
-      title: 'Legal',
-      links: ['Privacy Policy', 'Terms of Service', 'Data Handling', 'Accessibility'],
     },
   ]
 
   return (
     <footer className="portico-no-print bg-[#111625] px-4 pb-12 pt-16 text-white sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr]">
           <div>
             <div className="flex items-center gap-2.5">
               <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#0F2C59] text-[#bef264]">
@@ -1130,19 +1001,13 @@ function Footer() {
             <div key={col.title}>
               <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-white/40">{col.title}</p>
               <ul className="mt-4 space-y-2.5">
-                {col.links.map((link) =>
-                  typeof link === 'string' ? (
-                    <li key={link}>
-                      <span className="cursor-default text-[13px] text-white/60">{link}</span>
-                    </li>
-                  ) : (
+                {col.links.map((link) => (
                     <li key={link.label}>
                       <a href={link.href} className="text-[13px] text-white/60 transition hover:text-[#bef264]">
                         {link.label}
                       </a>
                     </li>
-                  )
-                )}
+                  ))}
               </ul>
             </div>
           ))}

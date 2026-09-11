@@ -148,7 +148,7 @@ export default function Analytics() {
           <div className="flex items-center gap-space-sm">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-secondary-container text-on-secondary-container text-[12px] font-semibold">
               <span className="w-1.5 h-1.5 rounded-full bg-risk-success"></span>
-              Live spatial telemetry
+              Spatial telemetry
             </span>
             <span className="text-[12px] text-text-muted">{scopedBlocks.length} blocks monitored</span>
           </div>
@@ -381,10 +381,6 @@ export default function Analytics() {
                   <span className="material-symbols-outlined text-[16px] text-risk-success">check_circle</span>
                   Joint Secretary alert triggered
                 </div>
-                <button className="px-3.5 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-text-primary text-[12px] font-semibold transition-colors flex items-center gap-1.5 border border-border-crisp">
-                  <span className="material-symbols-outlined text-[16px] text-primary">description</span>
-                  Download zonal dossier
-                </button>
               </div>
             </div>
 

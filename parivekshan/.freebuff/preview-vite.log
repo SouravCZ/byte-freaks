@@ -1,12 +1,29 @@
 
 > parivekshan-frontend@1.0.0 dev
-> vite --port 5173 --host 0.0.0.0
+> vite
 
+Port 5173 is in use, trying another one...
 
-  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m314[22m[2m[0m ms[22m
+  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m319[22m[2m[0m ms[22m
 
-  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
-  [32m➜[39m  [1mNetwork[22m: [36mhttp://100.75.171.106:[1m5173[22m/[39m
-  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.76.1:[1m5173[22m/[39m
-  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.209.1:[1m5173[22m/[39m
-  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.0.103:[1m5173[22m/[39m
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5174[22m/[39m
+[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[2m7:26:29 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Portal.jsx, /src/index.css[22m
+[2m7:26:34 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Overview.jsx, /src/index.css[22m
+[2m7:26:38 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Projects.jsx, /src/index.css[22m
+[2m7:26:42 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Alerts.jsx, /src/index.css[22m
+[2m7:26:47 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Analytics.jsx, /src/index.css[22m
+[2m7:26:50 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Users.jsx, /src/index.css[22m
+[2m7:26:55 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/SeoShell.jsx, /src/index.css[22m
+[2m7:27:25 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Overview.jsx, /src/index.css[22m
+[2m7:31:01 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Portal.jsx, /src/index.css[22m
+[2m7:31:24 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Portal.jsx, /src/index.css[22m
+[2m7:31:31 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Portal.jsx, /src/index.css[22m
+[2m7:32:49 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Portal.jsx, /src/index.css[22m
+[2m7:33:52 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Alerts.jsx, /src/index.css[22m
+[2m7:33:52 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Users.jsx, /src/index.css[22m
+[2m7:33:52 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Analytics.jsx, /src/index.css[22m
+[2m7:33:52 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Overview.jsx, /src/index.css[22m
+[2m7:33:52 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Projects.jsx, /src/index.css[22m
+[2m7:34:00 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Projects.jsx, /src/index.css[22m
+[2m7:52:11 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Users.jsx, /src/index.css[22m

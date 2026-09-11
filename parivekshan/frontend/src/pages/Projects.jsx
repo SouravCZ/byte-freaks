@@ -87,18 +87,6 @@ export default function Projects() {
   const toggleRow = (id) => setSelected((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]))
   const toggleAll = () => setSelected((prev) => (prev.length === filtered.length ? [] : filtered.map((p) => p.id)))
 
-  const exportCSV = () => {
-    const headers = ['code', 'name', 'project_type', 'district', 'block', 'mouzas_affected', 'status', 'risk_score', 'delay_days']
-    const rows = filtered.map((p) => headers.map((h) => p[h] ?? '').join(','))
-    const blob = new Blob([[headers.join(','), ...rows].join('\n')], { type: 'text/csv' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'parivekshan-projects.csv'
-    a.click()
-    URL.revokeObjectURL(url)
-  }
-
   const cardCls = 'bg-surface-card rounded-xl border border-border-crisp shadow-card'
 
   if (loading) {
@@ -138,9 +126,7 @@ export default function Projects() {
               <span className="px-2 py-0.5 rounded-full bg-surface-container border border-border-crisp text-[12px] font-semibold text-text-secondary tabular-nums">
                 {visibleProjects.length.toLocaleString()} corridors
               </span>
-              <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-[12px] font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-risk-success"></span> GatiShakti live
-              </span>
+
             </div>
             <p className="text-[13px] text-text-muted mt-1">Land acquisition risk directory and statutory monitoring</p>
           </div>
@@ -156,10 +142,6 @@ export default function Projects() {
               />
               <kbd className="absolute right-2.5 text-[10px] px-1.5 py-0.5 rounded bg-surface-card border border-border-crisp text-text-muted font-mono">⌘K</kbd>
             </div>
-            <button onClick={exportCSV} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-card border border-border-crisp text-text-secondary hover:text-text-primary hover:bg-surface-container transition-all text-[13px] font-medium">
-              <span className="material-symbols-outlined text-[17px] text-primary">file_download</span>
-              Export CSV
-            </button>
             <button className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-risk-critical-bg border border-error/25 text-error text-[13px] font-semibold transition-all" title="Batch intervention (demo)">
               <span className="material-symbols-outlined text-[17px]">bolt</span>
               Bulk actions

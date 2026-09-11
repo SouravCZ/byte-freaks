@@ -15,7 +15,7 @@ const PAGE_META = {
   },
   '/dashboard': {
     title: 'Command Dashboard — Parivekshan AI',
-    description: 'Live national telemetry for land acquisition, compensation, and statutory delay risk across every active district and corridor.',
+    description: 'National telemetry for land acquisition, compensation, and statutory delay risk across every active district and corridor.',
   },
   '/projects': {
     title: 'Project Directory — Parivekshan AI',

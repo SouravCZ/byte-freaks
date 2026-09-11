@@ -152,8 +152,7 @@ export default function Overview() {
           </div>
           <div className="flex items-center gap-space-md">
             <div className="flex items-center gap-1.5 text-[12px] text-text-muted">
-              <span className="w-2 h-2 rounded-full bg-risk-success"></span>
-              Live data feed · {blocks.length} blocks
+              {blocks.length} blocks
             </div>
             <span className="px-2 py-0.5 rounded-md bg-surface-container text-text-secondary text-[12px] font-medium">AES-256 encrypted</span>
           </div>
@@ -180,11 +179,7 @@ export default function Overview() {
               <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-space-md">
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-space-sm">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-secondary-container text-on-secondary-container text-[12px] font-semibold">
-                      <span className="w-1.5 h-1.5 rounded-full bg-risk-success"></span>
-                      Live GatiShakti feed
-                    </span>
-                    <span className="text-[12px] text-text-muted">LGD boundaries synced · {blocks.length} blocks</span>
+                    <span className="text-[12px] text-text-muted">{blocks.length} blocks</span>
                   </div>
                   <h1 className="text-2xl font-bold text-text-primary tracking-tight">National land acquisition risk telemetry</h1>
                   <p className="text-[14px] text-text-muted max-w-3xl">
@@ -197,10 +192,7 @@ export default function Overview() {
                     <span className="material-symbols-outlined text-[17px] text-primary">sync</span>
                     Re-score projects
                   </button>
-                  <button className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-white text-[13px] font-semibold hover:bg-accent-cyan-deep transition-colors shadow-card">
-                    <span className="material-symbols-outlined text-[17px]">picture_as_pdf</span>
-                    Export briefing
-                  </button>
+
                 </div>
               </div>
 

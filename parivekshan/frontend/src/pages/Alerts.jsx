@@ -157,7 +157,7 @@ export default function Alerts() {
           <div className="flex items-center gap-space-sm">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-risk-critical-bg text-error text-[12px] font-semibold border border-error/25">
               <span className="material-symbols-outlined text-[15px]">priority_high</span>
-              Live escalation protocol
+              Escalation protocol
             </span>
             <span className="text-[12px] text-text-muted">Threshold breaches auto-escalate at 48h if unacknowledged</span>
           </div>
@@ -169,10 +169,6 @@ export default function Alerts() {
               </p>
             </div>
             <div className="flex items-center gap-space-sm shrink-0">
-              <button className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-card border border-border-crisp text-text-secondary hover:bg-surface-container text-[13px] font-medium transition-colors shadow-card">
-                <span className="material-symbols-outlined text-[16px] text-primary">download</span>
-                Export register
-              </button>
               {canMarkFiltered && (
                 <button onClick={markFilteredReviewed} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white text-[13px] font-semibold hover:bg-accent-cyan-deep transition-colors shadow-card">
                   <span className="material-symbols-outlined text-[16px]">done_all</span>
@@ -186,7 +182,7 @@ export default function Alerts() {
             <div className="p-space-md rounded-xl bg-surface-card border border-border-crisp shadow-card flex flex-col justify-between">
               <div className="flex items-center justify-between">
                 <span className="text-[12px] font-semibold text-text-muted tracking-wider uppercase">Unacknowledged</span>
-                <span className="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+                <span className="w-2 h-2 rounded-full bg-error"></span>
               </div>
               <div className="mt-space-sm flex items-baseline gap-space-xs">
                 <span className="text-3xl font-bold text-error tabular-nums">{counts.unread}</span>

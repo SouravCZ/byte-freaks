@@ -173,6 +173,18 @@ router.get('/alerts', async (req, res) => {
   }
 })
 
+// GET /api/users - list all users
+router.get('/users', async (_req, res) => {
+  try {
+    const { rows } = await query(
+      'SELECT id, name, designation, department, email, role, is_active, created_at FROM users ORDER BY created_at DESC'
+    )
+    res.json(rows)
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
 // PATCH /api/alerts/:id - mark read/unread
 router.patch('/alerts/:id', async (req, res) => {
   const { is_read } = req.body
