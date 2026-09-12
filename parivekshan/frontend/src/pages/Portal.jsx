@@ -453,7 +453,8 @@ function Hero() {
           </div>
 
           <div className="relative hidden h-full min-h-[320px] lg:block">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0F2C59] via-transparent to-transparent z-10" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0F2C59] via-[#0F2C59]/60 to-transparent z-10" />
+            <div className="absolute inset-0 bg-[#0F2C59]/45 z-[9]" />
             <div className="absolute inset-0 rounded-bl-[32px] overflow-hidden">
               <img
                 src="/hero-image.webp"
